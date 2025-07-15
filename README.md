@@ -1,6 +1,3 @@
-Perfecto. Voy a diseñar una propuesta de MVP para una SPA y backend multiplataforma (Node.js con Fastify, Angular, y Capacitor) orientado a la trazabilidad de animales en Uruguay, considerando que el acceso a datos reales está restringido a operadores autorizados, por lo que podrían usarse datos simulados. Me enfocaré en un conjunto funcional mínimo que les permita demostrar las capacidades clave del sistema dentro del plazo de 4 semanas. Te avisaré en cuanto lo tenga listo.
-
-
 # MVP para Sistema de Trazabilidad de Animales en Uruguay
 
 &#x20;*Ganado en Uruguay, identificado con caravanas en las orejas para trazabilidad individual.*
