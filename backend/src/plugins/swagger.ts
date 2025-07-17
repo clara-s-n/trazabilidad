@@ -13,13 +13,20 @@ export default fp<FastifySwaggerOptions>(async (fastify) => {
       },
       servers: [
         {
-          url: 'http://localhost:3000/backend',
+          url: 'http://localhost:3000',
           description: 'Development server'
         }
       ],
       tags: [
-        { name: 'examples', description: 'Examples end points.' },
-        { name: 'auth', description: 'Authentication related end-points' }
+        { name: 'Auth', description: 'Endpoints para autenticación' }
+        , { name: 'Animales', description: 'Endpoints para animales' }
+        , { name: 'Usuarios', description: 'Endpoints para usuarios' }
+        , { name: 'Transportes', description: 'Endpoints para transportes' }
+        , { name: 'Caravanas', description: 'Endpoints para caravanas' }
+        , { name: 'Predios', description: 'Endpoints para predios' }
+        , { name: 'Ventas', description: 'Endpoints para ventas' }
+        , { name: 'Vacunaciones', description: 'Endpoints para vacunaciones' }
+        , { name: 'Pesajes', description: 'Endpoints para pesajes' }
       ],
       components: {
         securitySchemes: {
