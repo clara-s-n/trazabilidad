@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
-
+import { UCUError } from "../../../utils/index.js";
 const tokeneExample = Buffer.from(
     JSON.stringify({
         user: 'francisco@example.com',
@@ -60,7 +60,7 @@ const loginRoute: FastifyPluginAsync = async (fastify, options) => {
         onRequest: async (request, reply) => {
             const token = request.headers.authorization?.slice(7); // Remove 'Bearer ' prefix
             if (!token) {
-                return reply.status(401).send({ message: 'Unauthorized' });
+                throw new UCUError('Token is required for authentication');
             }
 
             const usuario = JSON.parse(Buffer.from(token, 'base64').toString('utf-8'));
