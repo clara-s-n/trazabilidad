@@ -1,39 +1,45 @@
-import { FastifyPluginAsync } from "fastify";
 import { UCUError } from "../../../utils/index.js";
-const tokeneExample = Buffer.from(
-    JSON.stringify({
-        user: 'francisco@example.com',
-        roles: ['user', 'admin'],
-    })
-).toString('base64');
+import { Static, Type} from "@sinclair/typebox";
+import { FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox";
+import { SignOptions } from "@fastify/jwt";
+import { Login, LoginType } from "../../../schemas/usuario.js";
 
-const loginRoute: FastifyPluginAsync = async (fastify, options) => {
+const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<void> => {
     fastify.post('/', {
         schema: {
             tags: ['Auth'],
             summary: 'Usuario Login',
             description: 'Endpoint para iniciar sesión de usuario',
-            body: {
-                type: 'object',
-                properties: {
-                    email: { type: 'string', format: 'email' },
-                    password: { type: 'string', minLength: 6 }
-                },
-                required: ['email', 'password']
-            }
+            body: Login,
+            // Es lo mismo que el esquema de JSON Schema Ejemplo:
+            // {
+            //   "type": "object",
+            //   "properties": {
+            //     "email": { "type": "string", "format": "email" },
+            //     "password": { "type": "string", "minLength": 6 }
+            //   },
+            //   "required": ["email", "password"]
+            // }
         },
         handler: async (request, reply) => {
-            // Logic to authenticate user and generate tokens
-            // This is a placeholder for actual authentication logic
-            if(tokeneExample) {
-                // Simulate successful login
-                const usuario = JSON.parse(Buffer.from(tokeneExample, 'base64').toString('utf-8'));
-                return reply.send({
-                    message: 'Login successful',
-                    usuario,
-                    exampleToken: tokeneExample // Example token for testing
-                });
+            const body: LoginType = request.body;
+
+            if (!body.email || !body.password) {
+                throw new UCUError('Email and password are required');
             }
+
+            const payload = {
+                user: body.email,
+                roles: ['user', 'admin'],
+            };
+
+            const signOptions : SignOptions = {
+                expiresIn: '1h', // Token expiration time
+                notBefore: '3' // Token is valid immediately
+            };
+
+            const token = fastify.jwt.sign(payload, signOptions);
+            return {token}; // Return the token and an example
         }
     });
 
@@ -58,18 +64,7 @@ const loginRoute: FastifyPluginAsync = async (fastify, options) => {
         },
 
         onRequest: async (request, reply) => {
-            const token = request.headers.authorization?.slice(7); // Remove 'Bearer ' prefix
-            if (!token) {
-                throw new UCUError('Token is required for authentication');
-            }
-
-            const usuario = JSON.parse(Buffer.from(token, 'base64').toString('utf-8'));
-            // You may want to validate usuario object here
-            return reply.send({
-                email: usuario.user,
-                name: 'Francisco', // Example name, replace with real data
-                roles: usuario.roles
-            });
+            await request.jwtVerify();
         },
 
         handler: async (request, reply) => {
