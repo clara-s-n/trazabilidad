@@ -1,4 +1,11 @@
+import { myPool } from "../services/database.service.js";
+
 export class UsuarioRepository {
+
+  baseQuery = `
+    SELECT id_usuario,nombres,roles FROM public.usuarios
+  `;
+
   // Define methods for user repository operations
   async findUserByEmail(email: string): Promise<any> {
     // Logic to find a user by email
@@ -6,8 +13,8 @@ export class UsuarioRepository {
   }
 
   async getAllUsers(): Promise<any[]> {
-    // Logic to get all users
-    throw new Error("Method not implemented.");
+    const result = await myPool.query(this.baseQuery);
+    return result.rows;
   }
 
   async getUserById(userId: string): Promise<any> {
@@ -29,6 +36,20 @@ export class UsuarioRepository {
     // Logic to delete a user
     throw new Error("Method not implemented.");
   }
-}
 
+  async auth(nombre: string, clave: string): Promise<any> {
+
+    const query = `${this.baseQuery}
+      WHERE nombre = $1 AND clave = $2 AND password_hash = crypt($2, password_hash);
+    `;
+
+    const result = await myPool.query(query, [nombre, clave]);
+
+    if (result.rows.length === 0) {
+      throw new Error("Usuario o clave incorrectos");
+    }
+
+    return result.rows[0];
+  }
+}
 export const usuarioRepository = new UsuarioRepository();

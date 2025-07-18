@@ -2,6 +2,7 @@ import { UCUError } from "../../../utils/index.js";
 import { FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox";
 import { SignOptions } from "@fastify/jwt";
 import { Login, LoginType } from "../../../schemas/usuario.js";
+import { usuarioRepository } from "../../../../services/usuario.repository.js";
 
 const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<void> => {
     fastify.post('/', {
@@ -25,12 +26,11 @@ const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<voi
 
             if (!body.email || !body.password) {
                 throw new UCUError('Email and password are required');
-            }
-
-            const payload = {
-                user: body.email,
-                roles: ['user', 'admin'],
             };
+
+            const {email, password} = request.body;
+
+            const payload = await usuarioRepository.auth(email, password);
 
             const signOptions : SignOptions = {
                 expiresIn: '1h', // Token expiration time
