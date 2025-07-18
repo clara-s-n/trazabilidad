@@ -1,5 +1,4 @@
 import { UCUError } from "../../../utils/index.js";
-import { Static, Type} from "@sinclair/typebox";
 import { FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox";
 import { SignOptions } from "@fastify/jwt";
 import { Login, LoginType } from "../../../schemas/usuario.js";
@@ -63,13 +62,14 @@ const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<voi
             }
         },
 
-        onRequest: async (request, reply) => {
-            await request.jwtVerify();
-        },
+        // onRequest: [fastify.authenticate],
 
         handler: async (request, reply) => {
             return request.user; // Assuming user is set in onRequest
         }
     });
+
+    fastify.addHook('onRequest', fastify.authenticate);
+    
 };
 export default loginRoute; 
