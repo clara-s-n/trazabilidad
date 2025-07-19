@@ -6,9 +6,11 @@ const usuariosRoute: FastifyPluginAsync = async (fastify, options) => {
     {
       schema: {
         tags: ['Usuarios'],
+        description: 'Listar todos los usuarios',
+        summary: 'Obtener una lista de todos los usuarios disponibles',
       },
       handler: async (request, reply) => {
-        reply.send({ message: 'Usuarios endpoint' });
+        throw new Error("Not implemented");
       },
     }
   );
@@ -18,9 +20,11 @@ const usuariosRoute: FastifyPluginAsync = async (fastify, options) => {
     {
       schema: {
         tags: ['Usuarios'],
+        description: 'Crear un nuevo usuario',
+        summary: 'Agregar un nuevo usuario a la lista',
       },
       handler: async (request, reply) => {
-        reply.send({ message: 'Crear usuario' });
+        throw new Error("Not implemented");
       },
     }
   );
