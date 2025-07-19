@@ -1,7 +1,7 @@
 import { UCUError } from "../../../utils/index.js";
 import { FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox";
 import { SignOptions } from "@fastify/jwt";
-import { Login, LoginType } from "../../../schemas/usuario.js";
+import { LoginParams, LoginType } from "../../../schemas/usuario.js";
 
 const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<void> => {
     fastify.post('/', {
@@ -9,7 +9,7 @@ const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<voi
             tags: ['Auth'],
             summary: 'Usuario Login',
             description: 'Endpoint para iniciar sesión de usuario',
-            body: Login,
+            body: LoginParams,
             // Es lo mismo que el esquema de JSON Schema Ejemplo:
             // {
             //   "type": "object",
@@ -41,35 +41,5 @@ const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<voi
             return {token}; // Return the token and an example
         }
     });
-
-    fastify.get('/profile', {
-        schema: {
-            tags: ['Auth'],
-            summary: 'Get User Profile',
-            description: 'Endpoint to retrieve the user profile information',
-            security: [
-                { bearerAuth: [] }
-            ],
-            response: {
-                200: {
-                    type: 'object',
-                    properties: {
-                        email: { type: 'string', format: 'email' },
-                        name: { type: 'string' },
-                        roles: { type: 'array', items: { type: 'string' } }
-                    },
-                }
-            }
-        },
-
-        // onRequest: [fastify.authenticate],
-
-        handler: async (request, reply) => {
-            return request.user; // Assuming user is set in onRequest
-        }
-    });
-
-    fastify.addHook('onRequest', fastify.authenticate);
-    
 };
 export default loginRoute; 
