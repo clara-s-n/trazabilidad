@@ -9,10 +9,10 @@
   },
   "scripts": {
     "test": "tsc && tsc -p test/tsconfig.json && FASTIFY_AUTOLOAD_TYPESCRIPT=1 node --test --experimental-test-coverage --loader ts-node/esm test/**/*.ts",
-    "start": "tsc && node --env-file=.env --watch dist/server.js",
+    "start": "tsc && node --watch dist/server.js",
     "build:ts": "tsc",
     "watch:ts": "tsc -w",
-    "dev": "tsc && concurrently -k -p \"[{name}]\" -n \"TypeScript,fastify\" -c \"yellow.bold,cyan.bold\" \"tsc -w\" \"node --env-file=.env --watch dist/server.js\"",
+    "dev": "tsc && concurrently -k -p \"[{name}]\" -n \"TypeScript,fastify\" -c \"yellow.bold,cyan.bold\" \"tsc -w\" \"node --watch dist/server.js\"",
     "dev:start": "fastify start --ignore-watch=.ts$ -w -l info -P dist/app.js"
   },
   "keywords": [],
