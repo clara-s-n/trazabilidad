@@ -5,4 +5,4 @@ ENV LANG es_ES.utf8
 ENV TZ=America/Montevideo
 
 # Vamos a copiar los script iniciales. Solo se ejecutarán al momento de crear la base de datos. Esto no lo usariamos para una imagen de producción
-COPY ./scripts/*.sql /docker-entrypoint-initdb.d
+# COPY ./scripts/*.sql /docker-entrypoint-initdb.d
