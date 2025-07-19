@@ -31,9 +31,9 @@ A continuación se presenta una vista general del árbol de endpoints:
       ├── /animal_id/:animal_id → GET, PUT, DELETE
       ├── /animal_id/:animal_id/modifications → GET
       └── /animal_id/:animal_id/events → GET
-         ├── /sale → GET, POST
-         ├── /vaccine → GET, POST
-         └── /weighing → GET, POST
+         ├── /sale/:animal_id → GET, POST
+         ├── /vaccine/:animal_id → GET, POST
+         └── /weighing/:animal_id → GET, POST
 ├──/users
    └── / → GET, POST
       └── user_id/:user_id → GET, PUT, DELETE
