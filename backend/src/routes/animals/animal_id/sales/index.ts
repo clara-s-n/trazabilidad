@@ -1,7 +1,7 @@
 import { FastifyPluginAsync } from "fastify";
 
 const ventasRoute: FastifyPluginAsync = async (fastify, options) => {
-    fastify.get('/', {
+    fastify.get('/:id_animal', {
         schema: {
             tags: ['Ventas'],
         },

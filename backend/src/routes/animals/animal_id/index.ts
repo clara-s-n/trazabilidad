@@ -15,7 +15,7 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
     },
   });
 
-  fastify.delete("/", {
+  fastify.delete("/:animal_id", {
     schema: {
       tags: ["Animales"],
       params: AnimalParams
@@ -25,10 +25,34 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
     },
   });
 
-  fastify.get("/", {
+  fastify.get("/:animal_id", {
     schema: {
       tags: ["Animales"],
       params: AnimalParams
+    },
+    handler: async (request, reply) => {
+      // Handle fetching a specific animal by ID logic
+    },
+  });
+
+  fastify.get("/:animal_id/modifications", {
+    schema: {
+      tags: ["Animales"],
+      params: AnimalParams,
+      summary: "Ver el historial de modificaciones realizadas a los datos de un animal",
+      description: "Ver el historial de modificaciones realizadas a los datos de un animal"
+    },
+    handler: async (request, reply) => {
+      // Handle fetching a specific animal by ID logic
+    },
+  });
+
+  fastify.get("/:animal_id/events", {
+    schema: {
+      tags: ["Animales"],
+      params: AnimalParams,
+      summary: "Ver el historial de eventos de un animal",
+      description: "Ver el historial de eventos de un animal"
     },
     handler: async (request, reply) => {
       // Handle fetching a specific animal by ID logic
