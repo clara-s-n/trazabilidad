@@ -1,9 +1,11 @@
 import { FastifyPluginAsync } from "fastify";
+import { AnimalParams } from "../../../../schemas/animal.js";
 
 const vacunacionesRoute: FastifyPluginAsync = async (fastify, options) => {
-    fastify.get('/:id_animal', {
+    fastify.get('/:animal_id', {
         schema: {
         tags: ['Vacunaciones'],
+        params: AnimalParams,
         description: 'Listar todas las vacunaciones de un animal específico',
         summary: 'Obtener una lista de todas las vacunaciones para un animal específico',
         },
@@ -13,7 +15,7 @@ const vacunacionesRoute: FastifyPluginAsync = async (fastify, options) => {
         }
     });
     
-    fastify.post('/', {
+    fastify.post('/animal_id', {
         schema: {
         tags: ['Vacunaciones'],
         description: 'Crear una nueva vacunación para un animal específico',

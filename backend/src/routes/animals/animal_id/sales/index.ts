@@ -1,9 +1,11 @@
 import { FastifyPluginAsync } from "fastify";
+import { AnimalParams } from "../../../../schemas/animal.js";
 
 const ventasRoute: FastifyPluginAsync = async (fastify, options) => {
-    fastify.get('/:id_animal', {
+    fastify.get('/:animal_id', {
         schema: {
             tags: ['Ventas'],
+            params: AnimalParams,
             description: 'Listar todas las ventas de un animal específico',
             summary: 'Obtener una lista de todas las ventas para un animal específico',
         },
@@ -13,7 +15,7 @@ const ventasRoute: FastifyPluginAsync = async (fastify, options) => {
         }
     });
 
-    fastify.post('/', {
+    fastify.post('/animal_id', {
         schema: {
             tags: ['Ventas'],
             description: 'Crear una nueva venta para un animal específico',

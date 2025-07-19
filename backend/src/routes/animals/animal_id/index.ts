@@ -52,6 +52,7 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
     },
     handler: async (request, reply) => {
       // Handle fetching a specific animal by ID logic
+      throw new Error("Not implemented")
     },
   });
 
@@ -64,6 +65,7 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
     },
     handler: async (request, reply) => {
       // Handle fetching a specific animal by ID logic
+      throw new Error("Not implemented")
     },
   });
 };
