@@ -15,7 +15,7 @@ const vacunacionesRoute: FastifyPluginAsync = async (fastify, options) => {
         }
     });
     
-    fastify.post('/animal_id', {
+    fastify.post('/:animal_id', {
         schema: {
         tags: ['Vacunaciones'],
         params: AnimalParams,

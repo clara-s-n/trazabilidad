@@ -11,6 +11,7 @@ const idCaravanasRoute: FastifyPluginAsync = async (fastify, options) => {
     },
     handler: async (request, reply) => {
       // Handle fetching caravan by ID logic
+      throw new Error("Not implemented");
     },
   });
 
