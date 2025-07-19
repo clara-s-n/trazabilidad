@@ -7,8 +7,8 @@ export default fp<FastifySwaggerOptions>(async (fastify) => {
     openapi: {
       openapi: '3.0.0',
       info: {
-        title: 'Test swagger',
-        description: 'Testing the Fastify swagger API',
+        title: 'Trazabilidad',
+        description: 'API de Trazabilidad',
         version: '0.1.0'
       },
       servers: [
@@ -18,8 +18,15 @@ export default fp<FastifySwaggerOptions>(async (fastify) => {
         }
       ],
       tags: [
-        { name: 'examples', description: 'Examples end points.' },
-        { name: 'auth', description: 'Authentication related end-points' }
+        { name: 'Auth', description: 'Endpoints para autenticación' }
+        , { name: 'Animales', description: 'Endpoints para animales' }
+        , { name: 'Usuarios', description: 'Endpoints para usuarios' }
+        , { name: 'Transportes', description: 'Endpoints para transportes' }
+        , { name: 'Caravanas', description: 'Endpoints para caravanas' }
+        , { name: 'Predios', description: 'Endpoints para predios' }
+        , { name: 'Ventas', description: 'Endpoints para ventas' }
+        , { name: 'Vacunaciones', description: 'Endpoints para vacunaciones' }
+        , { name: 'Pesajes', description: 'Endpoints para pesajes' }
       ],
       components: {
         securitySchemes: {
