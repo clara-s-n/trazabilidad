@@ -1,8 +1,13 @@
 import {Static, Type} from "@sinclair/typebox";
 
-export const Login = Type.Object({
+export const LoginParams = Type.Object({
     email : Type.String({ format: 'email' }),
     password: Type.String({ minLength: 6 }),
 });
 
-export type LoginType = Static<typeof Login>;
+export const UsuarioParams = Type.Object({
+    id: Type.String(),
+});
+
+export type LoginType = Static<typeof LoginParams>;
+export type UsuarioType = Static<typeof UsuarioParams>;
