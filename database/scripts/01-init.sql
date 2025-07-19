@@ -1,13 +1,13 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
-CREATE TYPE IF NOT EXISTS "tag_status" AS ENUM (
+CREATE TYPE "tag_status" AS ENUM (
   'active',
   'inactive',
   'retired'
 );
 
-CREATE TYPE IF NOT EXISTS "animal_status" AS ENUM (
+CREATE TYPE "animal_status" AS ENUM (
   'alive',
   'deceased',
   'robbed',
