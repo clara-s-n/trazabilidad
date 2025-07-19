@@ -5,9 +5,9 @@ export const LoginParams = Type.Object({
     password: Type.String({ minLength: 6 }),
 });
 
-export const UsuarioParams = Type.Object({
+export const UserParams = Type.Object({
     id: Type.String(),
 });
 
 export type LoginType = Static<typeof LoginParams>;
-export type UsuarioType = Static<typeof UsuarioParams>;
+export type UserType = Static<typeof UserParams>;
