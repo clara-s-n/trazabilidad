@@ -1,4 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
+import { UserParams } from "../../schemas/user.js";
 
 const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
   fastify.get('/', {

@@ -1,7 +1,7 @@
 import { Static, Type } from '@sinclair/typebox';
 
 export const AnimalParams = Type.Object({
-  id: Type.String(),
+  animal_id: Type.Integer(),
 });
 
 export type AnimalType = Static<typeof AnimalParams>; 

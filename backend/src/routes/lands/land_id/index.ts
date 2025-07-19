@@ -1,21 +1,33 @@
 import { FastifyPluginAsync } from "fastify";
+import { LandParams } from "../../../schemas/land.js";
 
 const idPrediosRoute: FastifyPluginAsync = async (fastify, options) => {
-  fastify.get('/:id_predio', {
+  fastify.get('/:land_id', {
     schema: {
       tags: ['Predios'],
+      params: LandParams
     },
     handler: async (request, reply) => {
       // Handle fetching predio by ID logic
     },
   });
 
-  fastify.put('/:id_predio', {
+  fastify.put('/:land_id', {
     schema: {
       tags: ['Predios'],
     },
     handler: async (request, reply) => {
       // Handle updating predio by ID logic
+    },
+  });
+
+  fastify.get('/animals', {
+    schema: {
+      tags: ['Predios'],
+      params: LandParams
+    },
+    handler: async (request, reply) => {
+      // Handle fetching predio by ID logic
     },
   });
 };

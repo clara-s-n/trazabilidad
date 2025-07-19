@@ -6,7 +6,7 @@ export const LoginParams = Type.Object({
 });
 
 export const UserParams = Type.Object({
-    id: Type.String(),
+    user_id: Type.Integer(),
 });
 
 export type LoginType = Static<typeof LoginParams>;

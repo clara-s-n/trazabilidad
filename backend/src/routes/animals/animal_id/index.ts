@@ -1,27 +1,34 @@
 import { FastifyPluginAsync } from "fastify";
+import { AnimalParams } from "../../../schemas/animal.js";
+//import { UserParams } from "../../../../../schemas/user.js";
+//import { Type } from "@sinclair/typebox";
 
 const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
-  fastify.put("/:id_animal", {
+  fastify.put("/:animal_id", {
     schema: {
       tags: ["Animales"],
+      //params: Type.Intersect([UserParams, AnimalParams])
+      params: AnimalParams
     },
     handler: async (request, reply) => {
       // Handle updating an animal logic
     },
   });
 
-  fastify.delete("/:id_animal", {
+  fastify.delete("/", {
     schema: {
       tags: ["Animales"],
+      params: AnimalParams
     },
     handler: async (request, reply) => {
       // Handle deleting an animal logic
     },
   });
 
-  fastify.get("/:id_animal", {
+  fastify.get("/", {
     schema: {
       tags: ["Animales"],
+      params: AnimalParams
     },
     handler: async (request, reply) => {
       // Handle fetching a specific animal by ID logic

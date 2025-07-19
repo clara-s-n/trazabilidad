@@ -1,25 +1,29 @@
 import { FastifyPluginAsync } from "fastify";
+import { UserParams } from "../../../schemas/user.js";
 
 const usuariosIdRoute: FastifyPluginAsync = async (fastify, options) => {
-  fastify.put('/:id_usuario', {
+  fastify.put('/:user_id', {
     schema: {
       tags: ['Usuarios'],
+      params: UserParams
     }
   }, async (request, reply) => {
     // Handle updating usuario logic
   });
 
-  fastify.delete('/:id_usuario', {
+  fastify.delete('/:user_id', {
     schema: {
       tags: ['Usuarios'],
+      params: UserParams
     }
   }, async (request, reply) => {
     // Handle deleting usuario logic
   });
 
-  fastify.get('/:id_usuario', {
+  fastify.get('/:user_id', {
     schema: {
       tags: ['Usuarios'],
+      params: UserParams
     }
   }, async (request, reply) => {
     // Handle fetching a specific usuario by ID logic
