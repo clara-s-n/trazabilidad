@@ -18,6 +18,7 @@ const vacunacionesRoute: FastifyPluginAsync = async (fastify, options) => {
     fastify.post('/animal_id', {
         schema: {
         tags: ['Vacunaciones'],
+        params: AnimalParams,
         description: 'Crear una nueva vacunación para un animal específico',
         summary: 'Agregar una nueva vacunación a la lista de un animal específico',
         },

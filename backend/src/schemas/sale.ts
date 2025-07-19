@@ -1,7 +1,7 @@
 import { Static, Type } from '@sinclair/typebox';
 
 export const Sale = Type.Object({
-  id: Type.String(),
+  sale_id: Type.Integer(),
 });
 
 export type SaleType = Static<typeof Sale>;

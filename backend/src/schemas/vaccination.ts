@@ -1,7 +1,7 @@
 import {Static, Type} from "@sinclair/typebox";
 
 export const VaccinationParams = Type.Object({
-    id: Type.String(),
+    vaccination_id: Type.Integer(),
 });
 
 export type VaccinationType = Static<typeof VaccinationParams>;

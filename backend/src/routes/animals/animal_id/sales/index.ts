@@ -18,6 +18,7 @@ const ventasRoute: FastifyPluginAsync = async (fastify, options) => {
     fastify.post('/animal_id', {
         schema: {
             tags: ['Ventas'],
+            params: AnimalParams,
             description: 'Crear una nueva venta para un animal específico',
             summary: 'Agregar una nueva venta a la lista de un animal específico',
         },

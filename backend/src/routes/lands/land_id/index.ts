@@ -2,7 +2,7 @@ import { FastifyPluginAsync } from "fastify";
 import { LandParams } from "../../../schemas/land.js";
 
 const idPrediosRoute: FastifyPluginAsync = async (fastify, options) => {
-  fastify.get('/:id', {
+  fastify.get('/:land_id', {
     schema: {
       tags: ['Predios'],
       params: LandParams, 
@@ -15,7 +15,7 @@ const idPrediosRoute: FastifyPluginAsync = async (fastify, options) => {
     },
   });
 
-  fastify.put('/:id', {
+  fastify.put('/:land_id', {
     schema: {
       tags: ['Predios'],
       params: LandParams,
@@ -28,7 +28,7 @@ const idPrediosRoute: FastifyPluginAsync = async (fastify, options) => {
     },
   });
 
-  fastify.get('/:id/animals', {
+  fastify.get('/:land_id/animals', {
     schema: {
       tags: ['Predios'],
       params: LandParams,
