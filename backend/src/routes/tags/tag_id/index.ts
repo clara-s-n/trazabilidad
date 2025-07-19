@@ -1,23 +1,23 @@
 import { FastifyPluginAsync } from "fastify";
 
-const caravanasRoute: FastifyPluginAsync = async (fastify, options) => {
-  fastify.get(('/'), {
+const idCaravanasRoute: FastifyPluginAsync = async (fastify, options) => {
+  fastify.get('/', {
     schema: {
       tags: ['Caravanas'],
     },
     handler: async (request, reply) => {
-      // Handle fetching caravans logic
+      // Handle fetching caravan by ID logic
     },
   });
 
-  fastify.post(('/'), {
+  fastify.put('/', {
     schema: {
       tags: ['Caravanas'],
     },
     handler: async (request, reply) => {
-      // Handle creating a new caravan logic
+      // Handle updating caravan by ID logic
     },
   });
 };
 
-export default caravanasRoute;
+export default idCaravanasRoute;
