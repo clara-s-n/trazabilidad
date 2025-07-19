@@ -23,30 +23,30 @@ El backend expone una API REST organizada por entidad, con rutas agrupadas en su
 
 A continuación se presenta una vista general del árbol de endpoints:
 ```
-/auth
-└── /login → POST - Login de usuario
-
-/users
-├── / → GET, POST
-└── /:user_id → GET, PUT, DELETE
-└── /animals
-├── / → GET, POST
-└── /:animal_id → GET, PUT, DELETE
-├── /sale → GET, POST
-├── /vaccine → GET, POST
-└── /weighing → GET, POST
-
-/lands
-├── / → GET, POST
-└── /:land_id → GET, PUT, DELETE
-
-/tags
-├── / → GET, POST
-└── /:tag_id → GET, PUT, DELETE
-
-/transport
-├── / → GET, POST
-└── /:transport_id → GET, PUT, DELETE
+/
+├──/auth
+   └── /login → POST - Login de usuario
+├──/animals
+   └── / → GET, POST
+      ├── /animal_id/:animal_id → GET, PUT, DELETE
+      ├── /animal_id/:animal_id/modifications → GET
+      └── /animal_id/:animal_id/events → GET
+         ├── /sale → GET, POST
+         ├── /vaccine → GET, POST
+         └── /weighing → GET, POST
+├──/users
+   └── / → GET, POST
+      └── user_id/:user_id → GET, PUT, DELETE
+├──/lands
+   └── / → GET, POST
+      ├── /land_id/:land_id → GET, PUT, DELETE
+      └── /land_id/:land_id/animals → GET, PUT, DELETE
+├──/tags
+   └── / → GET, POST
+      └── /tag_id/:tag_id → GET, PUT, DELETE
+└──/transport
+   └──/ → GET, POST
+      └── /transport_id/:transport_id → GET, PUT, DELETE
 ```
 
 ## 4. Instalación y ejecución local
