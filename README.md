@@ -13,6 +13,7 @@ Este sistema fue diseñado para ayudar a productores y entidades del rubro ganad
 - **JWT** para autenticación basada en tokens
 - **Swagger** para documentación automática
 - **PostgreSQL** como base de datos relacional
+- **Docker + Docker Compose** para facilitar la ejecución del entorno
 - **pnpm/npm** como gestor de paquetes
 
 ## 3. Rutas del Backend y Endpoints
@@ -49,18 +50,40 @@ A continuación se presenta una vista general del árbol de endpoints:
       └── /transport_id/:transport_id → GET, PUT, DELETE
 ```
 
-## 4. Instalación y ejecución local
+## 4. Ejecución con Docker (recomendado)
+
+### 🐳 Requisitos previos
+
+- Tener instalado **Docker** y **Docker Compose**
+
+### 🛠️ Paso a paso
 
 1. Clonar el repositorio:
    ```bash
    git clone <url-del-repo>
    cd backend
    
-2. Instalar dependencias y levantar el servidor:
+2. Crear un archivo .env en la raíz del backend con las siguientes variables:
    ```
-   npm install
-   npm run dev
+   DB_HOST=db
+   DB_PORT=5432
+   DB_USER=postgres
+   DB_PASSWORD=postgres
+   DB_NAME=trazabilidad
+   JWT_SECRET=supersecreto
    ```
 
-3. Acceder a la documentación de Swagger:
+3. Levantar el entorno completo con:
+   ```
+   docker-compose up --build
+   ```
+
+4. Esperar un tiempo y luego ingresar a:
    http://localhost:3000/docs
+
+>[!IMPORTANT]
+>⚠️ La base de datos se inicializa automáticamente con estructura y datos base al ejecutar los contenedores por primera vez.
+Los scripts .sql están en: src/database/scripts/
+
+>[!WARNING]
+>A pesar de que ya está la conexión entre la base de datos y el backend, no va a poder probar el funcionamiento de las rutas ya que aún no están implementadas.
