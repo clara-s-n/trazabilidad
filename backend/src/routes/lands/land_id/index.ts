@@ -5,7 +5,9 @@ const idPrediosRoute: FastifyPluginAsync = async (fastify, options) => {
   fastify.get('/:land_id', {
     schema: {
       tags: ['Predios'],
-      params: LandParams
+      params: LandParams, 
+      description: 'Obtener un predio específico',
+      summary: 'Obtener información detallada de un predio específico',
     },
     handler: async (request, reply) => {
       // Handle fetching predio by ID logic

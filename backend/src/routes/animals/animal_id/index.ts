@@ -8,7 +8,9 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
     schema: {
       tags: ["Animales"],
       //params: Type.Intersect([UserParams, AnimalParams])
-      params: AnimalParams
+      params: AnimalParams,
+      description: 'Modificar un animal',
+      summary: 'Realizar la modificación de un animal',
     },
     handler: async (request, reply) => {
       // Handle updating an animal logic
@@ -18,20 +20,26 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
   fastify.delete("/:animal_id", {
     schema: {
       tags: ["Animales"],
-      params: AnimalParams
+      params: AnimalParams,
+      description: 'Eliminar un animal',
+      summary: 'Realizar el eliminado de un animal',
     },
     handler: async (request, reply) => {
       // Handle deleting an animal logic
+        throw new Error("Not implemented")
     },
   });
 
   fastify.get("/:animal_id", {
     schema: {
       tags: ["Animales"],
-      params: AnimalParams
+      params: AnimalParams,
+      description: 'Listar un animal en específico',
+      summary: 'Obtener un animal en específico.',
     },
     handler: async (request, reply) => {
       // Handle fetching a specific animal by ID logic
+      throw new Error("Not implemented")
     },
   });
 

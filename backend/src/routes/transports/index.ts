@@ -4,9 +4,12 @@ const transportesRoute: FastifyPluginAsync = async (fastify, options) => {
   fastify.get('/', {
     schema: {
       tags: ['Transportes'],
+      description: 'Listar todos los transportes',
+      summary: 'Obtener una lista de todos los transportes disponibles',
     },
     handler: async (request, reply) => {
         // Handle fetching transportes logic
+        throw new Error("Not implemented");
     },
   });
 
@@ -16,6 +19,7 @@ const transportesRoute: FastifyPluginAsync = async (fastify, options) => {
     },
     handler: async (request, reply) => {
         // Handle creating new transporte logic
+        throw new Error("Not implemented");
     },
   });  
 };
