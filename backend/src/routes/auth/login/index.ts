@@ -5,6 +5,7 @@ import { SignOptions } from "@fastify/jwt";
 import { LoginParams, LoginType } from "../../../schemas/user.js";
 import { userRepository } from "../../../services/user.repository.js";
 import bcrypt from "bcryptjs";
+import { FastifyReply, FastifyRequest } from "fastify";
 
 const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<void> => {
   fastify.post("/", {
@@ -19,22 +20,9 @@ const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<voi
           token: String({ description: "JWT generado para autenticación" })
         })
       },
-      examples: {
-        admin: {
-          email: "administrador@example.com",
-          password: "admin123"
-        },
-        consulta: {
-          email: "consulta@example.com",
-          password: "consulta123"
-        },
-        operador: {
-          email: "operador@example.com",
-          password: "operador123"
-        }
     },
-    handler: async (request, reply) => {
-      const { email, password }: LoginType = request.body;
+    handler: async (request: FastifyRequest, reply: FastifyReply) => {
+      const { email, password }: LoginType = request.body as LoginType;
 
       if (!email || !password) {
         throw new UCUError("Email y contraseña son obligatorios");
@@ -62,7 +50,7 @@ const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<voi
 
       const token = fastify.jwt.sign(payload, signOptions);
       return { token };
-    }
+    },
   });
 };
 
