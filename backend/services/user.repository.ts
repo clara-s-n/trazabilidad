@@ -1,7 +1,7 @@
-import { query } from "./database";
+import { query } from "./database.js";
 import { User } from "../src/schemas/user.js"
 
-export class UsuarioRepository {
+export class UserRepository {
   async findUserByEmail(email: string): Promise<User | null> {
     const { rows } = await query(
       `SELECT id, email, password_hash, rols_id, created_at, updated_at
@@ -66,4 +66,4 @@ export class UsuarioRepository {
   }
 }
 
-export const usuarioRepository = new UsuarioRepository();
+export const userRepository = new UserRepository();
