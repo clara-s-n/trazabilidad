@@ -11,6 +11,11 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       params: AnimalParams,
       description: 'Modificar un animal',
       summary: 'Realizar la modificación de un animal',
+      security: [
+        {
+          bearerAuth: []
+        }
+      ],
     },
     handler: async (request, reply) => {
       // Handle updating an animal logic

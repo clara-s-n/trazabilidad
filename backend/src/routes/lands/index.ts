@@ -6,6 +6,11 @@ const prediosRoute: FastifyPluginAsync = async (fastify, options) => {
       tags: ['Predios'],
       description: 'Listar todos los predios',
       summary: 'Obtener una lista de todos los predios disponibles',
+      security: [
+        {
+          bearerAuth: []
+        }
+      ],
     },
     handler: async (request, reply) => {
       // Handle fetching predios logic

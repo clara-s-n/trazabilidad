@@ -8,6 +8,11 @@ const ventasRoute: FastifyPluginAsync = async (fastify, options) => {
             params: AnimalParams,
             description: 'Listar todas las ventas de un animal específico',
             summary: 'Obtener una lista de todas las ventas para un animal específico',
+            security: [
+        {
+          bearerAuth: []
+        }
+      ],
         },
         handler: async (request, reply) => {
             // Logic to fetch sales

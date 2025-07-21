@@ -8,6 +8,11 @@ const vacunacionesRoute: FastifyPluginAsync = async (fastify, options) => {
         params: AnimalParams,
         description: 'Listar todas las vacunaciones de un animal específico',
         summary: 'Obtener una lista de todas las vacunaciones para un animal específico',
+        security: [
+        {
+          bearerAuth: []
+        }
+      ],
         },
         handler: async (request, reply) => {
         // Logic to fetch vaccinations

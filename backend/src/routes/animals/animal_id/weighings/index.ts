@@ -8,6 +8,11 @@ const pesajesRoute: FastifyPluginAsync = async (fastify, options) => {
       params: AnimalParams,
       description: 'Listar todos los pesajes de un animal específico',
       summary: 'Obtener una lista de todos los pesajes para un animal específico',
+      security: [
+        {
+          bearerAuth: []
+        }
+      ],
     },
     handler: async (request, reply) => {
       // Logic to fetch pesajes for the specified animal

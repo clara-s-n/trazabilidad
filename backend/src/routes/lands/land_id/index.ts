@@ -8,6 +8,11 @@ const idPrediosRoute: FastifyPluginAsync = async (fastify, options) => {
       params: LandParams, 
       description: 'Obtener un predio específico',
       summary: 'Obtener información detallada de un predio específico',
+      security: [
+        {
+          bearerAuth: []
+        }
+      ],
     },
     handler: async (request, reply) => {
       // Handle fetching predio by ID logic

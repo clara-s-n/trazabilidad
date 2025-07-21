@@ -8,6 +8,11 @@ const usuariosIdRoute: FastifyPluginAsync = async (fastify, options) => {
       params: UserParams,
       description: 'Modificar un usuario',
       summary: 'Realizar la modificación de un usuario',
+      security: [
+        {
+          bearerAuth: []
+        }
+      ],
     },
     handler: async (request, reply) => {
     // Handle updating usuario logic

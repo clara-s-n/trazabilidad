@@ -8,6 +8,11 @@ const usuariosRoute: FastifyPluginAsync = async (fastify, options) => {
         tags: ['Usuarios'],
         description: 'Listar todos los usuarios',
         summary: 'Obtener una lista de todos los usuarios disponibles',
+        security: [
+        {
+          bearerAuth: []
+        }
+      ],
       },
       handler: async (request, reply) => {
         throw new Error("Not implemented");

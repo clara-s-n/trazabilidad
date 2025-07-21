@@ -30,6 +30,11 @@ export default fp<FastifySwaggerOptions>(async (fastify) => {
       ],
       components: {
         securitySchemes: {
+          apiKey: {
+            type: 'apiKey',
+            in: 'header',
+            name: 'apikey'
+          },
           bearerAuth: {
             type: 'http',
             scheme: 'bearer',
