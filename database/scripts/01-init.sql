@@ -37,8 +37,12 @@ CREATE TABLE IF NOT EXISTS "lands" (
 
 CREATE TABLE IF NOT EXISTS "tags" (
   "id" UUID PRIMARY KEY,
-  "code" VARCHAR UNIQUE NOT NULL,
-  "status" tag_status NOT NULL
+  "status" tag_status NOT NULL,
+  "country_code" VARCHAR(5) NOT NULL DEFAULT '00014',
+  "country_iso" CHAR(3) NOT NULL DEFAULT '858',
+  "ministry" VARCHAR(20) NOT NULL DEFAULT 'MGAP UY',
+  "tag_number" VARCHAR(20) NOT NULL, -- compuesto por el numero único del animal y el número de trabajo del animal
+  UNIQUE (country_code, tag_number)  -- evita duplicados en la misma emisión
 );
 
 CREATE TABLE IF NOT EXISTS "animals" (
@@ -63,7 +67,7 @@ CREATE TABLE IF NOT EXISTS "animal_tag" (
 CREATE TABLE IF NOT EXISTS "transports" (
   "id" UUID PRIMARY KEY,
   "animal_id" UUID NOT NULL,
-  "origin_land_id" UUID,
+  "origin_land_id" UUID NOT NULL,
   "destiny_land_id" UUID NOT NULL,
   "date" TIMESTAMP NOT NULL,
   "details" TEXT

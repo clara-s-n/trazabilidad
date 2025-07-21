@@ -8,6 +8,11 @@ const idCaravanasRoute: FastifyPluginAsync = async (fastify, options) => {
       params: TagParams,
       description: 'Obtener una caravana específica',
       summary: 'Obtener información detallada de una caravana específica',
+      security: [
+        {
+          bearerAuth: []
+        }
+      ],
     },
     handler: async (request, reply) => {
       // Handle fetching caravan by ID logic

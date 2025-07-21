@@ -6,6 +6,11 @@ const transportesRoute: FastifyPluginAsync = async (fastify, options) => {
       tags: ['Transportes'],
       description: 'Listar todos los transportes',
       summary: 'Obtener una lista de todos los transportes disponibles',
+      security: [
+        {
+          bearerAuth: []
+        }
+      ],
     },
     handler: async (request, reply) => {
         // Handle fetching transportes logic
@@ -18,6 +23,11 @@ const transportesRoute: FastifyPluginAsync = async (fastify, options) => {
       tags: ['Transportes'],
       description: 'Crear un nuevo transporte',
       summary: 'Agregar un nuevo transporte a la lista',
+      security: [
+        {
+          bearerAuth: []
+        }
+      ],
     },
     handler: async (request, reply) => {
         // Handle creating new transporte logic

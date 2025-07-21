@@ -8,6 +8,11 @@ const transportesRoutes: FastifyPluginAsync = async (fastify) => {
       params: TransportParams,
       description: 'Obtener un transporte específico',
       summary: 'Obtener información detallada de un transporte específico',
+      security: [
+        {
+          bearerAuth: []
+        }
+      ],
     },
     handler: async (request, reply) => {
       // Handle fetching transporte by ID logic

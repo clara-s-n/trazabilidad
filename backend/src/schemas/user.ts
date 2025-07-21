@@ -6,8 +6,23 @@ export const LoginParams = Type.Object({
 });
 
 export const UserParams = Type.Object({
-    user_id: Type.Integer(),
+    user_id: Type.String({ format: 'uuid' }),
 });
 
+export const UserSchema = Type.Object({
+    id: Type.String({ format: 'uuid' }),
+    email: Type.String({ format: 'email' }),
+    password_hash: Type.String(),
+    rols_id: Type.String({ format: 'uuid' }),
+    created_at: Type.String({ format: 'date-time' })
+});
+
+export const UpdateUserSchema = Type.Object({
+  email: Type.Optional(Type.String({ format: "email" })),
+  rolsId: Type.Optional(Type.String({ format: "uuid" }))
+});
+
+export type User = Static<typeof UserSchema>;
 export type LoginType = Static<typeof LoginParams>;
-export type UserType = Static<typeof UserParams>;
+export type UserParamsType = Static<typeof UserParams>;
+export type UpdateUserType = Static<typeof UpdateUserSchema>;
