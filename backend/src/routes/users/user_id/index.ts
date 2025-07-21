@@ -11,7 +11,12 @@ const usuariosIdRoute: FastifyPluginAsync = async (fastify, options) => {
       params: UserParams,
       description: "Obtener un usuario específico",
       summary: "Obtener información detallada de un usuario específico",
-      security: [{ bearerAuth: [] }]
+      security: [{ bearerAuth: [] }],
+      example: {
+        params: {
+          user_id: "debeeeb4-e4a4-4823-8510-b09ff13a735b"
+        },
+      }
     },
     handler: async (request, reply) => {
       const { user_id } = request.params as UserParamsType;
