@@ -27,6 +27,11 @@ const usuariosRoute: FastifyPluginAsync = async (fastify, options) => {
         tags: ['Usuarios'],
         description: 'Crear un nuevo usuario',
         summary: 'Agregar un nuevo usuario a la lista',
+        security: [
+        {
+          bearerAuth: []
+        }
+      ],
       },
       handler: async (request, reply) => {
         throw new Error("Not implemented");
