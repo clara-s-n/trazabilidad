@@ -1,6 +1,6 @@
 // loginRoute.ts
 import { UCUError } from "../../../utils/index.js";
-import { FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox";
+import { FastifyPluginAsyncTypebox, Type } from "@fastify/type-provider-typebox";
 import { SignOptions } from "@fastify/jwt";
 import { LoginParams, LoginType } from "../../../schemas/user.js";
 import { userRepository } from "../../../services/user.repository.js";
@@ -16,8 +16,8 @@ const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<voi
       body: LoginParams,
       security: [],
       response: {
-        200: ({
-          token: String({ description: "JWT generado para autenticación" })
+        200: Type.Object({
+          token: Type.String({ description: "JWT generado para autenticación" })
         })
       },
     },
