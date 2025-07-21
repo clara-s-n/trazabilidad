@@ -70,7 +70,7 @@ A continuación se presenta una vista general del árbol de endpoints:
    DB_USER=postgres
    DB_PASSWORD=postgres
    DB_NAME=trazabilidad
-   JWT_SECRET=supersecreto
+   FASTIFY_SECRET=supersecreto
    ```
 
 3. Levantar el entorno completo con:
@@ -82,8 +82,7 @@ A continuación se presenta una vista general del árbol de endpoints:
    http://localhost:3000/docs
 
 >[!IMPORTANT]
->⚠️ La base de datos se inicializa automáticamente con estructura y datos base al ejecutar los contenedores por primera vez.
-Los scripts .sql están en: src/database/scripts/
+>⚠️ La base de datos se inicializa automáticamente con estructura y datos base al ejecutar los contenedores por primera vez. Los scripts .sql están en: `src/database/scripts/`
 
 >[!WARNING]
->A pesar de que ya está la conexión entre la base de datos y el backend, no va a poder probar el funcionamiento de las rutas ya que aún no están implementadas.
+>Las rutas a probar para la entrega del día 21 de julio son las que se encuentran en las siguientes direcciones: `/auth/login`, `/users/user_id`
