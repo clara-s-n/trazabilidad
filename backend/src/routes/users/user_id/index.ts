@@ -1,7 +1,7 @@
 // src/routes/usuarios/usuariosIdRoute.ts
 import { FastifyPluginAsync } from "fastify";
 import { UpdateUserSchema, UpdateUserType, UserParams, UserParamsType } from "../../../schemas/user.js";
-import { userRepository } from "../../../../services/user.repository.js";
+import { userRepository } from "../../../services/user.repository.js";
 import { UCUError } from "../../../utils/index.js";
 
 const usuariosIdRoute: FastifyPluginAsync = async (fastify, options) => {
@@ -30,7 +30,7 @@ const usuariosIdRoute: FastifyPluginAsync = async (fastify, options) => {
       description: "Modificar un usuario",
       summary: "Realizar la modificación de un usuario",
       security: [{ bearerAuth: [] }],
-      body: UpdateUserSchema, // Asegúrate de definir el esquema del body si es necesario
+      body: UpdateUserSchema, 
     },
     handler: async (request, reply) => {
       const { user_id } = request.params as UserParamsType;

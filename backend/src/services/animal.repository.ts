@@ -1,5 +1,5 @@
 import { query } from "./database.js";
-import { Animal } from "../src/schemas/animal.js"
+import { Animal } from "../schemas/animal.js"
 
 
 export class AnimalRepository {

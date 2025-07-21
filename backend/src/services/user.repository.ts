@@ -1,10 +1,10 @@
 import { query } from "./database.js";
-import { User } from "../src/schemas/user.js"
+import { User } from "../schemas/user.js"
 
 export class UserRepository {
   async findUserByEmail(email: string): Promise<User | null> {
     const { rows } = await query(
-      `SELECT id, email, password_hash, rols_id, created_at, updated_at
+      `SELECT id, email, password_hash, rols_id, created_at
         FROM users
         WHERE email = $1`,
       [email]
@@ -14,7 +14,7 @@ export class UserRepository {
 
   async getAllUsers(): Promise<User[]> {
     const { rows } = await query(
-      `SELECT id, email, password_hash, rols_id, created_at, updated_at
+      `SELECT id, email, password_hash, rols_id, created_at
         FROM users`
     );
     return rows as User[];
@@ -22,7 +22,7 @@ export class UserRepository {
 
   async getUserById(id: string): Promise<User | null> {
     const { rows } = await query(
-      `SELECT id, email, password_hash, rols_id, created_at, updated_at
+      `SELECT id, email, password_hash, rols_id, created_at
         FROM users
         WHERE id = $1`,
       [id]
@@ -34,7 +34,7 @@ export class UserRepository {
     const { rows } = await query(
       `INSERT INTO users(id, email, password_hash, rols_id, created_at)
         VALUES (gen_random_uuid(), $1, $2, $3, now())
-        RETURNING id, email, password_hash, rols_id, created_at, updated_at`,
+        RETURNING id, email, password_hash, rols_id, created_at`,
       [data.email, data.passwordHash, data.rolsId]
     );
     return rows[0] as User;
@@ -55,7 +55,7 @@ export class UserRepository {
       `UPDATE users
         SET ${sets.join(', ')}, updated_at = now()
         WHERE id = $1
-        RETURNING id, email, password_hash, rols_id, created_at, updated_at`,
+        RETURNING id, email, password_hash, rols_id, created_at`,
       params
     );
     return rows[0] as User | null;

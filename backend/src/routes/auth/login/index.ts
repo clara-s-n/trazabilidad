@@ -3,7 +3,8 @@ import { UCUError } from "../../../utils/index.js";
 import { FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox";
 import { SignOptions } from "@fastify/jwt";
 import { LoginParams, LoginType } from "../../../schemas/user.js";
-import { userRepository } from "../../../../services/user.repository.js";
+import { userRepository } from "../../../services/user.repository.js";
+import bcrypt from "bcryptjs";
 
 const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<void> => {
   fastify.post("/", {
@@ -17,7 +18,21 @@ const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<voi
         200: ({
           token: String({ description: "JWT generado para autenticación" })
         })
-      }
+      },
+      example: [
+        {
+          email: "administrador@example.com",
+          password: "admin123"
+        },
+        {
+          email: "consulta@example.com",
+          password: "consulta123"
+        },
+        {
+          email: "operador@example.com",
+          password: "operador123"
+        }
+      ]
     },
     handler: async (request, reply) => {
       const { email, password }: LoginType = request.body;
@@ -31,10 +46,10 @@ const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<voi
         throw new UCUError("Usuario no encontrado");
       }
 
-    //   const isValid = await bcrypt.compare(password, user.password_hash);
-    //   if (!isValid) {
-    //     throw new UCUError("Credenciales inválidas");
-    //   }
+      const isValid = await bcrypt.compare(password, user.password_hash);
+      if (!isValid) {
+        throw new UCUError("Credenciales inválidas");
+      }
 
       const payload = {
         user: user.email,

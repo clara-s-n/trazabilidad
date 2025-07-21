@@ -1,5 +1,5 @@
 import { query } from "./database.js";
-import { Tag } from "../src/schemas/tag.js"
+import { Tag } from "../schemas/tag.js"
 
 export class TagRepository {
     async createTag(data: { tag_number: string }): Promise<Tag> {

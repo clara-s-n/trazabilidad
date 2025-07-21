@@ -1,5 +1,5 @@
 import { query } from "./database.js";
-import { Sale } from "../src/schemas/sale.js"
+import { Sale } from "../schemas/sale.js"
 
 
 export class SaleRepository {

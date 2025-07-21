@@ -26,7 +26,14 @@ SELECT
 FROM generate_series(1,100) AS gs;
 
 
--- 4) Usuarios – 100 registros
+-- 4) Usuarios
+INSERT INTO users (id, email, password_hash, rols_id, created_at)
+VALUES
+  ('3600e259-0cc1-491d-9860-aa4cff12155c', 'administrador@example.com', crypt('admin123', gen_salt('bf')), (SELECT id FROM rols WHERE name = 'Administrador'), now()),
+  ('c4221f6c-9534-4537-8803-eb12ef89468a', 'consulta@example.com', crypt('consulta123', gen_salt('bf')), (SELECT id FROM rols WHERE name = 'Usuario Consulta'), now()),
+  ('debeeeb4-e4a4-4823-8510-b09ff13a735b', 'operador@example.com', crypt('operador123', gen_salt('bf')), (SELECT id FROM rols WHERE name = 'Operador Autorizado'), now());
+
+-- 100 registros extras
 INSERT INTO users (id, email, password_hash, rols_id, created_at)
 SELECT
   uuid_generate_v4(),

@@ -14,8 +14,7 @@ export const UserSchema = Type.Object({
     email: Type.String({ format: 'email' }),
     password_hash: Type.String(),
     rols_id: Type.String({ format: 'uuid' }),
-    created_at: Type.String({ format: 'date-time' }),
-    updated_at: Type.Optional(Type.String({ format: 'date-time' })),
+    created_at: Type.String({ format: 'date-time' })
 });
 
 export const UpdateUserSchema = Type.Object({
