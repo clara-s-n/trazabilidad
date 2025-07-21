@@ -2,16 +2,6 @@ import { query } from "./database.js";
 import { User } from "../src/schemas/user.js"
 
 export class UserRepository {
-  async doLogin(email: string, password: string): Promise<User | null> {
-    const { rows } = await query(
-      `SELECT id, email, password_hash, rols_id, created_at, updated_at
-        FROM users
-        WHERE email = $1 AND password_hash = $2`,
-      [email, password]
-    );
-    return rows[0] as User | null;
-  }
-
   async findUserByEmail(email: string): Promise<User | null> {
     const { rows } = await query(
       `SELECT id, email, password_hash, rols_id, created_at, updated_at
