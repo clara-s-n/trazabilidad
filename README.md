@@ -83,6 +83,33 @@ A continuación se presenta una vista general del árbol de endpoints:
 
 >[!IMPORTANT]
 >⚠️ La base de datos se inicializa automáticamente con estructura y datos base al ejecutar los contenedores por primera vez. Los scripts .sql están en: `src/database/scripts/`
-
+## 5. Datos para probar la documentación
 >[!WARNING]
+>El texto default que aparece en la documentación de swagger no va a funcionar en el login
+
+A continuación se muestran ejemplos de como probar el login con cada uno de los roles:
+1. Administrador
+   ```
+      {
+          email: "administrador@example.com",
+          password: "admin123"
+      }
+   ```
+2. Usuario consulta
+   ```
+      {
+          email: "consulta@example.com",
+          password: "consulta123"
+      }
+   ```
+3. Operador
+   ```
+      {
+          email: "operador@example.com",
+          password: "operador123"
+      }
+   ```
+
+Aparte, en la ruta `users/user_id` se puede utilizar el valor: `3600e259-0cc1-491d-9860-aa4cff12155c`
+>[!IMPORTANT]
 >Las rutas a probar para la entrega del día 21 de julio son las que se encuentran en las siguientes direcciones: `/auth/login`, `/users/user_id`
