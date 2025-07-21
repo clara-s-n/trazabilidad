@@ -19,20 +19,19 @@ const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<voi
           token: String({ description: "JWT generado para autenticación" })
         })
       },
-      example: [
-        {
+      examples: {
+        admin: {
           email: "administrador@example.com",
           password: "admin123"
         },
-        {
+        consulta: {
           email: "consulta@example.com",
           password: "consulta123"
         },
-        {
+        operador: {
           email: "operador@example.com",
           password: "operador123"
         }
-      ]
     },
     handler: async (request, reply) => {
       const { email, password }: LoginType = request.body;
