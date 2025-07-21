@@ -5,7 +5,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 
 
 const jwtOptions: FastifyJWTOptions = {
-  secret: "process.env.FASTIFY_SECRET"  //El or es porque no puede ser undefined
+  secret: process.env.FASTIFY_SECRET   //El or es porque no puede ser undefined
 };
 
 const jwtPlugin = fp<FastifyJWTOptions>(async (fastify) => {  
