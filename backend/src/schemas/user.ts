@@ -1,8 +1,18 @@
 import {Static, Type} from "@sinclair/typebox";
 
 export const LoginParams = Type.Object({
-    email : Type.String({ format: 'email' }),
-    password: Type.String({ minLength: 6 }),
+  email: Type.String({
+    format: "email",
+    examples: [
+      "administrador@example.com",
+      "consulta@example.com",
+      "operador@example.com"
+    ]
+  }),
+  password: Type.String({
+    minLength: 6,
+    examples: ["admin123", "consulta123", "operador123"]
+  })
 });
 
 export const UserParams = Type.Object({
