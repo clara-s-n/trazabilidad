@@ -23,6 +23,11 @@ const transportesRoute: FastifyPluginAsync = async (fastify, options) => {
       tags: ['Transportes'],
       description: 'Crear un nuevo transporte',
       summary: 'Agregar un nuevo transporte a la lista',
+      security: [
+        {
+          bearerAuth: []
+        }
+      ],
     },
     handler: async (request, reply) => {
         // Handle creating new transporte logic

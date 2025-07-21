@@ -18,6 +18,12 @@ export const UserSchema = Type.Object({
     updated_at: Type.Optional(Type.String({ format: 'date-time' })),
 });
 
+export const UpdateUserSchema = Type.Object({
+  email: Type.Optional(Type.String({ format: "email" })),
+  rolsId: Type.Optional(Type.String({ format: "uuid" }))
+});
+
 export type User = Static<typeof UserSchema>;
 export type LoginType = Static<typeof LoginParams>;
 export type UserParamsType = Static<typeof UserParams>;
+export type UpdateUserType = Static<typeof UpdateUserSchema>;
