@@ -23,6 +23,11 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       tags: ['Animales'],
       description: 'Crear un nuevo animal',
       summary: 'Agregar un nuevo animal a la lista',
+      security: [
+        {
+          bearerAuth: []
+        }
+      ],
     },
     handler: async (request, reply) => {
       // Logic to create a new animal

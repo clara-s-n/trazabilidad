@@ -26,6 +26,11 @@ const vacunacionesRoute: FastifyPluginAsync = async (fastify, options) => {
         params: AnimalParams,
         description: 'Crear una nueva vacunación para un animal específico',
         summary: 'Agregar una nueva vacunación a la lista de un animal específico',
+        security: [
+          {
+            bearerAuth: []
+          }
+        ],
         },
         handler: async (request, reply) => {
         // Logic to create a new vaccination

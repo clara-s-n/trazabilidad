@@ -26,6 +26,11 @@ const pesajesRoute: FastifyPluginAsync = async (fastify, options) => {
       params: AnimalParams,
       description: 'Crear un nuevo pesaje para un animal específico',
       summary: 'Agregar un nuevo pesaje a la lista de un animal específico',
+      security: [
+        {
+          bearerAuth: []
+        }
+      ],
     },
     handler: async (request, reply) => {
       // Logic to create a new pesaje for the specified animal

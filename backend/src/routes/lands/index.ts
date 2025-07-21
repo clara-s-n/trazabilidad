@@ -23,6 +23,11 @@ const prediosRoute: FastifyPluginAsync = async (fastify, options) => {
       tags: ['Predios'],
       description: 'Crear un nuevo predio',
       summary: 'Agregar un nuevo predio a la lista',
+      security: [
+        {
+          bearerAuth: []
+        }
+      ],
     },
     handler: async (request, reply) => {
       // Handle creating a new predio logic
