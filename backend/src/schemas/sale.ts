@@ -1,6 +1,6 @@
 import { Static, Type } from '@sinclair/typebox';
 
-export const Sale = Type.Object({
+export const SaleParam = Type.Object({
   sale_id: Type.String({ format: 'uuid' }),
 });
 
@@ -13,4 +13,4 @@ export const SaleSchema = Type.Object({
 });
 
 export type Sale = Static<typeof SaleSchema>;
-export type SaleType = Static<typeof Sale>;
+export type SaleParamType = Static<typeof SaleParam>;

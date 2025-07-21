@@ -53,7 +53,7 @@ const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<voi
 
       const payload = {
         user: user.email,
-        roles: [user.rols_id] // Podés mapear esto si tenés más roles
+        roles: [user.rols_id]
       };
 
       const signOptions: SignOptions = {
