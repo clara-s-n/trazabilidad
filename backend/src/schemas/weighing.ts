@@ -1,7 +1,7 @@
 import { Static, Type } from '@sinclair/typebox';
 
 export const WeighingParams = Type.Object({
-    ewighing_id: Type.Integer(),
+    weighing_id: Type.String({ format: 'uuid' }),
 });
 
 export type WeighingType = Static<typeof WeighingParams>;
