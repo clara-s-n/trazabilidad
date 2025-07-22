@@ -1,8 +1,8 @@
 -- 1) Roles (estáticos: 3)
-INSERT INTO rols (id, name, description) VALUES
-  (uuid_generate_v4(), 'Operador Autorizado', 'Usuario autorizado por MGAP'),
-  (uuid_generate_v4(), 'Usuario Consulta',      'Usuario con permisos de consulta'),
-  (uuid_generate_v4(), 'Administrador',         'Administrador del sistema');
+INSERT INTO roles (id, name, description) VALUES
+  (1, 'Operador Autorizado', 'Usuario autorizado por MGAP'),
+  (2, 'Usuario Consulta', 'Usuario con permisos de consulta'),
+  (3, 'Administrador', 'Administrador del sistema');
 
 -- 2) Predios (lands) – 100 registros
 INSERT INTO lands (id, name, latitude, longitude)
@@ -30,19 +30,19 @@ FROM generate_series(1,100) AS gs;
 
 
 -- 4) Usuarios
-INSERT INTO users (id, email, password_hash, rols_id, created_at)
+INSERT INTO users (id, email, password_hash, role_id, created_at)
 VALUES
-  ('3600e259-0cc1-491d-9860-aa4cff12155c', 'administrador@example.com', crypt('admin123', gen_salt('bf')), (SELECT id FROM rols WHERE name = 'Administrador'), now()),
-  ('c4221f6c-9534-4537-8803-eb12ef89468a', 'consulta@example.com', crypt('consulta123', gen_salt('bf')), (SELECT id FROM rols WHERE name = 'Usuario Consulta'), now()),
-  ('debeeeb4-e4a4-4823-8510-b09ff13a735b', 'operador@example.com', crypt('operador123', gen_salt('bf')), (SELECT id FROM rols WHERE name = 'Operador Autorizado'), now());
+  ('3600e259-0cc1-491d-9860-aa4cff12155c', 'administrador@example.com', crypt('admin123', gen_salt('bf')), 3, now()),
+  ('c4221f6c-9534-4537-8803-eb12ef89468a', 'consulta@example.com', crypt('consulta123', gen_salt('bf')), 2, now()),
+  ('debeeeb4-e4a4-4823-8510-b09ff13a735b', 'operador@example.com', crypt('operador123', gen_salt('bf')), 1, now());
 
 -- 100 registros extras
-INSERT INTO users (id, email, password_hash, rols_id, created_at)
+INSERT INTO users (id, email, password_hash, role_id, created_at)
 SELECT
   uuid_generate_v4(),
   'user' || gs || '@example.com',
   'hash_pw' || gs,
-  (SELECT id FROM rols ORDER BY random() LIMIT 1),
+  (SELECT id FROM roles ORDER BY random() LIMIT 1),
   now()
 FROM generate_series(1,100) AS gs;
 
