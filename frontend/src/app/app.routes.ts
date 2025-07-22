@@ -2,6 +2,15 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: 'auth/login',
+    pathMatch: 'full',
+    loadComponent:() => 
+      import('./routes/auth/pages/login/login.page').then((m) => m.LoginPage),
+    children: [{
+      // Rutas anidadas
+    }]
+  },
+  {
     path: '',
     redirectTo: 'folder/inbox',
     pathMatch: 'full',
