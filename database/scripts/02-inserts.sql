@@ -6,6 +6,9 @@ INSERT INTO rols (id, name, description) VALUES
 
 -- 2) Predios (lands) – 100 registros
 INSERT INTO lands (id, name, latitude, longitude)
+VALUES ('ca751bd3-3df5-4967-8282-252ac89543ba', 'Campo 0', -31.1, -57.1);
+
+INSERT INTO lands (id, name, latitude, longitude)
 SELECT
   uuid_generate_v4(),
   'Campo ' || gs,
@@ -43,62 +46,38 @@ SELECT
   now()
 FROM generate_series(1,100) AS gs;
 
--- 5) Animales – 100 registros (una por cada raza listada abajo)
-INSERT INTO animals (id, breed, birth_date, owner_id, land_id, created_at, updated_at, status)
-VALUES
-    (
-        '56b33cc3-6e43-4aac-99cf-a90bc681d583',
-        'Aberdeen Angus',
-        '2021-06-10',
-        (SELECT id FROM users WHERE email = 'administrador@example.com'),
-        (SELECT id FROM lands WHERE name = 'Campo 1'),
-        now(),
-        now(),
-        'alive'
-    ),
-    (
-        'b2e6d4f3-5c7f-22fd-92e4-1353bd241114',
-        'Holstein Friesian',
-        '2020-12-03',
-        (SELECT id FROM users WHERE email = 'consulta@example.com'),
-        (SELECT id FROM lands WHERE name = 'Campo 2'),
-        now(),
-        now(),
-        'alive'
-    ),
-    (
-        'c3d7e5a4-6d80-33fe-a3e5-2464ce352225',
-        'Hereford',
-        '2019-08-21',
-        (SELECT id FROM users WHERE email = 'operador@example.com'),
-        (SELECT id FROM lands WHERE name = 'Campo 3'),
-        now(),
-        now(),
-        'alive'
-    ),
-    (
-        'd4e8f6b5-7e91-44af-b4f6-3575df463336',
-        'Jersey',
-        '2022-01-15',
-        (SELECT id FROM users WHERE email = 'operador@example.com'),
-        (SELECT id FROM lands WHERE name = 'Campo 4'),
-        now(),
-        now(),
-        'alive'
-    ),
-    (
-        '2688b6cb-5333-4309-a5d1-53871d342d85',
-        'Charolais',
-        '2021-11-30',
-        (SELECT id FROM users WHERE email = 'consulta@example.com'),
-        (SELECT id FROM lands WHERE name = 'Campo 5'),
-        now(),
-        now(),
-        'alive'
-    );
+-- 5) Animales
+-- Declarar las variables para reusar
+DO $$
+DECLARE
+  admin_id UUID;
+  consulta_id UUID;
+  operador_id UUID;
+  campo1_id UUID;
+  campo2_id UUID;
+  campo3_id UUID;
+  campo4_id UUID;
+  campo5_id UUID;
+BEGIN
+  SELECT id INTO admin_id FROM users WHERE email = 'administrador@example.com' LIMIT 1;
+  SELECT id INTO consulta_id FROM users WHERE email = 'consulta@example.com' LIMIT 1;
+  SELECT id INTO operador_id FROM users WHERE email = 'operador@example.com' LIMIT 1;
+  SELECT id INTO campo1_id FROM lands WHERE name = 'Campo 1' LIMIT 1;
+  SELECT id INTO campo2_id FROM lands WHERE name = 'Campo 2' LIMIT 1;
+  SELECT id INTO campo3_id FROM lands WHERE name = 'Campo 3' LIMIT 1;
+  SELECT id INTO campo4_id FROM lands WHERE name = 'Campo 4' LIMIT 1;
+  SELECT id INTO campo5_id FROM lands WHERE name = 'Campo 5' LIMIT 1;
 
+  INSERT INTO animals (id, breed, birth_date, owner_id, land_id, created_at, updated_at, status)
+  VALUES
+      ('56b33cc3-6e43-4aac-99cf-a90bc681d583', 'Aberdeen Angus', '2021-06-10', admin_id, campo1_id, now(), now(), 'alive'),
+      ('b2e6d4f3-5c7f-22fd-92e4-1353bd241114', 'Holstein Friesian', '2020-12-03', consulta_id, campo2_id, now(), now(), 'alive'),
+      ('c3d7e5a4-6d80-33fe-a3e5-2464ce352225', 'Hereford', '2019-08-21', operador_id, campo3_id, now(), now(), 'alive'),
+      ('d4e8f6b5-7e91-44af-b4f6-3575df463336', 'Jersey', '2022-01-15', operador_id, campo4_id, now(), now(), 'alive'),
+      ('2688b6cb-5333-4309-a5d1-53871d342d85', 'Charolais', '2021-11-30', consulta_id, campo5_id, now(), now(), 'alive');
+END $$;
 
-
+-- 100 registros (una por cada raza listada abajo)
 INSERT INTO animals (id, breed, birth_date, owner_id, land_id, created_at, updated_at, status)
 SELECT
   uuid_generate_v4(),

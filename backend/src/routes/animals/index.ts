@@ -1,5 +1,6 @@
 import { FastifyPluginAsync } from "fastify";
-import { AnimalParams, AnimalSchema } from "../../types/schemas/animal.js";
+import { Animal, AnimalFilter, AnimalParams} from "../../types/schemas/animal.js";
+import { animalRepository } from "../../services/animal.repository.js";
 
 const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
   fastify.get('/', {
@@ -7,6 +8,7 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       tags: ['Animales'],
       description: 'Listar todos los animales',
       summary: 'Obtener una lista de todos los animales disponibles',
+      querystring: AnimalFilter,
       security: [
         {
           bearerAuth: []
@@ -18,15 +20,17 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
           type: 'array',
           items: {
             type: 'object',
-            properties: AnimalSchema.properties
+            properties: Animal.properties
           }
         }
       }
     },
     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
-      // Logic to fetch animals
-      throw new Error("Not implemented")
+      // Si la query viene vacía, se retornan todos los animales
+      const filters = request.query as AnimalFilter;
+      const list = await animalRepository.filter(filters);
+      reply.send(list);
     }
   });
 
@@ -40,11 +44,13 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
           bearerAuth: []
         }
       ],
+      body: Animal
     },
     onRequest: fastify.verifyOperator,
     handler: async (request, reply) => {
-      // Logic to create a new animal
-      throw new Error("Not implemented")
+      const animalData = request.body as Animal;
+      const newAnimal = await animalRepository.createAnimal(animalData);
+      reply.status(201).send(newAnimal);
     }
   });
 
@@ -59,11 +65,22 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
           bearerAuth: []
         }
       ],
+      response: {
+        200: {
+          description: 'Animal encontrado',
+          type: 'object',
+          properties: Animal.properties
+        }
+      }
     },
     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
-      // Handle fetching a specific animal by ID logic
-      throw new Error("Not implemented")
+      const animalId = request.params as string;
+      const animal = await animalRepository.getByIdDetailed(animalId);
+      if (!animal) {
+        return reply.status(404).send({ message: 'Animal no encontrado' });
+      }
+      reply.send(animal);
     },
   });
 
