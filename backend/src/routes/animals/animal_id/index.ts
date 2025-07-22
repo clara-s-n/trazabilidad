@@ -17,6 +17,7 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
         }
       ],
     },
+    onRequest: fastify.authenticate,
     handler: async (request, reply) => {
       // Handle updating an animal logic
       throw new Error("Not implemented");

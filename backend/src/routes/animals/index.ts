@@ -10,7 +10,7 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
         {
           bearerAuth: []
         }
-      ]
+      ],
     },
     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
@@ -30,6 +30,7 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
         }
       ],
     },
+    onRequest: fastify.authenticate,
     handler: async (request, reply) => {
       // Logic to create a new animal
       throw new Error("Not implemented")

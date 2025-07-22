@@ -45,6 +45,61 @@ FROM generate_series(1,100) AS gs;
 
 -- 5) Animales – 100 registros (una por cada raza listada abajo)
 INSERT INTO animals (id, breed, birth_date, owner_id, land_id, created_at, updated_at, status)
+VALUES
+    (
+        'a1f5c3d2-4b6e-11ec-81d3-0242ac130003',
+        'Aberdeen Angus',
+        '2021-06-10',
+        (SELECT id FROM users WHERE email = 'administrador@example.com'),
+        (SELECT id FROM lands WHERE name = 'Campo 1'),
+        now(),
+        now(),
+        'alive'
+    ),
+    (
+        'b2e6d4f3-5c7f-22fd-92e4-1353bd241114',
+        'Holstein Friesian',
+        '2020-12-03',
+        (SELECT id FROM users WHERE email = 'consulta@example.com'),
+        (SELECT id FROM lands WHERE name = 'Campo 2'),
+        now(),
+        now(),
+        'alive'
+    ),
+    (
+        'c3d7e5a4-6d80-33fe-a3e5-2464ce352225',
+        'Hereford',
+        '2019-08-21',
+        (SELECT id FROM users WHERE email = 'operador@example.com'),
+        (SELECT id FROM lands WHERE name = 'Campo 3'),
+        now(),
+        now(),
+        'alive'
+    ),
+    (
+        'd4e8f6b5-7e91-44af-b4f6-3575df463336',
+        'Jersey',
+        '2022-01-15',
+        (SELECT id FROM users WHERE email = 'operador@example.com'),
+        (SELECT id FROM lands WHERE name = 'Campo 4'),
+        now(),
+        now(),
+        'alive'
+    ),
+    (
+        'e5f907c6-8fa2-55bg-c5g7-4686eg574447',
+        'Charolais',
+        '2021-11-30',
+        (SELECT id FROM users WHERE email = 'consulta@example.com'),
+        (SELECT id FROM lands WHERE name = 'Campo 5'),
+        now(),
+        now(),
+        'alive'
+    );
+
+
+
+INSERT INTO animals (id, breed, birth_date, owner_id, land_id, created_at, updated_at, status)
 SELECT
   uuid_generate_v4(),
   breed_list.breed,

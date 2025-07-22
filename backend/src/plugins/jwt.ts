@@ -29,10 +29,10 @@ const jwtPlugin = fp<FastifyJWTOptions>(async (fastify) => {
   const verifyAdmin: authenticateFunction = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       await request.jwtVerify();
-      const { id } = request.user as { id: number };
+      const { id } = request.user as { id: string };
       const { rows } = await query(`SELECT role FROM users WHERE id = ${id}`);
       const role = rows[0].role;
-      if (role !== 'admin') {
+      if (role !== 'Administrador') {
         reply.code(401).send({ error: `Unauthorized, you must be an admin and you are ${role}` });
       }
     } catch (err) {
