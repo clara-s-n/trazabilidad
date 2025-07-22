@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
-import { TagParams } from "../../../schemas/tag.js";
+import { TagParams } from "../../../types/schemas/tag.js";
 
 const idCaravanasRoute: FastifyPluginAsync = async (fastify, options) => {
   fastify.get('/:tag_id', {

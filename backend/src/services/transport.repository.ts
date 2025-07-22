@@ -1,5 +1,5 @@
 import { query } from "./database.js";
-import { Transport } from "../schemas/transport.js"
+import { Transport } from "../types/schemas/transport.js"
 
 export class TransportRepository {
     async createTransport(data: Transport): Promise<Transport> {

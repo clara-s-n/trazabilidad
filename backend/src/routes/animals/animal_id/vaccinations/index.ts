@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
-import { AnimalParams } from "../../../../schemas/animal.js";
+import { AnimalParams } from "../../../../types/schemas/animal.js";
 
 const vacunacionesRoute: FastifyPluginAsync = async (fastify, options) => {
     fastify.get('/:animal_id', {

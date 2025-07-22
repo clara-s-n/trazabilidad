@@ -1,6 +1,6 @@
 // src/routes/usuarios/usuariosIdRoute.ts
 import { FastifyPluginAsync } from "fastify";
-import { UpdateUserSchema, UpdateUserType, UserParams, UserParamsType, UserSchema} from "../../../schemas/user.js";
+import { UpdateUserSchema, UpdateUserType, UserParams, UserParamsType, UserSchema} from "../../../types/schemas/user.js";
 import { userRepository } from "../../../services/user.repository.js";
 import { UCUError } from "../../../utils/index.js";
 

@@ -1,5 +1,5 @@
 import { query } from "./database.js";
-import { User } from "../schemas/user.js"
+import { User } from "../types/schemas/user.js"
 
 export class UserRepository {
   async findUserByEmail(email: string): Promise<User | null> {

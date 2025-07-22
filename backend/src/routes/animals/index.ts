@@ -10,8 +10,9 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
         {
           bearerAuth: []
         }
-      ],
+      ]
     },
+    onRequest: fastify.authenticate,
     handler: async (request, reply) => {
       // Logic to fetch animals
       throw new Error("Not implemented")

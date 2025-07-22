@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
-import { TransportParams } from "../../../schemas/transport.js";
+import { TransportParams } from "../../../types/schemas/transport.js";
 
 const transportesRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.get('/:transport_id', {
