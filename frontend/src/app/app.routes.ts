@@ -6,6 +6,9 @@ export const routes: Routes = [
     pathMatch: 'full',
     loadComponent:() => 
       import('./routes/auth/pages/login/login.page').then((m) => m.LoginPage),
+    children: [{
+      // Rutas anidadas
+    }]
   },
   {
     path: '',
