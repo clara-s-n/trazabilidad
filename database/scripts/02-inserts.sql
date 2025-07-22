@@ -47,7 +47,7 @@ FROM generate_series(1,100) AS gs;
 INSERT INTO animals (id, breed, birth_date, owner_id, land_id, created_at, updated_at, status)
 VALUES
     (
-        'a1f5c3d2-4b6e-11ec-81d3-0242ac130003',
+        '56b33cc3-6e43-4aac-99cf-a90bc681d583',
         'Aberdeen Angus',
         '2021-06-10',
         (SELECT id FROM users WHERE email = 'administrador@example.com'),
@@ -87,7 +87,7 @@ VALUES
         'alive'
     ),
     (
-        'e5f907c6-8fa2-55bg-c5g7-4686eg574447',
+        '2688b6cb-5333-4309-a5d1-53871d342d85',
         'Charolais',
         '2021-11-30',
         (SELECT id FROM users WHERE email = 'consulta@example.com'),
