@@ -14,6 +14,7 @@ const idPrediosRoute: FastifyPluginAsync = async (fastify, options) => {
         }
       ],
     },
+    onRequest: fastify.verifyOperatorOrAdmin,
     handler: async (request, reply) => {
       // Handle fetching predio by ID logic
       throw new Error("Not implemented");
@@ -32,6 +33,7 @@ const idPrediosRoute: FastifyPluginAsync = async (fastify, options) => {
         }
       ],
     },
+    onRequest: fastify.verifyOperatorOrAdmin,
     handler: async (request, reply) => {
       // Handle updating predio by ID logic
       throw new Error("Not implemented");
@@ -50,6 +52,7 @@ const idPrediosRoute: FastifyPluginAsync = async (fastify, options) => {
         }
       ],
     },
+    onRequest: fastify.authenticate,
     handler: async (request, reply) => {
       // Handle fetching animals in a specific predio by ID logic
       throw new Error("Not implemented");

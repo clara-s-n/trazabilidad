@@ -14,7 +14,7 @@ const usuariosRoute: FastifyPluginAsync = async (fastify, options) => {
         }
       ],
       },
-      onRequest: fastify.authenticate,
+      onRequest: fastify.verifyAdmin,
       handler: async (request, reply) => {
         throw new Error("Not implemented");
       },
@@ -34,7 +34,7 @@ const usuariosRoute: FastifyPluginAsync = async (fastify, options) => {
         }
       ],
       },
-      onRequest: fastify.authenticate,
+      onRequest: fastify.verifyAdmin,
       handler: async (request, reply) => {
         throw new Error("Not implemented");
       },

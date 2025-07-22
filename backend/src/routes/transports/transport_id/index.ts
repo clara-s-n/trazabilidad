@@ -14,6 +14,7 @@ const transportesRoutes: FastifyPluginAsync = async (fastify) => {
         }
       ],
     },
+    onRequest: fastify.verifyOperator,
     handler: async (request, reply) => {
       // Handle fetching transporte by ID logic
       throw new Error("Not implemented");

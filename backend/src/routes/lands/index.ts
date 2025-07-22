@@ -12,6 +12,7 @@ const prediosRoute: FastifyPluginAsync = async (fastify, options) => {
         }
       ],
     },
+    onRequest: fastify.verifyOperator,
     handler: async (request, reply) => {
       // Handle fetching predios logic
       throw new Error("Not implemented");
@@ -29,6 +30,7 @@ const prediosRoute: FastifyPluginAsync = async (fastify, options) => {
         }
       ],
     },
+    onRequest: fastify.verifyOperator,
     handler: async (request, reply) => {
       // Handle creating a new predio logic
       throw new Error("Not implemented");

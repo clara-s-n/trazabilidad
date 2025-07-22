@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
-import { AnimalParams } from "../../../../types/schemas/animal.js";
+import { AnimalParams } from "../../../types/schemas/animal.js";
 
 const ventasRoute: FastifyPluginAsync = async (fastify, options) => {
     fastify.get('/:animal_id', {
@@ -14,6 +14,7 @@ const ventasRoute: FastifyPluginAsync = async (fastify, options) => {
             }
             ],
         },
+        onRequest: fastify.authenticate,
         handler: async (request, reply) => {
             // Logic to fetch sales
             throw new Error("Not implemented");
@@ -32,6 +33,7 @@ const ventasRoute: FastifyPluginAsync = async (fastify, options) => {
             }
             ],
         },
+        onRequest: fastify.verifyOperator,
         handler: async (request, reply) => {
             // Logic to create a new sale
             throw new Error("Not implemented");

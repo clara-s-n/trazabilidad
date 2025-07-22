@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
-import { AnimalParams } from "../../../../types/schemas/animal.js";
+import { AnimalParams } from "../../../types/schemas/animal.js";
 
 const pesajesRoute: FastifyPluginAsync = async (fastify, options) => {
   fastify.get('/:animal_id', {
@@ -33,7 +33,7 @@ const pesajesRoute: FastifyPluginAsync = async (fastify, options) => {
         }
       ],
     },
-    onRequest: fastify.authenticate,
+    onRequest: fastify.verifyOperator,
     handler: async (request, reply) => {
       // Logic to create a new pesaje for the specified animal
       throw new Error("Not implemented");
