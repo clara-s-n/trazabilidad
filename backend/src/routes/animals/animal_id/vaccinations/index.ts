@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
-import { AnimalParams } from "../../../../schemas/animal.js";
+import { AnimalParams } from "../../../../types/schemas/animal.js";
 
 const vacunacionesRoute: FastifyPluginAsync = async (fastify, options) => {
     fastify.get('/:animal_id', {
@@ -9,10 +9,10 @@ const vacunacionesRoute: FastifyPluginAsync = async (fastify, options) => {
         description: 'Listar todas las vacunaciones de un animal específico',
         summary: 'Obtener una lista de todas las vacunaciones para un animal específico',
         security: [
-        {
-          bearerAuth: []
-        }
-      ],
+          {
+            bearerAuth: []
+          }
+        ],
         },
         handler: async (request, reply) => {
         // Logic to fetch vaccinations

@@ -1,5 +1,5 @@
 import { query } from './database.js';
-import { Vaccination } from '../schemas/vaccination.js';
+import { Vaccination } from '../types/schemas/vaccination.js';
 
 export class VaccinationRepository {
     async createVaccination(data: { event_id:string; vaccine:string; dosage:string; provider:string }): Promise<Vaccination> {

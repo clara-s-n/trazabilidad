@@ -1,4 +1,4 @@
-import { Weighing } from '../schemas/weighing.js';
+import { Weighing } from '../types/schemas/weighing.js';
 import { query } from './database.js';
 
 export class WeighingRepository {

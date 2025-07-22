@@ -2,7 +2,7 @@
 import { UCUError } from "../../../utils/index.js";
 import { FastifyPluginAsyncTypebox, Type } from "@fastify/type-provider-typebox";
 import { SignOptions } from "@fastify/jwt";
-import { LoginParams, LoginType } from "../../../schemas/user.js";
+import { LoginParams, LoginType } from "../../../types/schemas/user.js";
 import { userRepository } from "../../../services/user.repository.js";
 import bcrypt from "bcryptjs";
 import { FastifyReply, FastifyRequest } from "fastify";

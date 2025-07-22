@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
-import { AnimalParams } from "../../../schemas/animal.js";
+import { AnimalParams } from "../../../types/schemas/animal.js";
 //import { UserParams } from "../../../../../schemas/user.js";
 //import { Type } from "@sinclair/typebox";
 
@@ -17,6 +17,7 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
         }
       ],
     },
+    onRequest: fastify.authenticate,
     handler: async (request, reply) => {
       // Handle updating an animal logic
       throw new Error("Not implemented");

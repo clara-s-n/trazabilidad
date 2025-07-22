@@ -1,5 +1,5 @@
 import { query } from "./database.js";
-import { Land } from "../schemas/land.js"
+import { Land } from "../types/schemas/land.js"
 
 export class LandRepository {
     async createLand(data: { name: string; latitude: number; longitude: number }): Promise<Land> {

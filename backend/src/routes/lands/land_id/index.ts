@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
-import { LandParams } from "../../../schemas/land.js";
+import { LandParams } from "../../../types/schemas/land.js";
 
 const idPrediosRoute: FastifyPluginAsync = async (fastify, options) => {
   fastify.get('/:land_id', {
