@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
-import { Animal, AnimalFilter, AnimalParams} from "../../types/schemas/animal.js";
+import { Animal, AnimalParams} from "../../types/schemas/animal.js";
 import { animalRepository } from "../../services/animal.repository.js";
 
 const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
@@ -8,7 +8,7 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       tags: ['Animales'],
       description: 'Listar todos los animales',
       summary: 'Obtener una lista de todos los animales disponibles',
-      querystring: AnimalFilter,
+      //querystring: AnimalFilter,
       security: [
         {
           bearerAuth: []
@@ -28,8 +28,9 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
       // Si la query viene vacía, se retornan todos los animales
-      const filters = request.query as AnimalFilter;
-      const list = await animalRepository.filter(filters);
+      //const filters = request.query as AnimalFilter;
+      //const list = await animalRepository.filter(filters);
+      const list = await animalRepository.getAll();
       reply.send(list);
     }
   });
@@ -75,8 +76,8 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
     },
     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
-      const animalId = request.params as string;
-      const animal = await animalRepository.getByIdDetailed(animalId);
+      const params = request.params as AnimalParams;
+      const animal = await animalRepository.getByIdDetailed(params.animal_id);
       if (!animal) {
         return reply.status(404).send({ message: 'Animal no encontrado' });
       }

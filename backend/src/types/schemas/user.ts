@@ -30,13 +30,13 @@ export const UserSchema = Type.Object({
     id: Type.String({ format: 'uuid' }),
     email: Type.String({ format: 'email' }),
     password_hash: Type.String(),
-    rols_id: Type.String({ format: 'uuid' }),
+    role_id: Type.Integer(),
     created_at: Type.String({ format: 'date-time' })
 });
 
 export const UpdateUserSchema = Type.Object({
-  email: Type.Optional(Type.String({ format: "email" })),
-  rolsId: Type.Optional(Type.String({ format: "uuid" }))
+    email: Type.Optional(Type.String({ format: "email" })),
+    role_id: Type.Optional(Type.Integer())
 });
 
 export type User = Static<typeof UserSchema>;
