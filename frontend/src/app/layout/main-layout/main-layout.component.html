@@ -1,0 +1,32 @@
+<!-- 1. Definición del menú lateral -->
+<ion-menu side="start" menuId="first" contentId="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Menú</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-list>
+      <ion-item routerLink="/animal/list">Animales</ion-item>
+      <ion-item routerLink="/land/list">Predios</ion-item>
+      <ion-item routerLink="/user/list">Usuarios</ion-item>
+      <ion-item routerLink="/evento/pesaje/create">Eventos</ion-item>
+      <ion-item (click)="logout()">Cerrar sesión</ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<div class="ion-page" id="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <!-- 2. Aquí el outlet vinculado al contentId -->
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-content>
+</div>
