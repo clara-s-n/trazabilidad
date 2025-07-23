@@ -1,3 +1,22 @@
-<p>
-  main-layout works!
-</p>
+<ion-app>
+  <!-- 1. Definición del menú lateral -->
+  <ion-menu side="start" menuId="first" contentId="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Menú</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item routerLink="/animal/list">Animales</ion-item>
+        <ion-item routerLink="/land/list">Predios</ion-item>
+        <ion-item routerLink="/user/list">Usuarios</ion-item>
+        <ion-item routerLink="/evento/pesaje/create">Eventos</ion-item>
+        <ion-item (click)="logout()">Cerrar sesión</ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <!-- 2. Aquí el outlet vinculado al contentId -->
+  <ion-router-outlet id="main-content"></ion-router-outlet>
+</ion-app>

@@ -1,10 +1,16 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
+  { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
+  { path: 'auth', loadChildren: () => import('./routes/auth/auth.routes').then(m => m.routes) },
+  { path: 'user', loadChildren: () => import('./routes/user/user.routes').then(m => m.routes) },
+  { path: 'land', loadChildren: () => import('./routes/land/land.routes').then(m => m.routes) },
+  { path: 'animal', loadChildren: () => import('./routes/animal/animal.routes').then(m => m.routes) },
+  { path: 'evento', loadChildren: () => import('./routes/evento/evento.routes').then(m => m.routes) },
   {
-    path: 'auth/login',
-    pathMatch: 'full',
-    loadComponent:() => 
-      import('./routes/auth/login/login.page').then((m) => m.LoginPage),
-  },
+    path: '**',
+    loadComponent: () =>
+      import('./layout/main-layout/main-layout.component').then(m => m.MainLayoutComponent)
+  }
 ];
+
