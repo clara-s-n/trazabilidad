@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { IonButtons, IonMenuButton, IonContent, IonHeader, IonItem, IonList, IonMenu, IonTitle, IonToolbar, IonRouterOutlet } from '@ionic/angular/standalone';
 
 @Component({
@@ -6,7 +7,7 @@ import { IonButtons, IonMenuButton, IonContent, IonHeader, IonItem, IonList, Ion
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.scss'],
   standalone: true,
-  imports: [IonButtons, IonMenuButton, IonMenu, IonHeader, IonTitle, IonContent, IonList, IonToolbar, IonItem, IonRouterOutlet]
+  imports: [IonButtons, IonMenuButton, IonMenu, IonHeader, IonTitle, IonContent, IonList, IonToolbar, IonItem, IonRouterOutlet, RouterLink]
 })
 export class MainLayoutComponent implements OnInit {
 
