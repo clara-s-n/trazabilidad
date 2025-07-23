@@ -1,3 +1,26 @@
 <p>
-  login-form works!
+  Email: {{this.user.email}}<br>
+  Password: {{this.user.password}}
 </p>
+
+<form  class="ion-padding ion-justify-content-center ion-align-items-center">
+  <ion-row>
+    <ion-col>
+      <ion-item>
+        <ion-input labelPlacement="floating" value="hi@ionic.io" type="email" [(ngModel)]="this.user.email" name="email">
+          <div slot="label">Email <ion-text color="danger">(Required)</ion-text></div>
+        </ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-item>
+        <ion-input labelPlacement="floating" type="password" [(ngModel)]="this.user.password" name="password">
+          <div slot="label">Password <ion-text color="danger">(Required)</ion-text></div>
+        </ion-input>
+      </ion-item>
+      <ion-button expand="full" (click)="login()">Login</ion-button>
+    </ion-col>
+  </ion-row>
+</form>

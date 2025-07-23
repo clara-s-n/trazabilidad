@@ -1,23 +1,29 @@
 import { Routes } from '@angular/router';
+import {protectedGuard} from "./guards/protected.guard";
 
 export const routes: Routes = [
   {
     path: 'auth/login',
     pathMatch: 'full',
-    loadComponent:() => 
-      import('./routes/auth/pages/login/login.page').then((m) => m.LoginPage),
-    children: [{
-      // Rutas anidadas
-    }]
+    loadComponent:() =>
+      import('./routes/auth/pages/login/login.page').then((m) => m.LoginPage)
   },
   {
     path: '',
-    redirectTo: 'folder/inbox',
+    redirectTo: '/homepage',
     pathMatch: 'full',
   },
   {
-    path: 'folder/:id',
+    path: 'homepage',
+    pathMatch: 'full',
     loadComponent: () =>
-      import('./folder/folder.page').then((m) => m.FolderPage),
+      import('./routes/home/pages/homepage/homepage.page').then((m) => m.HomepagePage),
+  },
+  {
+    path: 'protected',
+    pathMatch: 'full',
+    canActivate: [protectedGuard],
+    loadComponent: () =>
+      import('./routes/protegida/pages/protected/protected.page').then((m) => m.ProtectedPage),
   },
 ];
