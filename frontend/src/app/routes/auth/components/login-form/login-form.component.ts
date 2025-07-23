@@ -1,6 +1,9 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonButton, IonCol, IonGrid, IonInput, IonRow } from '@ionic/angular/standalone';
+import { firstValueFrom } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login-form',
@@ -8,25 +11,26 @@ import { IonButton, IonCol, IonGrid, IonInput, IonRow } from '@ionic/angular/sta
   styleUrls: ['./login-form.component.scss'],
   imports: [IonRow, IonCol, IonButton, IonInput, IonGrid, FormsModule]
 })
-export class LoginFormComponent  implements OnInit {
-  public usuario = signal("usuario");
-  public contrasena = signal("contra");
+export class LoginFormComponent  {
 
-  constructor() { }
+  public usuario = signal<string>("");
+  public contrasena = signal<string>("");
 
-  ngOnInit(): void {
-    this.usuario.set("modificado")
+  public httpCliente = inject(HttpClient);
+  public apiUrl = environment.apiUrl;
+
+
+  async onSubmit() {
+    const respuesta = await this.doAuth(this.usuario(), this.contrasena());
+    console.log({respuesta});
   }
-
-  onSubmit() {
-    console.log({
-      usuario : this.usuario(),
-      contrasena : this.contrasena(),
-    })
+  
+  private doAuth (usuario: string, contrasena: string){
+    const url = this.apiUrl + "auth/login";
+    const data = {usuario, contrasena}
+    return firstValueFrom(
+      this.httpCliente.post<string>(url, data)
+    )
   }
-
-}
-function computed(arg0: () => void) {
-  throw new Error('Function not implemented.');
 }
 
