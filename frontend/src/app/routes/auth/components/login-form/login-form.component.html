@@ -1,3 +1,20 @@
-<p>
-  login-form works!
-</p>
+  USUARIO : {{this.usuario()}} <br>
+  CONTRASEÑA : {{this.contrasena()}}
+  
+  <ion-grid>
+    <ion-row class="ion-justify-content-center">
+    <ion-col size="12" size-sm="8" size-md="6">
+      <ion-input labelPlacement="floating" fill="solid" label="Usuario"[(ngModel)]="this.usuario"></ion-input>
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-justify-content-center">
+    <ion-col size="12" size-sm="8" size-md="6">
+      <ion-input labelPlacement="floating" fill="solid" label="Contraseña" [(ngModel)]="this.contrasena"></ion-input>
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-justify-content-center">
+    <ion-col size="12" size-sm="8" size-md="6">
+        <ion-button shape="round" (click)="onSubmit()">INICIAR SESION</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
