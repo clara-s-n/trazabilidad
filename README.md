@@ -93,7 +93,7 @@ A continuación se presenta una vista general del árbol de endpoints:
 ## 5. Datos para probar la documentación
 
 > [!WARNING]
-> El texto default que aparece en la documentación de swagger no va a funcionar en el login
+> El texto default que aparece en la documentación de swagger no va a funcionar en el logi
 
 A continuación se muestran ejemplos de como probar el login con cada uno de los roles:
 
@@ -121,5 +121,46 @@ A continuación se muestran ejemplos de como probar el login con cada uno de los
 
 Aparte, en la ruta `users/user_id` se puede utilizar el valor: `3600e259-0cc1-491d-9860-aa4cff12155c`
 
-> [!IMPORTANT]
-> Las rutas a probar para la entrega del día 21 de julio son las que se encuentran en las siguientes direcciones: `/auth/login`, `/users/user_id`
+
+## 6. Navegación del Frontend (Angular/Ionic)
+
+El sistema cuenta con una interfaz web desarrollada con Angular e Ionic. A continuación se listan todas las rutas del frontend disponibles. Estas páginas pueden ser accedidas directamente **modificando la URL en el navegador**, por ejemplo: `http://localhost:4200/animal/list`.
+
+>[!NOTE]
+> Por defecto la aplicación redirigirá a la pantalla de login.
+
+### 🔐 Autenticación (`/auth`)
+
+* `/auth/login` – Página de inicio de sesión.
+* `/auth/logout` – Cierre de sesión.
+* `/auth/register` – Registro de nuevo usuario.
+
+### 👤 Usuarios (`/user`)
+
+* `/user/list` – Listado de usuarios.
+* `/user/create` – Alta de nuevo usuario.
+* `/user/:id/delete` – Eliminación de un usuario específico.
+* `/user/:id/profile` – Visualización del perfil del usuario con ID `:id`.
+
+### 🐄 Animales (`/animal`)
+
+* `/animal/list` – Listado de animales registrados.
+* `/animal/create` – Alta de nuevo animal.
+* `/animal/:id` – Detalles del animal con ID `:id`.
+* `/animal/:id/edit` – Edición del animal con ID `:id`.
+* `/animal/:id/events` – Eventos asociados al animal (pesajes, vacunas, ventas, etc.).
+* `/animal/:id/history` – Historial de cambios del animal.
+* `/animal/:id/movements` – Historial de movimientos geográficos del animal.
+
+### 🌾 Predios (`/land`)
+
+* `/land/list` – Listado de predios registrados.
+* `/land/create` – Alta de nuevo predio.
+* `/land/:id` – Detalles del predio con ID `:id`.
+
+### 📅 Eventos (`/evento`)
+
+* `/evento/pesaje/create` – Registrar nuevo evento de pesaje.
+* `/evento/vacunacion/create` – Registrar nuevo evento de vacunación.
+* `/evento/venta/create` – Registrar nuevo evento de venta.
+* `/evento/transporte/create` – Registrar nuevo evento de transporte.

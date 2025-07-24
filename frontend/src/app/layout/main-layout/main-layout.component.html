@@ -1,0 +1,60 @@
+<!-- 1. Definición del menú lateral -->
+<ion-menu side="start" menuId="first" contentId="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Secciones</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-accordion-group [multiple]="true">
+      <ion-accordion value="first">
+        <ion-item slot="header" color="light">
+          <ion-label>Animales</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content" routerLink="/animal/list">
+          Lista de animales
+        </div>
+        <div class="ion-padding" slot="content" routerLink="/animal/create">
+          Crear un animal
+        </div>
+        <div class="ion-padding" slot="content" routerLink="/animal/:id">
+          Detalle de un animal
+        </div>
+      </ion-accordion>
+      <ion-accordion value="second">
+        <ion-item slot="header" color="light">
+          <ion-label>Predios</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content" routerLink="/land/list">Lista de predios</div>
+      </ion-accordion>
+      <ion-accordion value="third">
+        <ion-item slot="header" color="light">
+          <ion-label>Usuarios</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content" routerLink="/user/list">Lista de usuarios</div>
+      </ion-accordion>
+      <ion-accordion value="fourth">
+        <ion-item slot="header" color="light">
+          <ion-label>Eventos</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content" routerLink="/evento/pesaje/create">Lista de eventos</div>
+      </ion-accordion>
+    </ion-accordion-group>
+    <ion-item (click)="logout()">Cerrar sesión</ion-item>
+  </ion-content>
+</ion-menu>
+
+<div class="ion-page" id="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <!-- 2. Aquí el outlet vinculado al contentId -->
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-content>
+</div>
