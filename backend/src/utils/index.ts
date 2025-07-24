@@ -1,4 +1,6 @@
 import { createError } from "@fastify/error";
-export const UCUError = createError('UCUError', 'UCU Error occurred: %s', 500, Error);
-export const UCUErrorUnauthorized = createError('UCUErrorUnauthorized', 'UCU Unauthorized: %s', 401, Error);
-export const UCUErrorBadRequest = createError('UCUErrorBadRequest', 'UCU Bad Request: %s', 400, Error);
+
+export const UCUError             = createError("UCUError",            "UCU Error occurred: %s",       500);
+export const UCUErrorUnauthorized = createError("UCUErrorUnauthorized", "UCU Unauthorized: %s",         401);
+export const UCUErrorBadRequest   = createError("UCUErrorBadRequest",   "UCU Bad Request: %s",          400);
+export const UCUErrorNotFound     = createError("UCUErrorNotFound",     "UCU Resource not found: %s",   404);
