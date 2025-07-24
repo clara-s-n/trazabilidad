@@ -10,7 +10,9 @@ declare module "fastify" {
     interface FastifyInstance {
         authenticate: authenticateFunction,
         verifyAdmin: authenticateFunction,
-        verifySelfOrAdmin: authenticateFunction
+        verifySelfOrAdmin: authenticateFunction,
+        verifyOperatorOrAdmin: authenticateFunction,
+        verifyOperator: authenticateFunction,
         //googleOAuth2: fastifyOauth2.OAuth2Namespace
     }
 }

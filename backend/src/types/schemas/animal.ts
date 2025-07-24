@@ -13,21 +13,49 @@ export const AnimalParams = Type.Object({
   }),
 });
 
-export const AnimalSchema = Type.Object({
-  id: Type.String({ format: 'uuid' }),
-  breed: Type.String(),
-  birth_date: Type.String({ format: 'date' }),
-  owner_id: Type.String({ format: 'uuid' }),
-  land_id: Type.String({ format: 'uuid' }),
+export const Animal = Type.Object({
+  id: Type.String({ format: 'uuid', examples: ['0a553254-e85c-4780-8995-34098a788256'] }),
+  breed: Type.String({ examples: ['Abigar'] }),
+  birth_date: Type.String({ format: 'date', examples: ['2020-01-01'] }),
+  owner_id: Type.String({ format: 'uuid', examples: ['56b33cc3-6e43-4aac-99cf-a90bc681d583'] }),
+  land_id: Type.String({ format: 'uuid', examples: ['ca751bd3-3df5-4967-8282-252ac89543ba'] }),
   status: Type.Union([
     Type.Literal('alive'),
     Type.Literal('deceased'),
     Type.Literal('robbed'),
     Type.Literal('lost'),
-  ]),
-  created_at: Type.String({ format: 'date-time' }),
+  ], { default: 'alive', examples: ['alive', 'deceased', 'robbed', 'lost'] }),
+  created_at: Type.String({ format: 'date-time' , examples: ['2020-01-01T00:00:00Z'] }),
   updated_at: Type.String({ format: 'date-time' }),
 });
 
-export type Animal = Static<typeof AnimalSchema>;
-export type AnimalParamsType = Static<typeof AnimalParams>;
+export const AnimalFilter = Type.Object({
+  breed: Type.Optional(Type.String({ minLength: 1, examples: ['Abigar', 'Aberdeen Angus'] })),
+  landId: Type.Optional(Type.String({ format: 'uuid', examples: ['ca751bd3-3df5-4967-8282-252ac89543ba'] })),
+  dateRange: Type.Optional(
+    Type.String({ pattern: '^\\{\\d{4}-\\d{2}-\\d{2},\\d{4}-\\d{2}-\\d{2}\\}$', examples: ['{2020-01-01,2020-12-31}'] })
+  ),
+});
+
+export const AnimalEventSchema = Type.Object({
+  id: Type.String({ format: "uuid" }),
+  type: Type.String(),
+  date: Type.String({ format: "date-time" }),
+  comments: Type.String(),
+});
+
+export const AnimalDetailedSchema = Type.Intersect([
+  Animal,
+  Type.Object({
+    land: Type.Object({
+      id: Type.String({ format: "uuid" }),
+      name: Type.String(),
+    }),
+    events: Type.Array(AnimalEventSchema),
+  }),
+]);
+export type AnimalDetailed = Static<typeof AnimalDetailedSchema>;
+export type AnimalEvent = Static<typeof AnimalEventSchema>;
+export type AnimalFilter = Static<typeof AnimalFilter>;
+export type Animal = Static<typeof Animal>;
+export type AnimalParams = Static<typeof AnimalParams>;
