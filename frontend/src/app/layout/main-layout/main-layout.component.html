@@ -2,17 +2,23 @@
 <ion-menu side="start" menuId="first" contentId="main-content">
   <ion-header>
     <ion-toolbar>
-      <ion-title>Menú</ion-title>
+      <ion-title>Secciones</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
-    <ion-accordion-group [multiple]="true" [value]="['first', 'third']">
+    <ion-accordion-group [multiple]="true">
       <ion-accordion value="first">
         <ion-item slot="header" color="light">
           <ion-label>Animales</ion-label>
         </ion-item>
         <div class="ion-padding" slot="content" routerLink="/animal/list">
           Lista de animales
+        </div>
+        <div class="ion-padding" slot="content" routerLink="/animal/create">
+          Crear un animal
+        </div>
+        <div class="ion-padding" slot="content" routerLink="/animal/:id">
+          Detalle de un animal
         </div>
       </ion-accordion>
       <ion-accordion value="second">
