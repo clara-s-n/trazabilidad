@@ -1,15 +1,15 @@
-  USUARIO : {{this.usuario()}} <br>
-  CONTRASEÑA : {{this.contrasena()}}
+  email : {{this.email()}} <br>
+  CONTRASEÑA : {{this.password()}}
   
   <ion-grid>
     <ion-row class="ion-justify-content-center">
     <ion-col size="12" size-sm="8" size-md="6">
-      <ion-input labelPlacement="floating" fill="solid" label="Usuario"[(ngModel)]="this.usuario"></ion-input>
+      <ion-input labelPlacement="floating" fill="solid" label="email"[(ngModel)]="this.email"></ion-input>
     </ion-col>
   </ion-row>
   <ion-row class="ion-justify-content-center">
     <ion-col size="12" size-sm="8" size-md="6">
-      <ion-input labelPlacement="floating" fill="solid" label="Contraseña" [(ngModel)]="this.contrasena"></ion-input>
+      <ion-input labelPlacement="floating" fill="solid" label="Contraseña" [(ngModel)]="this.password"></ion-input>
     </ion-col>
   </ion-row>
   <ion-row class="ion-justify-content-center">
