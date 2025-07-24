@@ -173,11 +173,18 @@ FROM generate_series(1,100) AS gs;
 INSERT INTO sales (id, event_id, buyer, price, currency)
 SELECT
   uuid_generate_v4(),
-  (SELECT id FROM events ORDER BY random() LIMIT 1),
-  'Buyer ' || gs,
-  ROUND((random()*2000 + 100)::numeric, 2),
+  ae.event_id,
+  'Buyer ',
+  ROUND((random() * 2000 + 100)::numeric, 2),
   'USD'
-FROM generate_series(1,100) AS gs;
+FROM (
+  SELECT event_id
+  FROM animal_event
+  JOIN events ON events.id = animal_event.event_id
+  JOIN event_type ON event_type.id = events.event_type
+  WHERE event_type.name = 'Sale'
+) ae
+LIMIT 100;
 
 -- 13) Vacunaciones (vaccinations) – 100 registros
 INSERT INTO vaccinations (id, event_id, vaccine, dosage, provider)

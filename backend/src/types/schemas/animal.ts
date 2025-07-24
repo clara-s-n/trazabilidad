@@ -37,6 +37,25 @@ export const AnimalFilter = Type.Object({
   ),
 });
 
+export const AnimalEventSchema = Type.Object({
+  id: Type.String({ format: "uuid" }),
+  type: Type.String(),
+  date: Type.String({ format: "date-time" }),
+  comments: Type.String(),
+});
+
+export const AnimalDetailedSchema = Type.Intersect([
+  Animal,
+  Type.Object({
+    land: Type.Object({
+      id: Type.String({ format: "uuid" }),
+      name: Type.String(),
+    }),
+    events: Type.Array(AnimalEventSchema),
+  }),
+]);
+export type AnimalDetailed = Static<typeof AnimalDetailedSchema>;
+export type AnimalEvent = Static<typeof AnimalEventSchema>;
 export type AnimalFilter = Static<typeof AnimalFilter>;
 export type Animal = Static<typeof Animal>;
 export type AnimalParams = Static<typeof AnimalParams>;

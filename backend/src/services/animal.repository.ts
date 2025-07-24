@@ -1,5 +1,5 @@
 import { query } from "./database.js";
-import { Animal } from "../types/schemas/animal.js"
+import { Animal, AnimalDetailed } from "../types/schemas/animal.js"
 
 
 export class AnimalRepository {
@@ -19,23 +19,31 @@ export class AnimalRepository {
         return rows[0] as Animal;
     }
 
-    async getByIdDetailed(id: string): Promise<any> {
+    async getByIdDetailed(id: string): Promise<AnimalDetailed> {
         const { rows } = await query(
-            `SELECT
-            a.*, 
-            json_build_object('id', l.id, 'name', l.name) AS land,
-            coalesce(json_agg(json_build_object(
-                'type', et.name,
-                'date', e.date,
-                'comments', e.comments
-            )) FILTER (WHERE e.id IS NOT NULL), '[]') AS events
+            `
+            SELECT 
+                a.*,
+                json_build_object('id', l.id, 'name', l.name) AS land,
+                coalesce(
+                json_agg(
+                    json_build_object(
+                    'id',       e.id,
+                    'type',     et.name,
+                    'date',     e.date,
+                    'comments', e.comments
+                    ) ORDER BY e.date
+                ) FILTER (WHERE e.id IS NOT NULL),
+                '[]'
+                ) AS events
             FROM animals a
             LEFT JOIN lands l ON a.land_id = l.id
             LEFT JOIN animal_event ae ON ae.animal_id = a.id
             LEFT JOIN events e ON ae.event_id = e.id
             LEFT JOIN event_type et ON e.event_type = et.id
             WHERE a.id = $1
-            GROUP BY a.id, l.id`,
+            GROUP BY a.id, l.id
+            `,
             [id]
         );
         return rows[0];
