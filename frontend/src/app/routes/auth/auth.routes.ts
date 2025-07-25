@@ -1,5 +1,6 @@
 // src/app/routes/auth/auth.routes.ts
 import { Routes } from '@angular/router';
+import { adminGuard } from 'src/app/guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,7 @@ export const routes: Routes = [
       },
       {
         path: 'register',
+        canActivate: [adminGuard], // Solo accesible por administradores
         loadComponent: () =>
           import('./register/register.page').then(m => m.RegisterPage)
       },
