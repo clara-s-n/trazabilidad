@@ -8,17 +8,22 @@ export const routes: Routes = [
       {
         path: 'list',
         loadComponent: () =>
-          import('./list/list.page').then(m => m.ListPage)
+          import('./pages/list/list.page').then(m => m.ListPage)
       },
       {
         path: 'create',
         loadComponent: () =>
-          import('./create/create.page').then(m => m.CreatePage)
+          import('./pages/create/create.page').then(m => m.CreatePage)
       },
       {
         path: ':id',
         loadComponent: () =>
-          import('./detail/detail.page').then(m => m.DetailPage)
+          import('./pages/detail/detail.page').then(m => m.DetailPage)
+      },
+      {
+        path: 'edit/:id',
+        loadComponent: () =>
+          import('./pages/edit/edit.page').then(m => m.EditPage)
       },
       {
         path: '',
