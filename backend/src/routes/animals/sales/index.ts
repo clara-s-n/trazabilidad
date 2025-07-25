@@ -1,4 +1,3 @@
-// src/routes/ventas/index.ts
 import { FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox";
 import { Type } from "@sinclair/typebox";
 import { AnimalParams } from "../../../types/schemas/animal.js";
