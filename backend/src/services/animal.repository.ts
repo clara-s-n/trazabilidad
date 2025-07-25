@@ -79,6 +79,14 @@ export class AnimalRepository {
         );
         return rows as Animal[];
     }
+
+    async getAll(): Promise<Animal[]> {
+        const { rows } = await query(
+            `SELECT id, breed, birth_date, owner_id, land_id, status, created_at, updated_at
+            FROM animals`
+        );
+        return rows as Animal[];
+    }
 }
 
 export const animalRepository = new AnimalRepository();

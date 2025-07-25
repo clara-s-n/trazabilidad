@@ -28,4 +28,22 @@ export const routes: Routes = [
     loadComponent:() => 
       import('./routes/protegida/protegida.page').then((m) => m.ProtegidaPage),
   },
+  {
+    path: 'animals',
+    pathMatch: 'full',
+    loadComponent:() => 
+      import('./routes/animalDisplay/animals/animals.page').then((m) => m.AnimalsPage),
+  },
+  {
+    path: 'animals/crear',
+    pathMatch: 'full',
+    loadComponent:() => 
+      import('./routes/animales/crear/crear.page').then((m) => m.CrearPage),
+  },
+  {
+    path: 'animals/modificar',
+    pathMatch: 'full',
+    loadComponent:() => 
+      import('./routes/animales/modificar/modificar.page').then((m) => m.ModificarPage),
+  },
 ];

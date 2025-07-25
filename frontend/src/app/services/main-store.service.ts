@@ -30,10 +30,10 @@ export class MainStoreService {
 
 
   // Llamar tras un login exitoso
-  setAuth(user: User, token: string) {
+  setUser(user: User) {
     this.usuario.set(user);
-    localStorage.setItem('access_token', token);
-    this.token.set(token);
+    const userString = JSON.stringify(user)
+    localStorage.setItem("user", userString);
   }
 
   // Llamar en logout

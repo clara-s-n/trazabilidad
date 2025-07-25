@@ -1,0 +1,36 @@
+<form (ngSubmit)="onSubmit()" #userForm="ngForm">
+<ion-grid>
+    <ion-row class="ion-justify-content-center">
+    <ion-col size="12" size-sm="8" size-md="6">
+      <ion-input #breed="ngModel" labelPlacement="floating" fill="solid" label="Raza"[(ngModel)]="this.breed" required minlength="3" errorText="{{breed.errors | errorMessage:'breed'}}" appReservado='Magica' name="breed"></ion-input>
+      <ion-col> {{breed.errors | json }}</ion-col>
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-justify-content-center">
+    <ion-col size="12" size-sm="8" size-md="6">
+      <ion-input #birth_date="ngModel" labelPlacement="floating" fill="solid" label="Lugar de Nacimiento" [(ngModel)]="this.birth_date" required minlength="3" errorText="{{birth_date.errors | errorMessage:'birth_date'}}" name="birth_date"></ion-input>
+      <ion-col> {{birth_date.errors | json }}</ion-col>
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-justify-content-center">
+    <ion-col size="12" size-sm="8" size-md="6">
+      <ion-input labelPlacement="floating" fill="solid" label="Dueño"[(ngModel)]="this.dueno" required name="dueno"></ion-input>
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-justify-content-center">
+    <ion-col size="12" size-sm="8" size-md="6">
+      <ion-input labelPlacement="floating" fill="solid" label="Predio"[(ngModel)]="this.predio" required name="predio"></ion-input>
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-justify-content-center">
+    <ion-col size="12" size-sm="8" size-md="6">
+      <ion-input labelPlacement="floating" fill="solid" label="Estado"[(ngModel)]="this._status" required name="_status"></ion-input>
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-justify-content-center">
+    <ion-col size="12" size-sm="8" size-md="6">
+        <ion-button expand="block" type="submit" shape="round" [disabled]="!userForm.valid">REGISTRARSE</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+</form>
