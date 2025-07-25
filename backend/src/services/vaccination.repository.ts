@@ -27,7 +27,7 @@ export class VaccinationRepository {
        JOIN events e         ON e.id         = ae.event_id
        JOIN event_type et    ON et.id        = e.event_type
        WHERE ae.animal_id = $1
-         AND et.name = 'Vaccination'`,
+       AND et.name = 'Vaccination'`,
       [animalId]
     );
     return rows as Vaccination[];

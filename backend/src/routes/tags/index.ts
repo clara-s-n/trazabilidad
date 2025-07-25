@@ -1,23 +1,29 @@
+// src/routes/tags/tagsRoute.ts
 import { FastifyPluginAsync } from "fastify";
+import { tagRepository } from "../../services/tag.repository.js";
+import { Type } from "@sinclair/typebox";
+import { TagSchema } from "../../types/schemas/tag.js";
 
-const caravanasRoute: FastifyPluginAsync = async (fastify, options) => {
-  fastify.get(('/'), {
-    schema: {
-      tags: ['Caravanas'],
-      description: 'Listar todas las caravanas',
-      summary: 'Obtener una lista de todas las caravanas disponibles',
-      security: [
-        {
-          bearerAuth: []
-        }
-      ],
-    },
-    onRequest: fastify.authenticate,
-    handler: async (request, reply) => {
-      // Handle fetching caravans logic
-      throw new Error("Not implemented");
-    },
-  });
+const tagsRoute: FastifyPluginAsync = async (fastify, options) => {
+  fastify.get(
+    "/",
+    {
+      schema: {
+        tags: ["Caravanas"],
+        description: "Listar todos los tags (caravanas electrónicas)",
+        summary: "Obtener todos los tags",
+        security: [{ bearerAuth: [] }],
+        response: {
+          200: Type.Array(TagSchema),
+        },
+      },
+      onRequest: fastify.verifyOperatorOrAdmin,
+      handler: async (request, reply) => {
+        const tags = await tagRepository.getAllTags();
+        return reply.status(200).send(tags);
+      },
+    }
+  );
 };
 
-export default caravanasRoute;
+export default tagsRoute;

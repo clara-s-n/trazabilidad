@@ -61,7 +61,7 @@ const idPrediosRoute: FastifyPluginAsyncTypebox = async (fastify) => {
         200: LandSchema
       }
     },
-    // onRequest: fastify.verifyOperatorOrAdmin,
+     onRequest: fastify.verifyOperatorOrAdmin,
     handler: async (request, reply) => {
       const { land_id } = request.params as LandParamsType;
       const updateData = request.body as UpdateLandType;
@@ -100,7 +100,7 @@ const idPrediosRoute: FastifyPluginAsyncTypebox = async (fastify) => {
         200: Type.Array(Animal)
       }
     },
-    // onRequest: fastify.authenticate,
+     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
       const { land_id } = request.params as LandParamsType;
 
