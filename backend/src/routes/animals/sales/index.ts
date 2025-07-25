@@ -20,7 +20,7 @@ const ventasRoute: FastifyPluginAsyncTypebox = async (fastify) => {
                 200: Type.Array(SaleSchema)
             }
         },
-        // onRequest: fastify.authenticate,
+        onRequest: fastify.authenticate,
         handler: async (request, reply) => {
             const { animal_id } = request.params as AnimalParams;
 
@@ -50,7 +50,7 @@ const ventasRoute: FastifyPluginAsyncTypebox = async (fastify) => {
                 201: SaleSchema
             }
         },
-        // onRequest: fastify.verifyOperator,
+        onRequest: fastify.verifyOperator,
         handler: async (request, reply) => {
             const { animal_id } = request.params as AnimalParams;
             const body = request.body as CreateSaleType;
