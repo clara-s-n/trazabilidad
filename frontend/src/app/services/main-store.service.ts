@@ -7,7 +7,7 @@ import { JWTPayload } from '../model/payload';
 })
 export class MainStoreService {
   // Señal para datos del usuario completo (backend)
-  public usuario = signal<User | undefined>(undefined);
+  public usuario = signal<User | null>(null);
 
   // Señal para el token JWT
   public token = signal<string | null>(localStorage.getItem('access_token'));
@@ -84,7 +84,8 @@ export class MainStoreService {
 
   // Limpia datos de autenticación y señales relacionadas.
   clearAuth() {
-    this.usuario.set(undefined);
+    this.usuario.set(null);
+    localStorage.removeItem('user')
     localStorage.removeItem('access_token');
     this.token.set(null);
     this.userId.set(null);
