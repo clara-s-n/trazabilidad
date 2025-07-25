@@ -1,54 +1,94 @@
-import { effect, Injectable, signal } from '@angular/core';
+import { effect, Injectable, signal, computed } from '@angular/core';
 import { User } from '../model/user';
+import { JWTPayload } from '../model/payload';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MainStoreService {
-
+  // Señal para datos del usuario completo (backend)
   public usuario = signal<User | undefined>(undefined);
 
-  private efecto = effect(() => {
-    console.log("Usuario effecteado: ", this.usuario())
-  })
-
-  // Estado del token JWT
+  // Señal para el token JWT
   public token = signal<string | null>(localStorage.getItem('access_token'));
 
-  // Efecto para depurar cambios de token
-  private tokenEffect = effect(() => {
-    console.log('🔑 Token actualizado:', this.token());
+  // Nuevas señales para desglosar el payload
+  public userId = signal<string | null>(null);
+  public userEmail = signal<string | null>(null);
+  public userRoleId = signal<number | null>(null);
+
+  // Computed signal para verificar si es administrador (role_id = 3)
+  public isAdmin = computed(() => this.userRoleId() === 3);
+
+  // Efecto de depuración para usuario
+  private userEffect = effect(() => {
+    console.log('Usuario actualizado:', this.usuario());
   });
 
-  constructor() { }
+  // Efecto de depuración para token y decodificación
+  private tokenEffect = effect(() => {
+    console.log('🔑 Token actualizado:', this.token());
+    this.decodePayload();
+  });
 
-  // Setear el token en la Signal
+  constructor() {
+    // Al inicializar, si hay token en localStorage, decodificarlo
+    if (this.token()) {
+      this.decodePayload();
+    }
+  }
+
+  // Decodifica el payload del JWT y actualiza las señales correspondientes.
+  private decodePayload() {
+    const token = this.token();
+    if (!token) {
+      this.userId.set(null);
+      this.userEmail.set(null);
+      this.userRoleId.set(null);
+      return;
+    }
+    try {
+      // Extraer la segunda parte (payload) y decodificar Base64URL
+      const payloadBase64 = token.split('.')[1];
+      const payloadJson = decodeURIComponent(
+        atob(payloadBase64)
+          .split('')
+          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      const payload = JSON.parse(payloadJson) as JWTPayload;
+
+      // Actualizar señales con datos desglosados
+      this.userId.set(payload.user_id);
+      this.userEmail.set(payload.user);
+      this.userRoleId.set(payload.role_id);
+    } catch (error) {
+      console.error('Error al decodificar JWT payload:', error);
+      this.userId.set(null);
+      this.userEmail.set(null);
+      this.userRoleId.set(null);
+    }
+  }
+
+  // Guarda el token en la señal y en localStorage.
   setToken(token: string) {
     this.token.set(token);
     localStorage.setItem('access_token', token);
-
-
-
-    /* Estructura del payload:
-        const payload = {
-            user_id: user.id,
-            user: user.email,
-            role_id: user.role_id
-          };*/
   }
 
-
-  // Llamar tras un login exitoso
+  // Guarda el usuario en la señal y en localStorage.
   setUser(user: User) {
     this.usuario.set(user);
-    const userString = JSON.stringify(user)
-    localStorage.setItem("user", userString);
+    localStorage.setItem('user', JSON.stringify(user));
   }
 
-  // Llamar en logout
+  // Limpia datos de autenticación y señales relacionadas.
   clearAuth() {
     this.usuario.set(undefined);
     localStorage.removeItem('access_token');
     this.token.set(null);
+    this.userId.set(null);
+    this.userEmail.set(null);
+    this.userRoleId.set(null);
   }
 }
