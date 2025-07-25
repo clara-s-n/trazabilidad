@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
-import { Animal, AnimalParams} from "../../types/schemas/animal.js";
+import {Animal, AnimalParams, AnimalPost} from "../../types/schemas/animal.js";
 import { animalRepository } from "../../services/animal.repository.js";
 
 const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
@@ -45,11 +45,11 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
           bearerAuth: []
         }
       ],
-      body: Animal
+      body: AnimalPost,
     },
     onRequest: fastify.verifyOperator,
     handler: async (request, reply) => {
-      const animalData = request.body as Animal;
+      const animalData = request.body as AnimalPost;
       const newAnimal = await animalRepository.createAnimal(animalData);
       reply.status(201).send(newAnimal);
     }
