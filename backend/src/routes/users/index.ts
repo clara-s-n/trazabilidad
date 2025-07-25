@@ -1,4 +1,7 @@
 import { FastifyPluginAsync } from "fastify";
+import { UserPostSchema, UserPostType } from "../../types/schemas/user.js";
+import { userRepository } from "../../services/user.repository.js";
+import bcrypt from "bcryptjs";
 
 const usuariosRoute: FastifyPluginAsync = async (fastify, options) => {
   fastify.get(
@@ -9,14 +12,17 @@ const usuariosRoute: FastifyPluginAsync = async (fastify, options) => {
         description: 'Listar todos los usuarios',
         summary: 'Obtener una lista de todos los usuarios disponibles',
         security: [
-        {
-          bearerAuth: []
-        }
-      ],
+          {
+            bearerAuth: []
+          }
+        ],
       },
       onRequest: fastify.verifyAdmin,
       handler: async (request, reply) => {
-        throw new Error("Not implemented");
+        // Obtenemos todos los usuarios de la base de datos
+        const users = await userRepository.getAllUsers();
+        // Enviamos la lista de usuarios como respuesta
+        reply.send(users);
       },
     }
   );
@@ -29,14 +35,24 @@ const usuariosRoute: FastifyPluginAsync = async (fastify, options) => {
         description: 'Crear un nuevo usuario',
         summary: 'Agregar un nuevo usuario a la lista',
         security: [
-        {
-          bearerAuth: []
-        }
-      ],
+          {
+            bearerAuth: []
+          }
+        ],
+        body: UserPostSchema,
       },
       onRequest: fastify.verifyAdmin,
       handler: async (request, reply) => {
-        throw new Error("Not implemented");
+        // Obtenemos los datos del usuario desde el cuerpo de la solicitud
+        const userData = request.body as UserPostType;
+        // Hasheamos la contraseña antes de guardar
+        const passwordHash = await bcrypt.hash(userData.password_hash, bcrypt.genSaltSync(10));
+        // Creamos el usuario en la base de datos
+        userData.password_hash = passwordHash;
+        const user = await userRepository.createUser({
+          ...userData
+        });
+        reply.status(201).send(user);
       },
     }
   );

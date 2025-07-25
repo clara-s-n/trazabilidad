@@ -54,8 +54,24 @@ export const AnimalDetailedSchema = Type.Intersect([
     events: Type.Array(AnimalEventSchema),
   }),
 ]);
+
+export const AnimalPost = Type.Object({
+  breed: Type.String({ examples: ['Abigar'] }),
+  birth_date: Type.String({ format: 'date', examples: ['2020-01-01'] }),
+  owner_id: Type.String({ format: 'uuid', examples: ['3600e259-0cc1-491d-9860-aa4cff12155c'] }),
+  land_id: Type.String({ format: 'uuid', examples: ['ca751bd3-3df5-4967-8282-252ac89543ba'] }),
+  status: Type.Union([
+    Type.Literal('alive'),
+    Type.Literal('deceased'),
+    Type.Literal('robbed'),
+    Type.Literal('lost'),
+  ], { default: 'alive', examples: ['alive', 'deceased', 'robbed', 'lost'] }),
+});
+
+
 export type AnimalDetailed = Static<typeof AnimalDetailedSchema>;
 export type AnimalEvent = Static<typeof AnimalEventSchema>;
 export type AnimalFilter = Static<typeof AnimalFilter>;
 export type Animal = Static<typeof Animal>;
 export type AnimalParams = Static<typeof AnimalParams>;
+export type AnimalPost = Static<typeof AnimalPost>;

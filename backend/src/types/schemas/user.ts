@@ -1,4 +1,4 @@
-import {Static, Type} from "@sinclair/typebox";
+import { Static, Type } from "@sinclair/typebox";
 
 export const LoginParams = Type.Object({
     email: Type.String({
@@ -30,7 +30,7 @@ export const UserSchema = Type.Object({
     id: Type.String({ format: 'uuid' }),
     email: Type.String({ format: 'email' }),
     password_hash: Type.String(),
-    role_id: Type.Integer(),
+    role_id: Type.Number(),
     created_at: Type.String({ format: 'date-time' })
 });
 
@@ -39,6 +39,9 @@ export const UpdateUserSchema = Type.Object({
     role_id: Type.Optional(Type.Integer())
 });
 
+export const UserPostSchema = Type.Omit(UserSchema, ['id', 'created_at']);
+
+export type UserPostType = Static<typeof UserPostSchema>;
 export type User = Static<typeof UserSchema>;
 export type LoginType = Static<typeof LoginParams>;
 export type UserParamsType = Static<typeof UserParams>;

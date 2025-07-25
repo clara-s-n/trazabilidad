@@ -20,6 +20,21 @@
         <div class="ion-padding" slot="content" routerLink="/animal/:id">
           Detalle de un animal
         </div>
+        <div class="ion-padding" slot="content" routerLink="/animal/${id}/edit">
+          Editar un animal
+        </div>
+        <div class="ion-padding" slot="content" routerLink="/animal/${id}/events">
+          Eventos de un animal
+        </div>
+        <div class="ion-padding" slot="content" routerLink="/animal/:id/history">
+          Historial de un animal
+        </div>
+        <div class="ion-padding" slot="content" routerLink="/animal/:id/movements">
+          Movimientos de un animal
+        </div>
+        <div class="ion-padding" slot="content" routerLink="/animal/:user/list">
+          Animales de un usuario
+        </div>
       </ion-accordion>
       <ion-accordion value="second">
         <ion-item slot="header" color="light">
@@ -32,6 +47,7 @@
           <ion-label>Usuarios</ion-label>
         </ion-item>
         <div class="ion-padding" slot="content" routerLink="/user/list">Lista de usuarios</div>
+        <div class="ion-padding" slot="content" routerLink="/auth/register">Crear un usuario</div>
       </ion-accordion>
       <ion-accordion value="fourth">
         <ion-item slot="header" color="light">
