@@ -19,7 +19,10 @@ const usuariosRoute: FastifyPluginAsync = async (fastify, options) => {
       },
       onRequest: fastify.verifyAdmin,
       handler: async (request, reply) => {
-        throw new Error("Not implemented");
+        // Obtenemos todos los usuarios de la base de datos
+        const users = await userRepository.getAllUsers();
+        // Enviamos la lista de usuarios como respuesta
+        reply.send(users);
       },
     }
   );
