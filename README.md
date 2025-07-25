@@ -164,3 +164,11 @@ El sistema cuenta con una interfaz web desarrollada con Angular e Ionic. A conti
 * `/evento/vacunacion/create` – Registrar nuevo evento de vacunación.
 * `/evento/venta/create` – Registrar nuevo evento de venta.
 * `/evento/transporte/create` – Registrar nuevo evento de transporte.
+
+## 7. Creación de usuario
+Para poder acceder a la sección de creación de un usuario es necesario estar autenticado con las credenciales de un administrador.
+
+```
+Email: admin@example.com
+Contraseña: admin123
+```
