@@ -12,6 +12,7 @@ const caravanasRoute: FastifyPluginAsync = async (fastify, options) => {
         }
       ],
     },
+    onRequest: fastify.authenticate,
     handler: async (request, reply) => {
       // Handle fetching caravans logic
       throw new Error("Not implemented");

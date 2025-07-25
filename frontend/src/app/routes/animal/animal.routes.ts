@@ -41,6 +41,12 @@ export const routes: Routes = [
           import('./movements/movements.page').then(m => m.MovementsPage)
       },
       {
+        path: ':userId/list',
+        pathMatch: 'full',
+        loadComponent: () =>
+          import('./user-list/user-list.page').then(m => m.UserListPage)
+      },
+      {
         path: '',
         redirectTo: 'list',
         pathMatch: 'full'

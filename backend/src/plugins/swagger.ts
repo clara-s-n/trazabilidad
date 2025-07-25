@@ -3,7 +3,7 @@ import swaggerui from "@fastify/swagger-ui";
 import fp from 'fastify-plugin'
 
 export default fp<FastifySwaggerOptions>(async (fastify) => {
-  await fastify.register(swagger,{
+  await fastify.register(swagger, {
     openapi: {
       openapi: '3.0.0',
       info: {
@@ -13,7 +13,7 @@ export default fp<FastifySwaggerOptions>(async (fastify) => {
       },
       servers: [
         {
-          url: 'http://localhost:3000',
+          url: 'http://localhost/backend',
           description: 'Development server'
         }
       ],

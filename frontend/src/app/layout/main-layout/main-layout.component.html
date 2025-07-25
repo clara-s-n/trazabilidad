@@ -2,17 +2,61 @@
 <ion-menu side="start" menuId="first" contentId="main-content">
   <ion-header>
     <ion-toolbar>
-      <ion-title>Menú</ion-title>
+      <ion-title>Secciones</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
-    <ion-list>
-      <ion-item routerLink="/animal/list">Animales</ion-item>
-      <ion-item routerLink="/land/list">Predios</ion-item>
-      <ion-item routerLink="/user/list">Usuarios</ion-item>
-      <ion-item routerLink="/evento/pesaje/create">Eventos</ion-item>
-      <ion-item (click)="logout()">Cerrar sesión</ion-item>
-    </ion-list>
+    <ion-accordion-group [multiple]="true">
+      <ion-accordion value="first">
+        <ion-item slot="header" color="light">
+          <ion-label>Animales</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content" routerLink="/animal/list">
+          Lista de animales
+        </div>
+        <div class="ion-padding" slot="content" routerLink="/animal/create">
+          Crear un animal
+        </div>
+        <div class="ion-padding" slot="content" routerLink="/animal/:id">
+          Detalle de un animal
+        </div>
+        <div class="ion-padding" slot="content" routerLink="/animal/${id}/edit">
+          Editar un animal
+        </div>
+        <div class="ion-padding" slot="content" routerLink="/animal/${id}/events">
+          Eventos de un animal
+        </div>
+        <div class="ion-padding" slot="content" routerLink="/animal/:id/history">
+          Historial de un animal
+        </div>
+        <div class="ion-padding" slot="content" routerLink="/animal/:id/movements">
+          Movimientos de un animal
+        </div>
+        <div class="ion-padding" slot="content" routerLink="/animal/:user/list">
+          Animales de un usuario
+        </div>
+      </ion-accordion>
+      <ion-accordion value="second">
+        <ion-item slot="header" color="light">
+          <ion-label>Predios</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content" routerLink="/land/list">Lista de predios</div>
+      </ion-accordion>
+      <ion-accordion value="third">
+        <ion-item slot="header" color="light">
+          <ion-label>Usuarios</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content" routerLink="/user/list">Lista de usuarios</div>
+        <div class="ion-padding" slot="content" routerLink="/auth/register">Crear un usuario</div>
+      </ion-accordion>
+      <ion-accordion value="fourth">
+        <ion-item slot="header" color="light">
+          <ion-label>Eventos</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content" routerLink="/evento/pesaje/create">Lista de eventos</div>
+      </ion-accordion>
+    </ion-accordion-group>
+    <ion-item (click)="logout()">Cerrar sesión</ion-item>
   </ion-content>
 </ion-menu>
 

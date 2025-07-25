@@ -14,6 +14,7 @@ const idCaravanasRoute: FastifyPluginAsync = async (fastify, options) => {
         }
       ],
     },
+    onRequest: fastify.authenticate,
     handler: async (request, reply) => {
       // Handle fetching caravan by ID logic
       throw new Error("Not implemented");
@@ -27,6 +28,7 @@ const idCaravanasRoute: FastifyPluginAsync = async (fastify, options) => {
       description: 'Modificar una caravana',
       summary: 'Realizar la modificación de una caravana',
     },
+    onRequest: fastify.verifyOperatorOrAdmin,
     handler: async (request, reply) => {
       // Handle updating caravan by ID logic
       throw new Error("Not implemented");

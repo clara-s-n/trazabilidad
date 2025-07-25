@@ -23,15 +23,16 @@ El backend expone una API REST organizada por entidad, con rutas agrupadas en su
 **→ http://localhost:3000/docs**
 
 A continuación se presenta una vista general del árbol de endpoints:
+
 ```
 /
 ├──/auth
    └── /login → POST - Login de usuario
 ├──/animals
    └── / → GET, POST
-      ├── /animal_id/:animal_id → GET, PUT, DELETE
-      ├── /animal_id/:animal_id/modifications → GET
-      └── /animal_id/:animal_id/events → GET
+      ├── /:animal_id → GET, PUT, DELETE
+      ├── /:animal_id/modifications → GET
+      └── /:animal_id/events → GET
          ├── /sale/:animal_id → GET, POST
          ├── /vaccine/:animal_id → GET, POST
          └── /weighing/:animal_id → GET, POST
@@ -40,11 +41,11 @@ A continuación se presenta una vista general del árbol de endpoints:
       └── user_id/:user_id → GET, PUT, DELETE
 ├──/lands
    └── / → GET, POST
-      ├── /land_id/:land_id → GET, PUT, DELETE
-      └── /land_id/:land_id/animals → GET, PUT, DELETE
+      ├── /land_id/:land_id → GET, PUT
+      └── /land_id/:land_id/animals → GET
 ├──/tags
-   └── / → GET, POST
-      └── /tag_id/:tag_id → GET, PUT, DELETE
+   └── / → GET
+      └── /tag_id/:tag_id → GET, PUT
 └──/transport
    └──/ → GET, POST
       └── /transport_id/:transport_id → GET, PUT, DELETE
@@ -59,11 +60,15 @@ A continuación se presenta una vista general del árbol de endpoints:
 ### 🛠️ Paso a paso
 
 1. Clonar el repositorio:
+
    ```bash
    git clone <url-del-repo>
    cd backend
-   
+
+   ```
+
 2. Crear un archivo .env en la raíz del backend con las siguientes variables:
+
    ```
    DB_HOST=db
    DB_PORT=5432
@@ -74,6 +79,7 @@ A continuación se presenta una vista general del árbol de endpoints:
    ```
 
 3. Levantar el entorno completo con:
+
    ```
    docker-compose up --build
    ```
@@ -81,15 +87,16 @@ A continuación se presenta una vista general del árbol de endpoints:
 4. Esperar un tiempo y luego ingresar a:
    http://localhost:3000/docs
 
->[!IMPORTANT]
->⚠️ La base de datos se inicializa automáticamente con estructura y datos base al ejecutar los contenedores por primera vez. Los scripts .sql están en: `src/database/scripts/`
+> [!IMPORTANT]
+> ⚠️ La base de datos se inicializa automáticamente con estructura y datos base al ejecutar los contenedores por primera vez. Los scripts .sql están en: `src/database/scripts/`
 
 ## 5. Datos para probar la documentación
 
->[!WARNING]
->El texto default que aparece en la documentación de swagger no va a funcionar en el login
+> [!WARNING]
+> El texto default que aparece en la documentación de swagger no va a funcionar en el logi
 
 A continuación se muestran ejemplos de como probar el login con cada uno de los roles:
+
 1. Administrador
    ```
       {
@@ -113,6 +120,7 @@ A continuación se muestran ejemplos de como probar el login con cada uno de los
    ```
 
 Aparte, en la ruta `users/user_id` se puede utilizar el valor: `3600e259-0cc1-491d-9860-aa4cff12155c`
+
 
 ## 6. Navegación del Frontend (Angular/Ionic)
 
@@ -156,4 +164,3 @@ El sistema cuenta con una interfaz web desarrollada con Angular e Ionic. A conti
 * `/evento/vacunacion/create` – Registrar nuevo evento de vacunación.
 * `/evento/venta/create` – Registrar nuevo evento de venta.
 * `/evento/transporte/create` – Registrar nuevo evento de transporte.
-

@@ -14,8 +14,8 @@ CREATE TYPE "animal_status" AS ENUM (
   'lost'
 );
 
-CREATE TABLE IF NOT EXISTS "rols" (
-  "id" UUID PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS "roles" (
+  "id" INT PRIMARY KEY,
   "name" VARCHAR UNIQUE NOT NULL,
   "description" VARCHAR
 );
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS "users" (
   "id" UUID PRIMARY KEY,
   "email" VARCHAR UNIQUE NOT NULL,
   "password_hash" VARCHAR NOT NULL,
-  "rols_id" UUID NOT NULL,
+  "role_id" INT NOT NULL,
   "created_at" TIMESTAMP DEFAULT (now())
 );
 
@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS "animal_history" (
   "modification_date" TIMESTAMP DEFAULT (now())
 );
 
-ALTER TABLE "users" ADD FOREIGN KEY ("rols_id") REFERENCES "rols" ("id");
+ALTER TABLE "users" ADD FOREIGN KEY ("role_id") REFERENCES "roles" ("id");
 
 ALTER TABLE "animals" ADD FOREIGN KEY ("owner_id") REFERENCES "users" ("id") ON DELETE SET NULL;
 

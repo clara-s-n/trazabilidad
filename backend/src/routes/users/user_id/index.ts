@@ -28,7 +28,7 @@ const usuariosIdRoute: FastifyPluginAsync = async (fastify, options) => {
         }
       }
     },
-    onRequest: fastify.authenticate,
+    onRequest: fastify.verifySelfOrAdmin,
     handler: async (request, reply) => {
       const { user_id } = request.params as UserParamsType;
       const user = await userRepository.getUserById(user_id);
@@ -48,7 +48,7 @@ const usuariosIdRoute: FastifyPluginAsync = async (fastify, options) => {
       security: [{ bearerAuth: [] }],
       body: UpdateUserSchema, 
     },
-    onRequest: fastify.authenticate,
+    onRequest: fastify.verifyAdmin,
     handler: async (request, reply) => {
       const { user_id } = request.params as UserParamsType;
       const updateData = request.body as UpdateUserType; // Asegurate de tener validaciones para el body
@@ -69,7 +69,7 @@ const usuariosIdRoute: FastifyPluginAsync = async (fastify, options) => {
       summary: "Realizar el eliminado de un usuario",
       security: [{ bearerAuth: [] }]
     },
-    onRequest: fastify.authenticate,
+    onRequest: fastify.verifySelfOrAdmin,
     handler: async (request, reply) => {
       const { user_id } = request.params as UserParamsType;
       await userRepository.deleteUser(user_id);

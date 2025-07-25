@@ -12,5 +12,13 @@ export const SaleSchema = Type.Object({
   currency: Type.String(),
 });
 
+export const CreateSaleParams = Type.Object({
+  event_id: Type.String({ format: "uuid" }),
+  buyer: Type.String({ minLength: 3 }),
+  price: Type.Number({ minimum: 0 }),
+  currency: Type.String({ minLength: 3, maxLength: 4 }) // Ej: USD, UYU
+});
+
 export type Sale = Static<typeof SaleSchema>;
 export type SaleParamType = Static<typeof SaleParam>;
+export type CreateSaleType = Static<typeof CreateSaleParams>;
