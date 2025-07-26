@@ -1,9 +1,15 @@
 import { FastifyPluginAsync } from "fastify";
-import { UpdateUserSchema, UpdateUserType, UserParams, UserParamsType, UserSchema} from "../../../types/schemas/user.js";
+import {
+  UpdateUserSchema,
+  UpdateUserType,
+  UserParams,
+  UserParamsType,
+  UserResponseSchema
+} from "../../../types/schemas/user.js";
 import { userRepository } from "../../../services/user.repository.js";
-import { UCUError } from "../../../utils/index.js";
+import { UCUErrorNotFound } from "../../../utils/index.js";
 
-const usuariosIdRoute: FastifyPluginAsync = async (fastify, options) => {
+const usuariosIdRoute: FastifyPluginAsync = async (fastify) => {
   fastify.get("/:user_id", {
     schema: {
       tags: ["Usuarios"],
@@ -11,20 +17,9 @@ const usuariosIdRoute: FastifyPluginAsync = async (fastify, options) => {
       description: "Obtener un usuario específico",
       summary: "Obtener información detallada de un usuario específico",
       security: [{ bearerAuth: [] }],
-      example: {
-        params: {
-          user_id: "debeeeb4-e4a4-4823-8510-b09ff13a735b"
-        },
-      },
       response: {
-        200: {
-          description: "Usuario encontrado",
-          type: "object",
-          properties: UserSchema.properties
-        },
-        404: {
-          description: "Usuario no encontrado"
-        }
+        200: UserResponseSchema,
+        404: { description: "Usuario no encontrado" }
       }
     },
     onRequest: fastify.verifySelfOrAdmin,
@@ -32,9 +27,10 @@ const usuariosIdRoute: FastifyPluginAsync = async (fastify, options) => {
       const { user_id } = request.params as UserParamsType;
       const user = await userRepository.getUserById(user_id);
       if (!user) {
-        throw new UCUError("Usuario no encontrado");
+        throw new UCUErrorNotFound(`Usuario ${user_id} no encontrado`);
       }
-      return user;
+      const { password_hash, ...safeUser } = user;
+      return safeUser;
     }
   });
 
@@ -45,34 +41,46 @@ const usuariosIdRoute: FastifyPluginAsync = async (fastify, options) => {
       description: "Modificar un usuario",
       summary: "Realizar la modificación de un usuario",
       security: [{ bearerAuth: [] }],
-      body: UpdateUserSchema, 
+      body: UpdateUserSchema,
+      response: {
+        200: UserResponseSchema,
+        404: { description: "Usuario no encontrado" }
+      }
     },
     onRequest: fastify.verifyAdmin,
     handler: async (request, reply) => {
       const { user_id } = request.params as UserParamsType;
-      const updateData = request.body as UpdateUserType; // Asegurate de tener validaciones para el body
-
+      const updateData = request.body as UpdateUserType;
       const updatedUser = await userRepository.updateUser(user_id, updateData);
       if (!updatedUser) {
-        throw new UCUError("No se pudo actualizar el usuario");
+        throw new UCUErrorNotFound(`No se pudo actualizar el usuario ${user_id}`);
       }
-      return updatedUser;
+      const { password_hash, ...safeUser } = updatedUser;
+      return safeUser;
     }
   });
 
+  // DELETE /users/:user_id
   fastify.delete("/:user_id", {
     schema: {
       tags: ["Usuarios"],
       params: UserParams,
       description: "Eliminar un usuario",
       summary: "Realizar el eliminado de un usuario",
-      security: [{ bearerAuth: [] }]
+      security: [{ bearerAuth: [] }],
+      response: {
+        204: { type: "null" },
+      }
     },
     onRequest: fastify.verifySelfOrAdmin,
     handler: async (request, reply) => {
       const { user_id } = request.params as UserParamsType;
+      const user = await userRepository.getUserById(user_id);
+      if (!user) {
+        throw new UCUErrorNotFound(`Usuario ${user_id} no encontrado`);
+      }
       await userRepository.deleteUser(user_id);
-      reply.code(204).send(); // Sin contenido
+      reply.code(204).send();
     }
   });
 };

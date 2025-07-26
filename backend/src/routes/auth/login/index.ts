@@ -1,7 +1,13 @@
-import {  UCUErrorNotFound, UCUErrorUnauthorized } from "../../../utils/index.js";
-import { FastifyPluginAsyncTypebox, Type } from "@fastify/type-provider-typebox";
+import {
+  UCUErrorNotFound,
+  UCUErrorUnauthorized
+} from "../../../utils/index.js";
+import {
+  FastifyPluginAsyncTypebox,
+} from "@fastify/type-provider-typebox";
 import { SignOptions } from "@fastify/jwt";
 import { LoginParams, LoginType } from "../../../types/schemas/user.js";
+import { LoginResponse } from "../../../types/schemas/user.js";
 import { userRepository } from "../../../services/user.repository.js";
 import bcrypt from "bcryptjs";
 import { FastifyReply, FastifyRequest } from "fastify";
@@ -15,10 +21,8 @@ const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<voi
       body: LoginParams,
       security: [],
       response: {
-        200: Type.Object({
-          token: Type.String({ description: "JWT generado para autenticación" })
-        })
-      },
+        200: LoginResponse,
+      }
     },
     handler: async (request: FastifyRequest, reply: FastifyReply) => {
       const { email, password }: LoginType = request.body as LoginType;
@@ -37,9 +41,8 @@ const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<voi
         throw new UCUErrorUnauthorized("Credenciales inválidas");
       }
 
-      const payload = {
+      const tokenPayload = {
         user_id: user.id,
-        user: user.email,
         role_id: user.role_id
       };
 
@@ -48,9 +51,16 @@ const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<voi
         notBefore: "0"
       };
 
-      const token = fastify.jwt.sign(payload, signOptions);
-      return { token };
-    },
+      const token = fastify.jwt.sign(tokenPayload, signOptions);
+
+      // Omitir password_hash en respuesta
+      const { password_hash, ...safeUser } = user;
+
+      reply.send({
+        token,
+        user: safeUser
+      });
+    }
   });
 };
 
