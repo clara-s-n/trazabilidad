@@ -53,7 +53,7 @@ export class UserRepository {
     }
     const { rows } = await query(
       `UPDATE users
-          SET ${sets.join(', ')}, updated_at = now()
+          SET ${sets.join(', ')}
           WHERE id = $1
           RETURNING id, email, password_hash, role_id, created_at`,
       params
