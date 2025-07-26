@@ -10,7 +10,7 @@ import {IonBackButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar} 
   standalone: true,
   imports: [
     LandFormComponent,
-    IonContent,
+    //IonContent,
     IonTitle,
     IonBackButton,
     IonButtons,
@@ -28,6 +28,6 @@ export class LandCreatePage {
   async handleSave(payload: CreateLand | UpdateLand) {
     // Para creación, payload incluirá todos los campos obligatorios
     await this.landsService.createLand(payload as CreateLand);
-    this.router.navigate(['/predios/list']);
+    this.router.navigate(['/land/list']);
   }
 }

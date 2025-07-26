@@ -23,10 +23,10 @@ export class LandMenuPage  implements OnInit {
   }
 
   goToList() {
-    this.router.navigate(['/predios/list']);
+    this.router.navigate(['/land/list']);
   }
 
   goToCreate() {
-    this.router.navigate(['/predios/create']);
+    this.router.navigate(['/land/create']);
   }
 }

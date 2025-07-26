@@ -42,7 +42,7 @@ export class RegisterPage {
   async onSubmit() {
     const user: UserPost = {
       email: this.email,
-      password_hash: this.password,
+      password: this.password,
       role_id: this.role_id
     };
 

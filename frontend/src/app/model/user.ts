@@ -1,9 +1,11 @@
 export interface UserPost {
   email: string;
-  password_hash: string;
+  password: string;
   role_id: number;
 }
 
-export interface User extends UserPost {
-  id_usuario: number;
+export interface User {
+  user_id: string;
+  email: string;
+  role_id: number;
 }
