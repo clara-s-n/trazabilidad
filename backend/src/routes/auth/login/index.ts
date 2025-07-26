@@ -1,5 +1,4 @@
-// loginRoute.ts
-import { UCUError } from "../../../utils/index.js";
+import {  UCUErrorNotFound, UCUErrorUnauthorized } from "../../../utils/index.js";
 import { FastifyPluginAsyncTypebox, Type } from "@fastify/type-provider-typebox";
 import { SignOptions } from "@fastify/jwt";
 import { LoginParams, LoginType } from "../../../types/schemas/user.js";
@@ -25,17 +24,17 @@ const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<voi
       const { email, password }: LoginType = request.body as LoginType;
 
       if (!email || !password) {
-        throw new UCUError("Email y contraseña son obligatorios");
+        throw new UCUErrorUnauthorized("Email y contraseña son obligatorios");
       }
 
       const user = await userRepository.findUserByEmail(email);
       if (!user) {
-        throw new UCUError("Usuario no encontrado");
+        throw new UCUErrorNotFound("Usuario no encontrado");
       }
 
       const isValid = await bcrypt.compare(password, user.password_hash);
       if (!isValid) {
-        throw new UCUError("Credenciales inválidas");
+        throw new UCUErrorUnauthorized("Credenciales inválidas");
       }
 
       const payload = {

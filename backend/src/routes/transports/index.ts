@@ -1,41 +1,52 @@
-import { FastifyPluginAsync } from "fastify";
+// src/routes/transportes/index.ts
+import { FastifyPluginAsyncTypebox, Type } from '@fastify/type-provider-typebox';
+import { transportRepository } from '../../services/transport.repository.js';
+import {
+  CreateTransportSchema,
+  CreateTransportType,
+  TransportSchema
+} from '../../types/schemas/transport.js';
 
-const transportesRoute: FastifyPluginAsync = async (fastify, options) => {
+const transportesRoute: FastifyPluginAsyncTypebox = async (fastify) => {
+  // GET /transportes → listado completo
   fastify.get('/', {
     schema: {
       tags: ['Transportes'],
-      description: 'Listar todos los transportes',
-      summary: 'Obtener una lista de todos los transportes disponibles',
-      security: [
-        {
-          bearerAuth: []
-        }
-      ],
+      summary: 'Listar todos los transportes',
+      description: 'Obtiene el listado completo de transportes registrados',
+      security: [{ bearerAuth: [] }],
+      response: {
+        200: Type.Array(TransportSchema)
+      }
     },
     onRequest: fastify.authenticate,
-    handler: async (request, reply) => {
-        // Handle fetching transportes logic
-        throw new Error("Not implemented");
-    },
+    handler: async () => {
+      // Asumiendo que implementás getAll() en transportRepository
+      const result = await transportRepository.getAllTransports();
+      return result;
+    }
   });
 
+  // POST /transportes → nuevo registro
   fastify.post('/', {
     schema: {
       tags: ['Transportes'],
-      description: 'Crear un nuevo transporte',
-      summary: 'Agregar un nuevo transporte a la lista',
-      security: [
-        {
-          bearerAuth: []
-        }
-      ],
+      summary: 'Registrar un nuevo transporte',
+      description: 'Crea un nuevo registro de transporte',
+      body: CreateTransportSchema,
+      security: [{ bearerAuth: [] }],
+      response: {
+        201: TransportSchema
+      }
     },
     onRequest: fastify.verifyOperator,
     handler: async (request, reply) => {
-        // Handle creating new transporte logic
-        throw new Error("Not implemented");
-    },
-  });  
+      const data = request.body as CreateTransportType;
+      const created = await transportRepository.createTransport(data);
+      reply.code(201);
+      return created;
+    }
+  });
 };
 
 export default transportesRoute;
