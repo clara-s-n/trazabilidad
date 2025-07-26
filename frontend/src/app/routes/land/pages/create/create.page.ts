@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-create',
+  selector: 'app-create-land',
   templateUrl: './create.page.html',
   styleUrls: ['./create.page.scss'],
   standalone: true,
