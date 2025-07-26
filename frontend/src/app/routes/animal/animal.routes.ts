@@ -51,7 +51,7 @@ export const routes: Routes = [
           import('./animal-user-list/animal-user-list.page').then(m => m.UserListPage)
       },
 
-      // 5. Ruta genérica detalle (deja esta al final)
+      // 5. Ruta genérica detalle
       {
         path: ':id',
         loadComponent: () =>

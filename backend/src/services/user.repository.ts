@@ -34,9 +34,9 @@ export class UserRepository {
 
   async getRoleById(role_id: number): Promise<User | null> {
     const { rows } = await query(
-      `SELECT id, email, password_hash, role_id, created_at
-        FROM users
-        WHERE role_id = $4`,
+      `SELECT *
+        FROM roles
+        WHERE id = $1`,
       [role_id]
     );
     return rows[0] as User | null;
@@ -52,10 +52,10 @@ export class UserRepository {
       );
       return rows[0] as User;
     } catch (error: any) {
-      if (error.code === Any) {
-        throw new UCUErrorConflict("El correo ya está registrado", 409);
+      if (error.code === '23505') {
+        throw new UCUErrorConflict("El correo ya está registrado");
       }
-      throw new UCUError("Error al clear el usuario", 500);
+      throw new UCUError("Error al crear el usuario");
     }
   }
 

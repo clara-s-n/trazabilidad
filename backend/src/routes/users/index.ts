@@ -37,7 +37,7 @@ const usuariosRoute: FastifyPluginAsync = async (fastify) => {
     },
     onRequest: fastify.verifyAdmin,
     handler: async (request, reply) => {
-      const { password, repeatPassword, role_id, ...rest } = request.body as UserPostType;
+      const { email, password, repeatPassword, role_id } = request.body as UserPostType;
 
       // 1. Verificar coincidencia de contraseñas
       if (password !== repeatPassword) {
@@ -53,9 +53,9 @@ const usuariosRoute: FastifyPluginAsync = async (fastify) => {
       // 3. Hashear contraseña y preparar payload
       const passwordHash = await bcrypt.hash(password, 10);
       const userToInsert = {
-        ...rest,
+        email,
+        password_hash: passwordHash,
         role_id,
-        password_hash: passwordHash
       };
 
       const user = await userRepository.createUser(userToInsert);

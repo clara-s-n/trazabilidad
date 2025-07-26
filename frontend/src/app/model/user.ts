@@ -1,6 +1,7 @@
 export interface UserPost {
   email: string;
-  password_hash: string;
+  password: string;
+  repeatPassword: string,
   role_id: number;
 }
 

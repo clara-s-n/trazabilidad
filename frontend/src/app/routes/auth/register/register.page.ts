@@ -12,6 +12,7 @@ import {
 import { UserPost } from 'src/app/model/user';
 import { UserService } from 'src/app/services/user.service';
 import { JsonPipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -33,16 +34,26 @@ import { JsonPipe } from '@angular/common';
 })
 export class RegisterPage {
   private userService = inject(UserService);
+  private router = inject(Router);
 
   // Modelo del formulario
   public email: string = '';
   public password: string = '';
+  public repeatPassword: string = '';
   public role_id: number = 0;
 
+
   async onSubmit() {
+
+    if (!(this.password === this.repeatPassword)) {
+      console.error('Las contraseñas no coinciden')
+      this.router.navigate(['/auth/register/']);
+    }
+
     const user: UserPost = {
       email: this.email,
-      password_hash: this.password,
+      password: this.password,
+      repeatPassword : this.repeatPassword,
       role_id: this.role_id
     };
 
