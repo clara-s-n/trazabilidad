@@ -15,14 +15,14 @@ export const routes: Routes = [
         canActivate: [userGuard],
         data: { menu: true, section: 'Predios', title: 'Lista de predios' },
         loadComponent: () =>
-          import('./pages/list/list.page').then(m => m.ListPage)
+          import('./pages/land-list/land-list.page').then(m => m.ListPage)
       },
       {
         path: 'create',
         canActivate: [adminOrOperatorGuard],
         data: { menu: true, section: 'Predios', title: 'Crear predio' },
         loadComponent: () =>
-          import('./pages/create/create.page').then(m => m.CreatePage)
+          import('./pages/land-create/land-create.page').then(m => m.CreatePage)
       },
 
       // Edit antes de detail
@@ -30,13 +30,13 @@ export const routes: Routes = [
         path: 'edit/:id',
         canActivate: [adminOrOperatorGuard],
         loadComponent: () =>
-          import('./pages/edit/edit.page').then(m => m.EditPage)
+          import('./pages/land-edit/land-edit.page').then(m => m.EditPage)
       },
       {
         path: ':id',
         canActivate: [userGuard],
         loadComponent: () =>
-          import('./pages/detail/detail.page').then(m => m.DetailPage)
+          import('./pages/land-detail/land-detail.page').then(m => m.DetailPage)
       }
     ]
   }
