@@ -8,33 +8,11 @@
   <ion-content class="ion-padding">
     <ion-accordion-group [multiple]="true">
       <ion-accordion value="first">
-        <ion-item slot="header" color="light">
+        <ion-item slot="header" color="tertiary">
           <ion-label>Animales</ion-label>
         </ion-item>
-        <div class="ion-padding" slot="content" routerLink="/animal/list">
-          Lista de animales
-        </div>
-        <div class="ion-padding" slot="content" routerLink="/animal/create">
-          Crear un animal
-        </div>
-        <div class="ion-padding" slot="content" routerLink="/animal/:id">
-          Detalle de un animal
-        </div>
-        <div class="ion-padding" slot="content" routerLink="/animal/${id}/edit">
-          Editar un animal
-        </div>
-        <div class="ion-padding" slot="content" routerLink="/animal/${id}/events">
-          Eventos de un animal
-        </div>
-        <div class="ion-padding" slot="content" routerLink="/animal/:id/history">
-          Historial de un animal
-        </div>
-        <div class="ion-padding" slot="content" routerLink="/animal/:id/movements">
-          Movimientos de un animal
-        </div>
-        <div class="ion-padding" slot="content" routerLink="/animal/:user/list">
-          Animales de un usuario
-        </div>
+        <ion-item lines="full" slot="content" routerLink="/animal/list">Lista de animales</ion-item>
+        <ion-item lines="full" slot="content" routerLink="/animal/list">Crear un animal</ion-item>
       </ion-accordion>
       <ion-accordion value="second">
         <ion-item slot="header" color="light">

@@ -1,5 +1,7 @@
 // src/app/routes/user/user.routes.ts
 import { Routes } from '@angular/router';
+import {userGuard} from "../../guards/user.guard";
+import {adminGuard} from "../../guards/admin.guard";
 
 export const routes: Routes = [
   {
@@ -7,13 +9,9 @@ export const routes: Routes = [
     children: [
       {
         path: 'list',
+        canActivate: [adminGuard],
         loadComponent: () =>
           import('./list/list.page').then(m => m.ListPage)
-      },
-      {
-        path: 'create',
-        loadComponent: () =>
-          import('./create/create.page').then(m => m.CreatePage)
       },
       {
         path: ':id/delete',
@@ -22,6 +20,7 @@ export const routes: Routes = [
       },
       {
         path: ':id/profile',
+        canActivate: [userGuard],
         loadComponent: () =>
           import('./profile/profile.page').then(m => m.ProfilePage)
       },

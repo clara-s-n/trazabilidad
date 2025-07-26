@@ -10,6 +10,8 @@ export class CreatePage  implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log("holis");
+  }
 
 }
