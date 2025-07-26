@@ -17,7 +17,7 @@ export const routes: Routes = [
         path: 'create',
         canActivate: [adminOrOperatorGuard],
         loadComponent: () =>
-          import('./pages/create/create.page').then(m => m.CreatePage)
+          import('./pages/create/create.page').then(m => m.LandCreatePage)
       },
       {
         path: ':id',
@@ -33,9 +33,9 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'list',
-        pathMatch: 'full',
         canActivate: [userGuard],
+        loadComponent: () =>
+          import('./pages/land-menu/land-menu.page').then(m => m.LandMenuPage)
       }
     ]
   }

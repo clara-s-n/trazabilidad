@@ -1,3 +1,17 @@
-<p>
-  edit works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/predios/list"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Editar Predio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if(land) {
+  <app-land-form [land]="land" (submitted)="handleSave($event)"></app-land-form>
+  }
+  @if(!land) {
+  <p>Cargando predio...</p>
+  }
+</ion-content>

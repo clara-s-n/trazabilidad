@@ -1,14 +1,35 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {Land} from "../../../../model/land";
 import {LandsService} from "../../../../services/lands.service";
-import {ModalController} from "@ionic/angular/standalone";
+import {
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader, IonItem, IonLabel, IonList,
+  IonTitle,
+  IonToolbar,
+  ModalController
+} from "@ionic/angular/standalone";
 import {DeleteLandModalComponent} from "../../components/delete-land-modal/delete-land-modal.component";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-list-land',
   templateUrl: './list.page.html',
   styleUrls: ['./list.page.scss'],
   standalone: true,
+  imports: [
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
+    IonButton,
+    IonContent,
+    IonList,
+    IonItem,
+    IonLabel,
+    RouterLink
+  ]
 })
 export class ListPage  implements OnInit {
 
