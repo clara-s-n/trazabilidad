@@ -17,5 +17,14 @@ export const TagSchema = Type.Object({
   ]),
 });
 
+export const UpdateTagSchema = Type.Object({
+  status: Type.Union([
+    Type.Literal("active"),
+    Type.Literal("inactive"),
+    Type.Literal("retired"),
+  ]),
+});
+
+export type UpdateTagType = Static<typeof UpdateTagSchema>;
 export type Tag = Static<typeof TagSchema>;
-export type TagType = Static<typeof TagParams>;
+export type TagParams = Static<typeof TagParams>;

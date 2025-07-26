@@ -8,7 +8,6 @@ import { MainStoreService } from 'src/app/services/main-store.service';
 import { firstValueFrom } from 'rxjs';
 import { Login } from 'src/app/model/login';
 import { Token } from 'src/app/model/token';
-import { User } from 'src/app/model/user';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -47,7 +46,7 @@ export class LoginPage {
       );
       this.store.setUser(user);
       */
-      this.router.navigate(['/auth/register']);
+      this.router.navigate(['/animal/list']);
     } catch (err) {
       console.error('Error al iniciar sesión', err);
       // Aquí podrías mostrar un toast o alerta

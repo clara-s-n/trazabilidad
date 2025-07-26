@@ -20,6 +20,19 @@ export class MainStoreService {
   // Computed signal para verificar si es administrador (role_id = 3)
   public isAdmin = computed(() => this.userRoleId() === 3);
 
+  // Computed signal para verificar si hay usuario autenticado
+  public isAuthenticated = computed(() => {
+    return this.usuario() !== null && this.token() !== null;
+  });
+
+  // Computed signal para verificar si el usuario es un operador (role_id = 1)
+  public isOperator = computed(() => this.userRoleId() === 1);
+
+  // Computed signal para verificar si el usuario es operador o administrador
+  public isOperatorOrAdmin = computed(() => {
+    return this.isOperator() || this.isAdmin();
+  });
+
   // Efecto de depuración para usuario
   private userEffect = effect(() => {
     console.log('Usuario actualizado:', this.usuario());

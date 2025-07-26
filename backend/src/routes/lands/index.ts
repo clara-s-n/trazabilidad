@@ -21,7 +21,7 @@ const prediosRoute: FastifyPluginAsyncTypebox = async (fastify, opts) => {
         200: Type.Array(LandSchema)
       }
     },
-    // onRequest: fastify.verifyOperator,
+     onRequest: fastify.verifyOperator,
     handler: async (request, reply) => {
       const lands = await landRepository.getAllLands();
       return lands;
@@ -40,7 +40,7 @@ const prediosRoute: FastifyPluginAsyncTypebox = async (fastify, opts) => {
         201: LandSchema
       }
     },
-    // onRequest: fastify.verifyOperator,
+     onRequest: fastify.verifyOperator,
     handler: async (request, reply) => {
       const body = request.body as CreateLandType;
       const { name, latitude, longitude } = body;

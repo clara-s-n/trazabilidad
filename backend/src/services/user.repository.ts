@@ -1,5 +1,7 @@
 import { query } from "./database.js";
 import { User } from "../types/schemas/user.js"
+import { Any } from "@sinclair/typebox";
+import { UCUError, UCUErrorConflict } from "../utils/index.js";
 
 export class UserRepository {
   async findUserByEmail(email: string): Promise<User | null> {
@@ -30,14 +32,31 @@ export class UserRepository {
     return rows[0] as User | null;
   }
 
-  async createUser(data: { email: string; password_hash: string; role_id: number }): Promise<User> {
+  async getRoleById(role_id: number): Promise<User | null> {
     const { rows } = await query(
-      `INSERT INTO users(id, email, password_hash, role_id, created_at)
+      `SELECT *
+        FROM roles
+        WHERE id = $1`,
+      [role_id]
+    );
+    return rows[0] as User | null;
+  }
+
+  async createUser(data: { email: string; password_hash: string; role_id: number }): Promise<User> {
+    try {
+      const { rows } = await query(
+        `INSERT INTO users(id, email, password_hash, role_id, created_at)
         VALUES (gen_random_uuid(), $1, $2, $3, now())
         RETURNING id, email, password_hash, role_id, created_at`,
-      [data.email, data.password_hash, data.role_id]
-    );
-    return rows[0] as User;
+        [data.email, data.password_hash, data.role_id]
+      );
+      return rows[0] as User;
+    } catch (error: any) {
+      if (error.code === '23505') {
+        throw new UCUErrorConflict("El correo ya está registrado");
+      }
+      throw new UCUError("Error al crear el usuario");
+    }
   }
 
   async updateUser(id: string, data: { email?: string; role_id?: number }): Promise<User | null> {
@@ -53,7 +72,7 @@ export class UserRepository {
     }
     const { rows } = await query(
       `UPDATE users
-          SET ${sets.join(', ')}, updated_at = now()
+          SET ${sets.join(', ')}
           WHERE id = $1
           RETURNING id, email, password_hash, role_id, created_at`,
       params

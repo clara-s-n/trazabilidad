@@ -20,8 +20,15 @@
     <ion-row class="ion-justify-content-center">
       <ion-col size="12" size-sm="8" size-md="6">
         <ion-input labelPlacement="floating" fill="solid" label="Contraseña" name="password" required minlength="3"
-          [(ngModel)]="password" #passwordRef="ngModel" errorText="{{ passwordRef.errors }}"></ion-input>
-        <ion-col>{{ passwordRef.errors | json }}</ion-col>
+          [(ngModel)]="password" #passwordRef="ngModel" errorText="{{ passwordRef.errors }}" type="password"></ion-input>
+      </ion-col>
+    </ion-row>
+
+    <!-- Repetir contraseña -->
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" size-sm="8" size-md="6">
+        <ion-input labelPlacement="floating" fill="solid" label="Repetir Contraseña" name="repeatpassword" required minlength="3"
+          [(ngModel)]="repeatPassword" #repeatpasswordRef="ngModel" errorText="{{ repeatpasswordRef.errors }}" type="password"></ion-input>
       </ion-col>
     </ion-row>
 
