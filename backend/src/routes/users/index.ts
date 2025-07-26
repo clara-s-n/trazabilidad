@@ -33,7 +33,6 @@ const usuariosRoute: FastifyPluginAsync = async (fastify) => {
       body: UserPostSchema,
       response: {
         201: UserResponseSchema,
-        400: { description: "Bad Request" }
       }
     },
     onRequest: fastify.verifyAdmin,

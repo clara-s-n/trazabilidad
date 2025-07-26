@@ -70,7 +70,6 @@ const usuariosIdRoute: FastifyPluginAsync = async (fastify) => {
       security: [{ bearerAuth: [] }],
       response: {
         204: { type: "null" },
-        404: { description: "Usuario no encontrado" }
       }
     },
     onRequest: fastify.verifySelfOrAdmin,

@@ -22,8 +22,6 @@ const loginRoute: FastifyPluginAsyncTypebox = async (fastify, opts): Promise<voi
       security: [],
       response: {
         200: LoginResponse,
-        401: { description: "Credenciales inválidas" },
-        404: { description: "Usuario no encontrado" }
       }
     },
     handler: async (request: FastifyRequest, reply: FastifyReply) => {

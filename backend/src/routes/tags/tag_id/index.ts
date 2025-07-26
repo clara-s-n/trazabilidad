@@ -20,12 +20,6 @@ const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
         security: [{ bearerAuth: [] }],
         response: {
           200: TagSchema,
-          404: {
-            type: "object",
-            properties: {
-              message: { type: "string" },
-            },
-          },
         },
       },
       onRequest: fastify.authenticate,
