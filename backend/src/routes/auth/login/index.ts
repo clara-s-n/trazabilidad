@@ -1,5 +1,4 @@
-// loginRoute.ts
-import { UCUError, UCUErrorNotFound, UCUErrorUnauthorized } from "../../../utils/index.js";
+import {  UCUErrorNotFound, UCUErrorUnauthorized } from "../../../utils/index.js";
 import { FastifyPluginAsyncTypebox, Type } from "@fastify/type-provider-typebox";
 import { SignOptions } from "@fastify/jwt";
 import { LoginParams, LoginType } from "../../../types/schemas/user.js";

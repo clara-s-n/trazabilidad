@@ -1,4 +1,3 @@
-// src/routes/tags/tagsRoute.ts
 import { FastifyPluginAsync } from "fastify";
 import { tagRepository } from "../../services/tag.repository.js";
 import { Type } from "@sinclair/typebox";

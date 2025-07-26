@@ -1,84 +1,52 @@
-// src/routes/transportes/id.ts
-import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
-import {
-  TransportParams,
-  TransportSchema,
-  TransportType,
-  UpdateTransportSchema,
-  UpdateTransportType
-} from '../../types/schemas/transport.js';
+// src/routes/transportes/index.ts
+import { FastifyPluginAsyncTypebox, Type } from '@fastify/type-provider-typebox';
 import { transportRepository } from '../../services/transport.repository.js';
-import { UCUErrorNotFound } from '../../utils/index.js';
+import {
+  CreateTransportSchema,
+  CreateTransportType,
+  TransportSchema
+} from '../../types/schemas/transport.js';
 
-const transportesRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
-  // GET /transportes/:transport_id
-  fastify.get('/:transport_id', {
+const transportesRoute: FastifyPluginAsyncTypebox = async (fastify) => {
+  // GET /transportes → listado completo
+  fastify.get('/', {
     schema: {
       tags: ['Transportes'],
-      summary: 'Obtener transporte por ID',
-      description: 'Devuelve los datos de un transporte específico',
-      params: TransportParams,
+      summary: 'Listar todos los transportes',
+      description: 'Obtiene el listado completo de transportes registrados',
       security: [{ bearerAuth: [] }],
       response: {
-        200: TransportSchema
+        200: Type.Array(TransportSchema)
       }
     },
-    onRequest: fastify.verifyOperator,
-    handler: async (request) => {
-      const { transport_id } = request.params as TransportType;
-      const result = await transportRepository.getTransportById(transport_id);
-      if (!result) throw new UCUErrorNotFound(`Transporte ${transport_id} no encontrado`);
+    onRequest: fastify.authenticate,
+    handler: async () => {
+      // Asumiendo que implementás getAll() en transportRepository
+      const result = await transportRepository.getAllTransports();
       return result;
     }
   });
 
-  // PUT /transportes/:transport_id
-  fastify.put('/:transport_id', {
+  // POST /transportes → nuevo registro
+  fastify.post('/', {
     schema: {
       tags: ['Transportes'],
-      summary: 'Actualizar transporte',
-      description: 'Modifica los datos de un transporte existente',
-      params: TransportParams,
-      body: UpdateTransportSchema,
+      summary: 'Registrar un nuevo transporte',
+      description: 'Crea un nuevo registro de transporte',
+      body: CreateTransportSchema,
       security: [{ bearerAuth: [] }],
       response: {
-        200: TransportSchema
+        201: TransportSchema
       }
     },
-    onRequest: fastify.verifyOperatorOrAdmin,
-    handler: async (request) => {
-      const { transport_id } = request.params as TransportType;
-      const updates = request.body as UpdateTransportType;
-
-      const updated = await transportRepository.updateTransport(transport_id, updates);
-      if (!updated) throw new UCUErrorNotFound(`No se pudo modificar el transporte ${transport_id}`);
-      return updated;
-    }
-  });
-
-  // DELETE /transportes/:transport_id
-  fastify.delete('/:transport_id', {
-    schema: {
-      tags: ['Transportes'],
-      summary: 'Eliminar transporte',
-      description: 'Elimina definitivamente un registro de transporte',
-      params: TransportParams,
-      security: [{ bearerAuth: [] }],
-      response: {
-        204: { type: 'null' }
-      }
-    },
-    onRequest: fastify.verifyOperatorOrAdmin,
+    onRequest: fastify.verifyOperator,
     handler: async (request, reply) => {
-      const { transport_id } = request.params as TransportType;
-
-      const exists = await transportRepository.getTransportById(transport_id);
-      if (!exists) throw new UCUErrorNotFound(`Transporte ${transport_id} no encontrado`);
-
-      await transportRepository.deleteTransport(transport_id);
-      reply.code(204).send();
+      const data = request.body as CreateTransportType;
+      const created = await transportRepository.createTransport(data);
+      reply.code(201);
+      return created;
     }
   });
 };
 
-export default transportesRoutes;
+export default transportesRoute;
