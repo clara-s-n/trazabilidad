@@ -1,5 +1,6 @@
 import { query } from "./database.js";
 import { Land } from "../types/schemas/land.js"
+import {Animal} from "../types/schemas/animal.js";
 
 export class LandRepository {
     async createLand(data: { name: string; latitude: number; longitude: number }): Promise<Land> {
@@ -39,9 +40,27 @@ export class LandRepository {
         ); return rows[0] || null;
     }
 
-    async deleteLand(id: string): Promise<void> {
-        await query(`DELETE FROM lands WHERE id=$1`, [id]);
+    async deleteLand(id: string): Promise<boolean> {
+      const result = await query(`DELETE FROM lands WHERE id=$1`, [id]);
+      if (result.rowCount === null ){
+        return false;
+      }
+      return result.rowCount > 0;
     }
+  
+  
+    async getAnimalsByLandId(id: string): Promise<Animal[]> {
+      const {rows} = await query(
+        `
+          SELECT a.id, a.birth_date FROM animals a
+          WHERE a.land_id = $1
+          ORDER BY a.birth_date;
+        `,
+        [id]
+      );
+      return rows;
+    };
+  
 }
 
 export const landRepository = new LandRepository();

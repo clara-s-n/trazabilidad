@@ -1,3 +1,10 @@
-<p>
-  create works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/predios/list"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Crear Predio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<app-land-form (submitted)="this.handleSave($event)"></app-land-form>

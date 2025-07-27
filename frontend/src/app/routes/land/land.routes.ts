@@ -1,14 +1,18 @@
 import { Routes } from '@angular/router';
 import { userGuard } from 'src/app/guards/user.guard';
 import { adminOrOperatorGuard } from 'src/app/guards/admin-or-operator.guard';
+import {LandCreatePage} from "./pages/land-create/land-create.page";
 
 export const routes: Routes = [
   {
     path: '',
     children: [
-      // Redirect a lista
-      { path: '', redirectTo: 'list', pathMatch: 'full', canActivate: [userGuard] },
-
+      {
+        path: '',
+        canActivate: [userGuard],
+        loadComponent: () =>
+          import('./pages/land-menu/land-menu.page').then(m => m.LandMenuPage)
+      },
       // List y create protegidas
       {
         path: 'list',
@@ -22,7 +26,7 @@ export const routes: Routes = [
         canActivate: [adminOrOperatorGuard],
         data: { menu: true, section: 'Predios', title: 'Crear predio' },
         loadComponent: () =>
-          import('./pages/land-create/land-create.page').then(m => m.CreatePage)
+          import('./pages/land-create/land-create.page').then(m => m.LandCreatePage)
       },
 
       // Edit antes de detail

@@ -1,6 +1,5 @@
 import { query } from "./database.js";
-import { User } from "../types/schemas/user.js"
-import { Any } from "@sinclair/typebox";
+import { User } from "../types/schemas/user.js";
 import { UCUError, UCUErrorConflict } from "../utils/index.js";
 
 export class UserRepository {

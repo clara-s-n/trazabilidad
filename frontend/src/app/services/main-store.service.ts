@@ -30,7 +30,12 @@ export class MainStoreService {
 
   // Computed signal para verificar si el usuario es operador o administrador
   public isOperatorOrAdmin = computed(() => {
-    return this.isOperator() || this.isAdmin();
+    if (this.isOperator()) {
+      return true;
+    } else if (this.isAdmin()) {
+      return true;
+    }
+    return false;
   });
 
   // Efecto de depuración para usuario
@@ -75,6 +80,14 @@ export class MainStoreService {
       this.userId.set(payload.user_id);
       this.userEmail.set(payload.user);
       this.userRoleId.set(payload.role_id);
+      console.log('Payload decodificado:', payload);
+
+      // Actualizar usuario completo
+      this.usuario.set({
+        user_id: payload.user_id,
+        email: payload.user,
+        role_id: payload.role_id
+      });
     } catch (error) {
       console.error('Error al decodificar JWT payload:', error);
       this.userId.set(null);
@@ -87,6 +100,10 @@ export class MainStoreService {
   setToken(token: string) {
     this.token.set(token);
     localStorage.setItem('access_token', token);
+    // Actualiza señales desglosadas si el usuario tiene un token
+    if (this.token()) {
+      this.decodePayload();
+    }
   }
 
   // Guarda el usuario en la señal y en localStorage.

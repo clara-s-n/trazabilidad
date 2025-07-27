@@ -5,6 +5,8 @@ export interface UserPost {
   role_id: number;
 }
 
-export interface User extends UserPost {
-  id_usuario: number;
+export interface User {
+  user_id: string;
+  email: string;
+  role_id: number;
 }
