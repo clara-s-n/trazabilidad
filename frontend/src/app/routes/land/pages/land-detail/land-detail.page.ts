@@ -50,12 +50,12 @@ export class DetailPage  implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/predios/list']);
+    this.router.navigate(['/land/list']);
   }
 
   goEdit() {
     const id = this.land()?.id;
-    if (id) this.router.navigate(['/predios/edit', id]);
+    if (id) this.router.navigate(['/land/edit', id]);
   }
 
   async confirmDelete() {
@@ -69,7 +69,7 @@ export class DetailPage  implements OnInit {
     const { data } = await modal.onWillDismiss();
     if (data?.confirm) {
       await this.landsService.deleteLand({ land_id: current.id });
-      this.router.navigate(['/predios/list']);
+      this.router.navigate(['/land/list']);
     }
   }
 }

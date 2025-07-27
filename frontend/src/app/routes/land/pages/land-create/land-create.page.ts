@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { LandsService } from '../../../../services/lands.service';
+import { CreateLand, UpdateLand } from '../../../../model/land';
+import {LandFormComponent} from "../../components/land-form/land-form.component";
+import {IonBackButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar} from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-land-create',
-  templateUrl: './land-create.page.html',
-  styleUrls: ['./create.page.scss'],
   standalone: true,
   imports: [
     LandFormComponent,
@@ -14,7 +17,7 @@ import { Component, OnInit } from '@angular/core';
     IonToolbar,
     IonHeader
   ],
-  templateUrl: './create.page.html',
+  templateUrl: './land-create.page.html',
   styleUrls: ['./create.page.scss']
 })
 export class LandCreatePage {

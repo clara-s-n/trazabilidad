@@ -104,8 +104,6 @@ export class MainStoreService {
     if (this.token()) {
       this.decodePayload();
     }
-    // Seteamos el usuario en la señal y en localStorage si ya existe
-
   }
 
   // Guarda el usuario en la señal y en localStorage.

@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>Predios</ion-title>
     <ion-buttons slot="end">
-      <ion-button [routerLink]="['/predios/create']">Nuevo</ion-button>
+      <ion-button [routerLink]="['/land/create']">Nuevo</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -11,8 +11,8 @@
     @for(land of lands(); track land.id) {
       <ion-item>
         <ion-label>{{ land.name }}</ion-label>
-        <ion-button slot="end" fill="clear" [routerLink]="['/predios', land.id]">Ver</ion-button>
-        <ion-button slot="end" fill="clear" [routerLink]="['/predios/edit', land.id]">Editar</ion-button>
+        <ion-button slot="end" fill="clear" [routerLink]="['/land', land.id]">Ver</ion-button>
+        <ion-button slot="end" fill="clear" [routerLink]="['/land/edit', land.id]">Editar</ion-button>
         <ion-button slot="end" color="danger" fill="clear" (click)="confirmDelete(land)">Eliminar</ion-button>
       </ion-item>
     }

@@ -9,6 +9,7 @@ import {LandFormComponent} from "../../components/land-form/land-form.component"
   selector: 'app-land-edit',
   templateUrl: './land-edit.page.html',
   styleUrls: ['./edit.page.scss'],
+  standalone: true,
   imports: [
     IonHeader,
     IonToolbar,
@@ -18,7 +19,6 @@ import {LandFormComponent} from "../../components/land-form/land-form.component"
     IonContent,
     LandFormComponent
   ]
-  standalone: true,
 })
 export class EditPage  implements OnInit {
   public land: Land | null = null;
@@ -39,6 +39,6 @@ export class EditPage  implements OnInit {
   async handleSave(payload: UpdateLand | CreateLand) {
     if (!this.land) return;
     await this.landsService.updateLand(this.land.id, payload as UpdateLand);
-    this.router.navigate(['/predios/list']);
+    this.router.navigate(['/land/list']);
   }
 }
