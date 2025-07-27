@@ -169,6 +169,6 @@ El sistema cuenta con una interfaz web desarrollada con Angular e Ionic. A conti
 Para poder acceder a la sección de creación de un usuario es necesario estar autenticado con las credenciales de un administrador.
 
 ```
-Email: admin@example.com
+Email: administrador@example.com
 Contraseña: admin123
 ```
