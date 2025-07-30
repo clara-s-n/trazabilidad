@@ -12,6 +12,7 @@ import {
 import { landRepository } from "../../services/land.repository.js";
 import { UCUErrorBadRequest, UCUErrorNotFound } from "../../utils/index.js";
 import { Animal } from "../../types/schemas/animal.js";
+import websocket from "../../plugins/websocket.js";
 
 const prediosRoute: FastifyPluginAsyncTypebox = async (fastify, opts) => {
   // 1. Listar todos los predios
@@ -37,38 +38,50 @@ const prediosRoute: FastifyPluginAsyncTypebox = async (fastify, opts) => {
   });
 
   // 2. Crear un nuevo predio
-  fastify.post("/", {
-    schema: {
-      tags: ["Predios"],
-      summary: "Crear un nuevo predio",
-      description:
-        "Recibe name, latitude y longitude y devuelve el predio creado",
-      security: [{ bearerAuth: [] }],
-      body: CreateLandParams,
-      response: {
-        201: LandSchema,
+  fastify.register(async (fastify, opts): Promise<void> => {
+    fastify.route({
+      method: "POST",
+      url: "/",
+      schema: {
+        tags: ["Predios"],
+        summary: "Crear un nuevo predio",
+        description:
+          "Recibe name, latitude y longitude y devuelve el predio creado",
+        security: [{ bearerAuth: [] }],
+        body: CreateLandParams,
+        response: {
+          201: LandSchema,
+        },
       },
-    },
-    onRequest: fastify.verifyOperatorOrAdmin,
-    handler: async (request, reply) => {
-      const body = request.body as CreateLandType;
-      const { name, latitude, longitude } = body;
+      onRequest: fastify.verifyOperatorOrAdmin,
+      handler: async (request, reply) => {
+        const body = request.body as CreateLandType;
+        const { name, latitude, longitude } = body;
 
-      // Validación extra por si falta algo
-      if (!name || latitude == null || longitude == null) {
-        throw new UCUErrorBadRequest(
-          "name, latitude y longitude son requeridos"
-        );
-      }
+        // Validación extra por si falta algo
+        if (!name || latitude == null || longitude == null) {
+          throw new UCUErrorBadRequest(
+            "name, latitude y longitude son requeridos"
+          );
+        }
 
-      const newLand = await landRepository.createLand({
-        name,
-        latitude,
-        longitude,
-      });
-      reply.code(201);
-      return newLand;
-    },
+        const newLand = await landRepository.createLand({
+          name,
+          latitude,
+          longitude,
+        });
+
+        reply.code(201);
+        // Broadcast a TODOS los clientes WS conectados
+        fastify.websocketServer.clients.forEach((cliente) => {
+          if (cliente.readyState === WebSocket.OPEN) {
+            cliente.send("newLand");
+          }
+        });
+
+        return newLand;
+      },
+    });
   });
 
   // 3. GET /predios/:land_id
