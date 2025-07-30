@@ -1,5 +1,4 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
-import {Land} from "../../../../model/land";
+import {Component, inject, Input} from '@angular/core';
 import {
   IonButton,
   IonButtons,
@@ -9,22 +8,23 @@ import {
   IonToolbar,
   ModalController
 } from "@ionic/angular/standalone";
+import {Land} from "../../../../model/land";
 
 @Component({
-  selector: 'app-delete-land-modal',
-  templateUrl: './delete-land-modal.component.html',
-  styleUrls: ['./delete-land-modal.component.scss'],
+  selector: 'app-delete-user-modal',
+  templateUrl: './delete-user-modal.component.html',
+  styleUrls: ['./delete-user-modal.component.scss'],
   standalone: true,
   imports: [
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonButtons,
     IonButton,
-    IonContent
+    IonButtons,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar
   ]
 })
-export class DeleteLandModalComponent {
+export class DeleteUserModalComponent{
 
   @Input() land!: Land;
   private modalController = inject(ModalController);
