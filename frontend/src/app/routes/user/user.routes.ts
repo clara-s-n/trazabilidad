@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { userGuard } from 'src/app/guards/user.guard';
 import { adminGuard } from 'src/app/guards/admin.guard';
+import { adminOrSelfGuard } from 'src/app/guards/admin-or-self.guard';
 
 export const routes: Routes = [
   {
@@ -21,7 +21,7 @@ export const routes: Routes = [
       // Profile
       {
         path: ':id/profile',
-        canActivate: [userGuard],
+        canActivate: [adminOrSelfGuard],
         loadComponent: () =>
           import('./pages/user-profile/user-profile.page').then(m => m.ProfilePage)
       }

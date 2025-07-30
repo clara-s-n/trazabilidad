@@ -122,4 +122,9 @@ export class MainStoreService {
     this.userEmail.set(null);
     this.userRoleId.set(null);
   }
+
+  // Verifica si el usuario es administrador o si mismo.
+  isAdminOrSelf(userId: string): boolean {
+    return this.isAdmin() || (this.isAuthenticated() && this.userId() === userId);
+  }
 }
