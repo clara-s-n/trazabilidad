@@ -9,6 +9,8 @@ import {
   IonSelect,
   IonSelectOption,
   IonIcon,
+  IonImg,
+  IonContent,
 } from '@ionic/angular/standalone';
 import { UserPost } from 'src/app/model/user';
 import { UserService } from 'src/app/services/user.service';
@@ -31,6 +33,7 @@ import { cameraOutline } from 'ionicons/icons';
   imports: [
     IonIcon,
     IonGrid,
+    IonIcon,
     IonRow,
     IonCol,
     IonInput,
@@ -39,6 +42,8 @@ import { cameraOutline } from 'ionicons/icons';
     IonSelect,
     IonSelectOption,
     JsonPipe,
+    IonImg,
+    IonContent,
   ],
 })
 export class RegisterPage {
@@ -57,18 +62,38 @@ export class RegisterPage {
 
   public foto = signal<Photo | undefined>(undefined);
 
+  public src = signal<string | undefined>(
+    'https://docs-demo.ionic.io/assets/madison.jpg'
+  );
+
+  private url: string | undefined = '';
   async takePhoto() {
-    const capturedPhoto = await Camera.getPhoto({
+    const capturedPhoto: Photo = await Camera.getPhoto({
       resultType: CameraResultType.Uri,
       source: CameraSource.Camera,
       quality: 100,
     });
     console.log({ capturedPhoto });
     this.foto.set(capturedPhoto);
+    this.src.set(this.foto()?.webPath);
+    this.url = this.foto()?.webPath;
   }
 
   async onSubmit() {
-    if (!(this.password === this.repeatPassword)) {
+    if (!this.url) {
+      return;
+    }
+    const response = await fetch(this.url);
+    const blob = await response.blob();
+
+    const formData = new FormData();
+    formData.append('file', blob, this.email + '.jpg');
+
+    console.log(`form data:`, formData);
+
+    this.userService.uploadPhoto(formData);
+
+    /*  if (!(this.password === this.repeatPassword)) {
       console.error('Las contraseñas no coinciden');
       this.router.navigate(['/auth/register/']);
     }
@@ -85,6 +110,6 @@ export class RegisterPage {
       console.log({ usuarioCreado });
     } catch (error) {
       console.error('Error al crear el usuario:', error);
-    }
+    }*/
   }
 }

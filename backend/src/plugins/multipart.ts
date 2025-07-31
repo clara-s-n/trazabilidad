@@ -18,6 +18,6 @@ export default fp(async (fastify) => {
       headerPairs: 100, // Número máximo de pares clave-valor en el encabezado.
       parts: 1000, // Número máximo de partes en el formulario (campos + archivos).
     },
-    attachFieldsToBody: "keyValues", // Adjunta los campos al cuerpo como clave-valor.
+    //attachFieldsToBody: "keyValues", // Adjunta los campos al cuerpo como clave-valor.
   });
 });

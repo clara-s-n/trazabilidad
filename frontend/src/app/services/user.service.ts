@@ -5,17 +5,23 @@ import { UserPost } from '../model/user';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
-
   public httpCliente = inject(HttpClient);
   public apiUrl = environment.apiUrl;
 
-  constructor() { }
+  constructor() {}
 
   async postUser(data: UserPost) {
-    const url = this.apiUrl + "users/"
+    const url = this.apiUrl + 'users/';
     return await firstValueFrom(this.httpCliente.post<UserPost>(url, data));
+  }
+
+  async uploadPhoto(formData: FormData) {
+    console.log(`form data del servicio: ${formData}`);
+    return await firstValueFrom(
+      this.httpCliente.post(`${this.apiUrl}photo/`, formData)
+    );
   }
 }
