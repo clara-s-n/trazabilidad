@@ -1,9 +1,15 @@
 import { FastifyPluginAsync } from "fastify";
-import { UserPostSchema, UserPostType, UserResponseSchema } from "../../types/schemas/user.js";
+import {
+  UserPostSchema,
+  UserPostType,
+  UserResponseSchema,
+} from "../../types/schemas/user.js";
 import { userRepository } from "../../services/user.repository.js";
 import bcrypt from "bcryptjs";
 import { Type } from "@sinclair/typebox";
-import { UCUErrorBadRequest } from "../../utils/index.js";
+import { UCUError, UCUErrorBadRequest } from "../../utils/index.js";
+import { MultipartFile } from "@fastify/multipart";
+import { writeFile } from "node:fs/promises";
 
 const usuariosRoute: FastifyPluginAsync = async (fastify) => {
   fastify.get("/", {
@@ -13,15 +19,15 @@ const usuariosRoute: FastifyPluginAsync = async (fastify) => {
       summary: "Obtener una lista de todos los usuarios disponibles",
       security: [{ bearerAuth: [] }],
       response: {
-        200: Type.Array(UserResponseSchema)
-      }
+        200: Type.Array(UserResponseSchema),
+      },
     },
     onRequest: fastify.verifyAdmin,
     handler: async (request, reply) => {
       const users = await userRepository.getAllUsers();
       const safeUsers = users.map(({ password_hash, ...u }) => u);
       reply.send(safeUsers);
-    }
+    },
   });
 
   fastify.post("/", {
@@ -33,11 +39,26 @@ const usuariosRoute: FastifyPluginAsync = async (fastify) => {
       body: UserPostSchema,
       response: {
         201: UserResponseSchema,
-      }
+      },
     },
     onRequest: fastify.verifyAdmin,
     handler: async (request, reply) => {
-      const { email, password, repeatPassword, role_id } = request.body as UserPostType;
+      const { email, password, repeatPassword, role_id } =
+        request.body as UserPostType;
+      const data: MultipartFile | undefined = await request.file();
+      if (!data) throw new UCUError("no hay archivo.");
+
+      data.file;
+      data.fields;
+      data.fieldname;
+      data.filename;
+      data.encoding;
+      data.mimetype;
+
+      const buffer = await data.toBuffer();
+      const savePath = `./uploads/${data.filename}`;
+
+      await writeFile(savePath, buffer);
 
       // 1. Verificar coincidencia de contraseñas
       if (password !== repeatPassword) {
@@ -62,7 +83,7 @@ const usuariosRoute: FastifyPluginAsync = async (fastify) => {
       const { password_hash, ...safeUser } = user;
 
       reply.status(201).send(safeUser);
-    }
+    },
   });
 };
 

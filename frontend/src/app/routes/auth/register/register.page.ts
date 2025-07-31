@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   IonInput,
@@ -7,13 +7,21 @@ import {
   IonCol,
   IonButton,
   IonSelect,
-  IonSelectOption
+  IonSelectOption,
+  IonIcon,
 } from '@ionic/angular/standalone';
 import { UserPost } from 'src/app/model/user';
 import { UserService } from 'src/app/services/user.service';
 import { JsonPipe } from '@angular/common';
 import { Router } from '@angular/router';
-
+import {
+  Camera,
+  CameraResultType,
+  CameraSource,
+  Photo,
+} from '@capacitor/camera';
+import { addIcons } from 'ionicons';
+import { cameraOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-register',
@@ -21,6 +29,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.page.scss'],
   standalone: true,
   imports: [
+    IonIcon,
     IonGrid,
     IonRow,
     IonCol,
@@ -29,12 +38,16 @@ import { Router } from '@angular/router';
     FormsModule,
     IonSelect,
     IonSelectOption,
-    JsonPipe
+    JsonPipe,
   ],
 })
 export class RegisterPage {
   private userService = inject(UserService);
   private router = inject(Router);
+
+  constructor() {
+    addIcons({ cameraOutline });
+  }
 
   // Modelo del formulario
   public email: string = '';
@@ -42,19 +55,29 @@ export class RegisterPage {
   public repeatPassword: string = '';
   public role_id: number = 0;
 
+  public foto = signal<Photo | undefined>(undefined);
+
+  async takePhoto() {
+    const capturedPhoto = await Camera.getPhoto({
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Camera,
+      quality: 100,
+    });
+    console.log({ capturedPhoto });
+    this.foto.set(capturedPhoto);
+  }
 
   async onSubmit() {
-
     if (!(this.password === this.repeatPassword)) {
-      console.error('Las contraseñas no coinciden')
+      console.error('Las contraseñas no coinciden');
       this.router.navigate(['/auth/register/']);
     }
 
     const user: UserPost = {
       email: this.email,
       password: this.password,
-      repeatPassword : this.repeatPassword,
-      role_id: this.role_id
+      repeatPassword: this.repeatPassword,
+      role_id: this.role_id,
     };
 
     try {
