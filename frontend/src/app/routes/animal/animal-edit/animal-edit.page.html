@@ -1,3 +1,19 @@
-<p>
-  edit works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/animal/list"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Editar Animal</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if(animal) {
+  <app-land-form
+    [land]="animal"
+    (submitted)="handleSave($event)"
+  ></app-land-form>
+  } @if(!animal) {
+  <p>Cargando predio...</p>
+  }
+</ion-content>
