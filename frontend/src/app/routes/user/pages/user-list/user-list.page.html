@@ -1,3 +1,21 @@
-<p>
-  list works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Usuarios</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ng-container *ngIf="usersResource() as result">
+    <ion-list *ngIf="result.state === 'success'; else loadingTpl">
+      <ion-item button *ngFor="let user of result.value" (click)="goToUserProfile(user.user_id)">
+        {{ user.email }} (Rol: {{ user.role_id }})
+      </ion-item>
+    </ion-list>
+    <div *ngIf="result.state === 'error'">
+      <ion-text color="danger">Error al cargar usuarios.</ion-text>
+    </div>
+  </ng-container>
+  <ng-template #loadingTpl>
+    <ion-spinner></ion-spinner>
+    <div>Cargando usuarios...</div>
+  </ng-template>
+</ion-content>

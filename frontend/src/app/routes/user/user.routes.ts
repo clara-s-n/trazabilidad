@@ -15,15 +15,21 @@ export const routes: Routes = [
         canActivate: [adminGuard],
         data: { menu: true, section: 'Usuarios', title: 'Lista de usuarios' },
         loadComponent: () =>
-          import('./pages/user-list/user-list.page').then(m => m.ListPage)
+          import('./pages/user-list/user-list.page').then(m => m.UserListPage)
       },
-
       // Profile
       {
-        path: ':id/profile',
+        path: 'edit/:id',
         canActivate: [adminOrSelfGuard],
         loadComponent: () =>
-          import('./pages/user-profile/user-profile.page').then(m => m.ProfilePage)
+          import('./pages/user-edit/user-edit.page').then(m => m.UserEditPage)
+      },
+      // Profile
+      {
+        path: 'profile/:id',
+        canActivate: [adminOrSelfGuard],
+        loadComponent: () =>
+          import('./pages/user-profile/user-profile.page').then(m => m.UserProfilePage)
       }
     ]
   }

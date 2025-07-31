@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { userGuard } from 'src/app/guards/user.guard';
 import { adminOrOperatorGuard } from 'src/app/guards/admin-or-operator.guard';
-import {LandCreatePage} from "./pages/land-create/land-create.page";
+import { LandCreatePage } from "./pages/land-create/land-create.page";
 
 export const routes: Routes = [
   {

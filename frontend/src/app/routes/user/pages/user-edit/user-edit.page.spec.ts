@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { EditUserFormComponent } from './edit-user-form.component';
+import { UserEditPage } from './user-edit.page';
 
-describe('EditUserFormComponent', () => {
-  let component: EditUserFormComponent;
-  let fixture: ComponentFixture<EditUserFormComponent>;
+describe('UserEditPage', () => {
+  let component: UserEditPage;
+  let fixture: ComponentFixture<UserEditPage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [EditUserFormComponent],
+      imports: [UserEditPage],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(EditUserFormComponent);
+    fixture = TestBed.createComponent(UserEditPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

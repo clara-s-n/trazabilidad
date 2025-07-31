@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, resource } from '@angular/core';
+import { Router } from '@angular/router';
+import { User } from 'src/app/model/user';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-user-list',
@@ -6,10 +9,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./list.page.scss'],
   standalone: true,
 })
-export class ListPage  implements OnInit {
+export class UserListPage {
+  private userService = inject(UserService);
+  private router = inject(Router);
 
-  constructor() { }
+  // Utiliza resource para la carga reactiva
+  usersResource = resource<User[], undefined>({
+    loader: async () => await this.userService.getAllUsers()
+  });
 
-  ngOnInit() {}
-
+  goToUserProfile(userId: string) {
+    this.router.navigate(['/users/profile', userId]);
+  }
 }

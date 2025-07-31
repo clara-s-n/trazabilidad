@@ -1,3 +1,22 @@
-<p>
-  profile works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Perfil de usuario</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div *ngIf="!loading(); else loadingTpl">
+    <ng-container *ngIf="user(); else notFoundTpl">
+      <h2>{{ user().email }}</h2>
+      <p>Rol: {{ user().role_id }}</p>
+      <p>ID: {{ user().user_id }}</p>
+      <!-- Agrega más datos si lo necesitas -->
+    </ng-container>
+  </div>
+  <ng-template #loadingTpl>
+    <ion-spinner></ion-spinner>
+    <div>Cargando perfil...</div>
+  </ng-template>
+  <ng-template #notFoundTpl>
+    <div>No se encontró el usuario.</div>
+  </ng-template>
+</ion-content>

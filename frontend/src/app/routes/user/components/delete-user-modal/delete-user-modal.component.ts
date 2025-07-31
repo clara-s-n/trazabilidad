@@ -1,4 +1,4 @@
-import {Component, inject, Input} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import {
   IonButton,
   IonButtons,
@@ -8,14 +8,16 @@ import {
   IonToolbar,
   ModalController
 } from "@ionic/angular/standalone";
-import {Land} from "../../../../model/land";
+import { IonModal } from '@ionic/angular';
 
 @Component({
   selector: 'app-delete-user-modal',
   templateUrl: './delete-user-modal.component.html',
   styleUrls: ['./delete-user-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
+    IonModal,
     IonButton,
     IonButtons,
     IonContent,
@@ -24,12 +26,14 @@ import {Land} from "../../../../model/land";
     IonToolbar
   ]
 })
-export class DeleteUserModalComponent{
+export class DeleteUserModalComponent {
 
-  @Input() land!: Land;
+  userId = input<string>();
+  deleted = output<void>();
   private modalController = inject(ModalController);
 
   confirm() {
+    this.deleted.emit();
     this.modalController.dismiss({ confirm: true });
   }
 
