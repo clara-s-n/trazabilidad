@@ -1,29 +1,36 @@
 import { FastifyPluginAsync } from "fastify";
-import {Animal, AnimalParams, AnimalPost} from "../../types/schemas/animal.js";
+import {
+  Animal,
+  AnimalParams,
+  AnimalPost,
+  UpdateAnimalSchema,
+  UpdateAnimalType,
+} from "../../types/schemas/animal.js";
 import { animalRepository } from "../../services/animal.repository.js";
+import { UCUErrorNotFound } from "../../utils/index.js";
 
 const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
-  fastify.get('/', {
+  fastify.get("/", {
     schema: {
-      tags: ['Animales'],
-      description: 'Listar todos los animales',
-      summary: 'Obtener una lista de todos los animales disponibles',
+      tags: ["Animales"],
+      description: "Listar todos los animales",
+      summary: "Obtener una lista de todos los animales disponibles",
       //querystring: AnimalFilter,
       security: [
         {
-          bearerAuth: []
-        }
+          bearerAuth: [],
+        },
       ],
       response: {
         200: {
-          description: 'Lista de animales',
-          type: 'array',
+          description: "Lista de animales",
+          type: "array",
           items: {
-            type: 'object',
-            properties: Animal.properties
-          }
-        }
-      }
+            type: "object",
+            properties: Animal.properties,
+          },
+        },
+      },
     },
     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
@@ -32,18 +39,18 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       //const list = await animalRepository.filter(filters);
       const list = await animalRepository.getAll();
       reply.send(list);
-    }
+    },
   });
 
-  fastify.post('/', {
+  fastify.post("/", {
     schema: {
-      tags: ['Animales'],
-      description: 'Crear un nuevo animal',
-      summary: 'Agregar un nuevo animal a la lista',
+      tags: ["Animales"],
+      description: "Crear un nuevo animal",
+      summary: "Agregar un nuevo animal a la lista",
       security: [
         {
-          bearerAuth: []
-        }
+          bearerAuth: [],
+        },
       ],
       body: AnimalPost,
     },
@@ -52,34 +59,34 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       const animalData = request.body as AnimalPost;
       const newAnimal = await animalRepository.createAnimal(animalData);
       reply.status(201).send(newAnimal);
-    }
+    },
   });
 
   fastify.get("/:animal_id", {
     schema: {
       tags: ["Animales"],
       params: AnimalParams,
-      description: 'Listar un animal en específico',
-      summary: 'Obtener un animal en específico.',
+      description: "Listar un animal en específico",
+      summary: "Obtener un animal en específico.",
       security: [
         {
-          bearerAuth: []
-        }
+          bearerAuth: [],
+        },
       ],
       response: {
         200: {
-          description: 'Animal encontrado',
-          type: 'object',
-          properties: Animal.properties
-        }
-      }
+          description: "Animal encontrado",
+          type: "object",
+          properties: Animal.properties,
+        },
+      },
     },
     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
       const params = request.params as AnimalParams;
       const animal = await animalRepository.getByIdDetailed(params.animal_id);
       if (!animal) {
-        return reply.status(404).send({ message: 'Animal no encontrado' });
+        return reply.status(404).send({ message: "Animal no encontrado" });
       }
       reply.send(animal);
     },
@@ -88,20 +95,33 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
   fastify.put("/:animal_id", {
     schema: {
       tags: ["Animales"],
-      //params: Type.Intersect([UserParams, AnimalParams])
       params: AnimalParams,
-      description: 'Modificar un animal',
-      summary: 'Realizar la modificación de un animal',
+      description: "Modificar un animal",
+      summary: "Realizar la modificación de un animal",
+      body: UpdateAnimalSchema,
       security: [
         {
-          bearerAuth: []
-        }
+          bearerAuth: [],
+        },
       ],
+      response: {
+        200: Animal,
+        404: { description: "Animal no encontrado" },
+      },
     },
     onRequest: fastify.verifyOperator,
     handler: async (request, reply) => {
-      // Handle updating an animal logic
-      throw new Error("Not implemented");
+      const { animal_id } = request.params as AnimalParams;
+      const updateData = request.body as UpdateAnimalType;
+      const updatedAnimal = await animalRepository.updateAnimal(
+        animal_id,
+        updateData
+      );
+      if (!updatedAnimal) {
+        throw new UCUErrorNotFound(
+          `No se pudo actualizar el animal ${animal_id}`
+        );
+      }
     },
   });
 
@@ -109,39 +129,39 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
     schema: {
       tags: ["Animales"],
       params: AnimalParams,
-      description: 'Eliminar un animal',
-      summary: 'Realizar el eliminado de un animal',
+      description: "Eliminar un animal",
+      summary: "Realizar el eliminado de un animal",
       security: [
         {
-          bearerAuth: []
-        }
+          bearerAuth: [],
+        },
       ],
     },
     onRequest: fastify.verifyOperator,
     handler: async (request, reply) => {
       // Handle deleting an animal logic
-        throw new Error("Not implemented")
+      throw new Error("Not implemented");
     },
   });
-
-  
 
   fastify.get("/:animal_id/modifications", {
     schema: {
       tags: ["Animales"],
       params: AnimalParams,
-      summary: "Ver el historial de modificaciones realizadas a los datos de un animal",
-      description: "Ver el historial de modificaciones realizadas a los datos de un animal",
+      summary:
+        "Ver el historial de modificaciones realizadas a los datos de un animal",
+      description:
+        "Ver el historial de modificaciones realizadas a los datos de un animal",
       security: [
         {
-          bearerAuth: []
-        }
+          bearerAuth: [],
+        },
       ],
     },
     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
       // Handle fetching a specific animal by ID logic
-      throw new Error("Not implemented")
+      throw new Error("Not implemented");
     },
   });
 
@@ -153,14 +173,14 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       description: "Ver el historial de eventos de un animal",
       security: [
         {
-          bearerAuth: []
-        }
+          bearerAuth: [],
+        },
       ],
     },
     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
       // Handle fetching a specific animal by ID logic
-      throw new Error("Not implemented")
+      throw new Error("Not implemented");
     },
   });
 };
