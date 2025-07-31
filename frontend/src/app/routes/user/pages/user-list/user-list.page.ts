@@ -2,11 +2,14 @@ import { Component, inject, OnInit, resource } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/model/user';
 import { UserService } from 'src/app/services/user.service';
+import { CommonModule } from '@angular/common';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonSpinner, IonText } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.page.html',
   styleUrls: ['./list.page.scss'],
+  imports: [CommonModule, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonSpinner, IonText],
   standalone: true,
 })
 export class UserListPage {
