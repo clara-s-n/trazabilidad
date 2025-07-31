@@ -12,7 +12,6 @@ import {
 import { landRepository } from "../../services/land.repository.js";
 import { UCUErrorBadRequest, UCUErrorNotFound } from "../../utils/index.js";
 import { Animal } from "../../types/schemas/animal.js";
-import websocket from "../../plugins/websocket.js";
 
 const prediosRoute: FastifyPluginAsyncTypebox = async (fastify, opts) => {
   // 1. Listar todos los predios
