@@ -21,7 +21,15 @@ export class UserService {
   async uploadPhoto(formData: FormData) {
     console.log(`form data del servicio: ${formData}`);
     return await firstValueFrom(
-      this.httpCliente.post(`${this.apiUrl}photo/`, formData)
+      this.httpCliente.put(`${this.apiUrl}photo/`, formData)
+    );
+  }
+
+  async getPhoto(data: string): Promise<ArrayBuffer> {
+    return await firstValueFrom(
+      this.httpCliente.get(`${this.apiUrl}photo/${data}`, {
+        responseType: 'arraybuffer' as const,
+      })
     );
   }
 }

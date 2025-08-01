@@ -24,6 +24,7 @@ import {
 } from '@capacitor/camera';
 import { addIcons } from 'ionicons';
 import { cameraOutline } from 'ionicons/icons';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -62,9 +63,7 @@ export class RegisterPage {
 
   public foto = signal<Photo | undefined>(undefined);
 
-  public src = signal<string | undefined>(
-    'https://docs-demo.ionic.io/assets/madison.jpg'
-  );
+  public src = signal<string | undefined>(`${environment.apiUrl}/photo/aaaa`);
 
   private url: string | undefined = '';
   async takePhoto() {

@@ -1,0 +1,9 @@
+<ion-content>
+  <ion-list>
+    @for(photo of photos(); track photo.id) {
+    <ion-item>
+      <ion-label>{{ photo.name }}</ion-label>
+    </ion-item>
+    }
+  </ion-list>
+</ion-content>
