@@ -26,14 +26,14 @@ services:
   frontend:
     image: frontend
     container_name: frontend
-    command: sh -c "npm install && npm start"
+    # command: sh -c "npm install && npm start"
     build:
       context: ./frontend
     volumes:
       - ./frontend/:/frontend
     ports:
       - 4200:4200
-    # tty: true
+    tty: true
     user: 1000:1000
 
   database:
@@ -54,8 +54,10 @@ services:
     image: nginx:alpine
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./proxy/proxy.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ./proxy/certs:/etc/nginx/certs
     container_name: proxy
     depends_on:
       - frontend
