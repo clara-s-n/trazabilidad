@@ -6,12 +6,13 @@ export class WeighingRepository {
   async createWeighing(data: {
     event_id: string;
     weight: number;
+    unit?: string;
   }): Promise<Weighing> {
     const { rows } = await query(
       `INSERT INTO weightings(id, event_id, weight, unit)
-       VALUES (gen_random_uuid(), $1, $2, 'kg')
+       VALUES (gen_random_uuid(), $1, $2, $3)
        RETURNING id, event_id, weight, unit`,
-      [data.event_id, data.weight]
+      [data.event_id, data.weight, data.unit || "kg"]
     );
     return rows[0];
   }

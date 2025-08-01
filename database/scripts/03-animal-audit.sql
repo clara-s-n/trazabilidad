@@ -3,6 +3,12 @@ CREATE OR REPLACE FUNCTION fn_audit_animal_changes()
 DECLARE
   changes JSONB := '{}'::jsonb;
 BEGIN
+IF NEW.breed   IS DISTINCT FROM OLD.breed   THEN
+    changes := changes || jsonb_build_object(
+      'breed',   jsonb_build_object('old', OLD.breed,   'new', NEW.breed)
+    );
+  END IF;
+
   IF NEW.status   IS DISTINCT FROM OLD.status   THEN
     changes := changes || jsonb_build_object(
       'status',   jsonb_build_object('old', OLD.status,   'new', NEW.status)
