@@ -20,7 +20,7 @@ export class UserProfilePage implements OnInit {
 
   async ngOnInit() {
     this.loading.set(true);
-    const userId = this.route.snapshot.paramMap.get('userId');
+    const userId = this.route.snapshot.paramMap.get('id');
     if (userId) {
       try {
         const userData = await this.userService.getUserById(userId);

@@ -84,7 +84,7 @@ export class MainStoreService {
 
       // Actualizar usuario completo
       this.usuario.set({
-        user_id: payload.user_id,
+        id: payload.user_id,
         email: payload.user,
         role_id: payload.role_id
       });

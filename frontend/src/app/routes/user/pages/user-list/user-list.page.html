@@ -5,33 +5,36 @@
 </ion-header>
 <ion-content>
   @if (usersResource.status() === 'loading') {
-    <ion-spinner></ion-spinner>
-    <div>Cargando usuarios...</div>
+  <ion-spinner></ion-spinner>
+  <div>Cargando usuarios...</div>
   }
   @if (usersResource.status() === 'error') {
-    <ion-text color="danger">
-      Error al cargar usuarios.
-    </ion-text>
-    <ion-button expand="block" (click)="reload()">
-      Reintentar
-    </ion-button>
+  <ion-text color="danger">
+    Error al cargar usuarios.
+  </ion-text>
+  <ion-button expand="block" (click)="reload()">
+    Reintentar
+  </ion-button>
   }
   @if (usersResource.status() === 'resolved') {
-    @if ((usersResource.value() ?? []).length === 0) {
-      <div class="ion-padding">
-        No hay usuarios registrados.
-      </div>
+  @if ((usersResource.value() ?? []).length === 0) {
+  <div class="ion-padding">
+    No hay usuarios registrados.
+  </div>
+  }
+  <ion-list>
+    @for (user of usersResource.value() ?? []; track user.email) {
+    <ion-row>
+      <ion-item>Email: {{ user.email }}</ion-item>
+      <ion-item>Rol: {{ user.role_id }}</ion-item>
+      <ion-button (click)="goToUserProfile(user)" slot="end">
+        <ion-icon name="eye-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="goToUserEdit(user)" slot="end">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
+    </ion-row>
     }
-    <ion-list>
-      @for (user of usersResource.value() ?? []; track user.email) {
-        <ion-row>
-          <ion-item>Email: {{ user.email }}</ion-item>
-          <ion-item>Rol: {{ user.role_id }}</ion-item>
-          <ion-button (click)="goToUserProfile(user.user_id)">
-            <ion-icon>Ver</ion-icon>
-          </ion-button>
-        </ion-row>
-      }
-    </ion-list>
+  </ion-list>
   }
 </ion-content>

@@ -19,7 +19,10 @@ const usuariosRoute: FastifyPluginAsync = async (fastify) => {
     onRequest: fastify.verifyAdmin,
     handler: async (request, reply) => {
       const users = await userRepository.getAllUsers();
-      const safeUsers = users.map(({ password_hash, ...u }) => u);
+      const safeUsers = users.map(({ password_hash, ...u }) => ({
+        ...u,
+        user_id: u.id, // agrega user_id
+      }));
       reply.send(safeUsers);
     }
   });

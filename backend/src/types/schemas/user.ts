@@ -1,8 +1,8 @@
 import { Static, Type } from "@sinclair/typebox";
 
 export const LoginParams = Type.Object({
-  email:   Type.String({ format: "email" }),
-  password:Type.String({ minLength: 6 })
+  email: Type.String({ format: "email" }),
+  password: Type.String({ minLength: 6 })
 });
 
 export const LoginResponse = Type.Object({
@@ -20,27 +20,27 @@ export const UserParams = Type.Object({
 });
 
 export const UserSchema = Type.Object({
-  id:            Type.String({ format: "uuid" }),
-  email:         Type.String({ format: "email" }),
+  id: Type.String({ format: "uuid" }),
+  email: Type.String({ format: "email" }),
   password_hash: Type.String(),
-  role_id:       Type.Integer(),
-  created_at:    Type.String({ format: "date-time" })
+  role_id: Type.Integer(),
+  created_at: Type.String({ format: "date-time" })
 });
 
 export const UserResponseSchema = Type.Omit(UserSchema, ["password_hash"]);
 export type UserResponse = Static<typeof UserResponseSchema>;
 
 export const UpdateUserSchema = Type.Object({
-  email:   Type.Optional(Type.String({ format: "email" })),
+  email: Type.Optional(Type.String({ format: "email" })),
   role_id: Type.Optional(Type.Integer())
 });
 export type UpdateUserType = Static<typeof UpdateUserSchema>;
 
 export const UserPostSchema = Type.Object({
-  email:          Type.String({ format: "email" }),
-  password:       Type.String({ minLength: 6 }),
+  email: Type.String({ format: "email" }),
+  password: Type.String({ minLength: 6 }),
   repeatPassword: Type.String({ minLength: 6 }),
-  role_id:        Type.Integer()
+  role_id: Type.Integer()
 });
 export type UserPostType = Static<typeof UserPostSchema>;
 export type User = Static<typeof UserSchema>;

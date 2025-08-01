@@ -20,7 +20,7 @@ export class UserService {
   }
 
   async updateUser(userId: string, data: Partial<UserUpdate>) {
-    return await firstValueFrom(this.httpClient.put<User>(`${this.apiUrl}users/${userId}`, data));
+    return await firstValueFrom(this.httpClient.put<User>(`${this.apiUrl}users/user_id/${userId}`, data));
   }
 
   async deleteUser(userId: string) {
@@ -32,7 +32,7 @@ export class UserService {
   }
 
   async getUserById(userId: string): Promise<User> {
-    return await firstValueFrom(this.httpClient.get<User>(`${this.apiUrl}users/${userId}`));
+    return await firstValueFrom(this.httpClient.get<User>(`${this.apiUrl}users/user_id/${userId}`));
   }
 
 }
