@@ -14,6 +14,7 @@ import {
 import { FieldErrorPipe } from 'src/app/pipes/field-error.pipe';
 import { MainStoreService } from 'src/app/services/main-store.service';
 import { UserFormInputs, UserFormOutputs } from 'src/app/model/userForm';
+import {FormsModule} from "@angular/forms";
 
 
 @Component({
@@ -29,7 +30,8 @@ import { UserFormInputs, UserFormOutputs } from 'src/app/model/userForm';
     IonButton,
     IonSelect,
     IonSelectOption,
-    FieldErrorPipe
+    FieldErrorPipe,
+    FormsModule
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'app-user-form' }
@@ -40,7 +42,7 @@ export default class UserFormComponent {
   isEditMode = input<UserFormInputs['isEditMode']>(false);
 
   submitted = output<UserFormOutputs['submitted']>();
-  cancel = output<void>();
+  canceled = output<void>();
 
   private store = inject(MainStoreService);
 
@@ -124,6 +126,6 @@ export default class UserFormComponent {
   }
 
   onCancel() {
-    this.cancel.emit();
+    this.canceled.emit();
   }
 }

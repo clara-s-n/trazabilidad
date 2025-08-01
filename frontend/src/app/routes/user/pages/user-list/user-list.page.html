@@ -4,31 +4,34 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ng-container *ngIf="usersResource.state as state">
-    <ng-container [ngSwitch]="state">
-      <ng-container *ngSwitchCase="'pending'">
-        <ion-spinner></ion-spinner>
-        <div>Cargando usuarios...</div>
-      </ng-container>
-      <ng-container *ngSwitchCase="'success'">
-        <ion-list>
-          <ion-item button *ngFor="let user of usersResource.value" (click)="goToUserProfile(user.user_id)">
-            {{ user.email }} (Rol: {{ user.role_id }})
-          </ion-item>
-        </ion-list>
-        <div *ngIf="usersResource.value.length === 0" class="ion-padding">
-          No hay usuarios registrados.
-        </div>
-      </ng-container>
-      <ng-container *ngSwitchCase="'error'">
-        <ion-text color="danger">
-          Error al cargar usuarios.
-        </ion-text>
-        <ion-button expand="block" (click)="usersResource.invalidate()">
-          Reintentar
-        </ion-button>
-      </ng-container>
-    </ng-container>
-  </ng-container>
-
+  @if (usersResource.status() === 'loading') {
+    <ion-spinner></ion-spinner>
+    <div>Cargando usuarios...</div>
+  }
+  @if (usersResource.status() === 'error') {
+    <ion-text color="danger">
+      Error al cargar usuarios.
+    </ion-text>
+    <ion-button expand="block" (click)="reload()">
+      Reintentar
+    </ion-button>
+  }
+  @if (usersResource.status() === 'resolved') {
+    @if ((usersResource.value() ?? []).length === 0) {
+      <div class="ion-padding">
+        No hay usuarios registrados.
+      </div>
+    }
+    <ion-list>
+      @for (user of usersResource.value() ?? []; track user.email) {
+        <ion-row>
+          <ion-item>Email: {{ user.email }}</ion-item>
+          <ion-item>Rol: {{ user.role_id }}</ion-item>
+          <ion-button (click)="goToUserProfile(user.user_id)">
+            <ion-icon>Ver</ion-icon>
+          </ion-button>
+        </ion-row>
+      }
+    </ion-list>
+  }
 </ion-content>

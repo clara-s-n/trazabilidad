@@ -1,12 +1,16 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
+import UserFormComponent from "../../components/user-form/user-form.component";
 
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.page.html',
   styleUrls: ['./user-edit.page.scss'],
   standalone: true,
+  imports: [
+    UserFormComponent
+  ]
 })
 export class UserEditPage {
 
