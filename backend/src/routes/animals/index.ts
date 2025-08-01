@@ -1,6 +1,7 @@
 import { FastifyPluginAsync } from "fastify";
 import {
   Animal,
+  AnimalEventSchema,
   AnimalHistorySchema,
   AnimalParams,
   AnimalPost,
@@ -127,24 +128,26 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
     },
   });
 
-  fastify.delete("/:animal_id", {
-    schema: {
-      tags: ["Animales"],
-      params: AnimalParams,
-      description: "Eliminar un animal",
-      summary: "Realizar el eliminado de un animal",
-      security: [
-        {
-          bearerAuth: [],
-        },
-      ],
-    },
-    onRequest: fastify.verifyOperator,
-    handler: async (request, reply) => {
-      // Handle deleting an animal logic
-      throw new Error("Not implemented");
-    },
-  });
+  // fastify.delete("/:animal_id", {
+  //   schema: {
+  //     tags: ["Animales"],
+  //     params: AnimalParams,
+  //     description: "Eliminar un animal",
+  //     summary: "Realizar el eliminado de un animal",
+  //     security: [
+  //       {
+  //         bearerAuth: [],
+  //       },
+  //     ],
+  //   },
+  //   onRequest: fastify.verifyOperator,
+  //   handler: async (request, reply) => {
+  //     // Handle deleting an animal logic
+  //     throw new Error("Not implemented");
+  //   },
+  // });
+
+  // No se usa pero nunca está demás tenerlo comentado (defensa).
 
   fastify.get("/:animal_id/modifications", {
     schema: {
@@ -173,24 +176,28 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
     },
   });
 
-  fastify.get("/:animal_id/events", {
-    schema: {
-      tags: ["Animales"],
-      params: AnimalParams,
-      summary: "Ver el historial de eventos de un animal",
-      description: "Ver el historial de eventos de un animal",
-      security: [
-        {
-          bearerAuth: [],
+  fastify.get(
+    "/:animal_id/events",
+    {
+      schema: {
+        tags: ["Animales"],
+        params: AnimalParams,
+        summary: "Ver el historial de eventos de un animal",
+        description:
+          "Recupera todos los eventos asociados a un animal ordenados por fecha descendente.",
+        security: [{ bearerAuth: [] }],
+        response: {
+          200: Type.Array(AnimalEventSchema),
         },
-      ],
+      },
+      onRequest: fastify.authenticate,
     },
-    onRequest: fastify.authenticate,
-    handler: async (request, reply) => {
-      // Handle fetching a specific animal by ID logic
-      throw new Error("Not implemented");
-    },
-  });
+    async (request, reply) => {
+      const { animal_id } = request.params as AnimalParams;
+      const events = await animalRepository.getAnimalEvents(animal_id);
+      return reply.code(200).send(events);
+    }
+  );
 };
 
 export default animalesRoute;

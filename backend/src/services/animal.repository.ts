@@ -1,5 +1,9 @@
 import { query } from "./database.js";
-import { Animal, AnimalDetailed } from "../types/schemas/animal.js";
+import {
+  Animal,
+  AnimalDetailed,
+  AnimalEvent,
+} from "../types/schemas/animal.js";
 
 export class AnimalRepository {
   async createAnimal(data: {
@@ -93,6 +97,26 @@ export class AnimalRepository {
             FROM animals`
     );
     return rows as Animal[];
+  }
+
+  async getAnimalEvents(animalId: string): Promise<AnimalEvent[]> {
+    const { rows } = await query(
+      `
+      SELECT
+        e.id,
+        et.name    AS type,
+        e.date,
+        e.comments
+      FROM animal_event ae
+      JOIN events     e  ON ae.event_id   = e.id
+      JOIN event_type et ON e.event_type = et.id
+      WHERE ae.animal_id = $1
+      ORDER BY e.date DESC
+      `,
+      [animalId]
+    );
+
+    return rows as AnimalEvent[];
   }
 
   async updateAnimal(
