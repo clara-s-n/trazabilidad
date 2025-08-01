@@ -9,10 +9,10 @@
 
 <ion-content class="ion-padding">
   @if(animal) {
-  <app-land-form
-    [land]="animal"
+  <app-animal-form
+    [animal]="animal"
     (submitted)="handleSave($event)"
-  ></app-land-form>
+  ></app-animal-form>
   } @if(!animal) {
   <p>Cargando predio...</p>
   }

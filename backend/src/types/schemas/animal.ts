@@ -149,6 +149,26 @@ export const UpdateAnimalSchema = Type.Object(
   }
 );
 
+export const AnimalHistorySchema = Type.Object({
+  id: Type.String({ format: "uuid", description: "History record ID" }),
+  animal_id: Type.String({
+    format: "uuid",
+    description: "Which animal was modified",
+  }),
+  modified: Type.String({ description: "Field name that changed" }),
+  old_value: Type.Optional(Type.String({ description: "Previous value" })),
+  new_value: Type.Optional(Type.String({ description: "New value" })),
+  modified_by: Type.String({
+    format: "uuid",
+    description: "User who made the change",
+  }),
+  modification_date: Type.String({
+    format: "date-time",
+    description: "When the change was recorded",
+  }),
+});
+
+export type AnimalHistory = Static<typeof AnimalHistorySchema>;
 export type UpdateAnimalType = Static<typeof UpdateAnimalSchema>;
 export type AnimalDetailed = Static<typeof AnimalDetailedSchema>;
 export type AnimalEvent = Static<typeof AnimalEventSchema>;

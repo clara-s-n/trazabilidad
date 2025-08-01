@@ -1,6 +1,7 @@
 import { FastifyPluginAsync } from "fastify";
 import {
   Animal,
+  AnimalHistorySchema,
   AnimalParams,
   AnimalPost,
   UpdateAnimalSchema,
@@ -8,6 +9,7 @@ import {
 } from "../../types/schemas/animal.js";
 import { animalRepository } from "../../services/animal.repository.js";
 import { UCUErrorNotFound } from "../../utils/index.js";
+import { Type } from "@sinclair/typebox";
 
 const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
   fastify.get("/", {
@@ -151,17 +153,23 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       summary:
         "Ver el historial de modificaciones realizadas a los datos de un animal",
       description:
-        "Ver el historial de modificaciones realizadas a los datos de un animal",
+        "Recupera todas las modificaciones hechas sobre los datos de un animal",
       security: [
         {
           bearerAuth: [],
         },
       ],
+      response: {
+        200: Type.Array(AnimalHistorySchema),
+      },
     },
     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
-      // Handle fetching a specific animal by ID logic
-      throw new Error("Not implemented");
+      const { animal_id } = request.params as AnimalParams;
+      const modificationList = await animalRepository.getAnimalHistory(
+        animal_id
+      );
+      reply.send(modificationList);
     },
   });
 
