@@ -84,7 +84,7 @@ export class MainStoreService {
 
       // Actualizar usuario completo
       this.usuario.set({
-        user_id: payload.user_id,
+        id: payload.user_id,
         email: payload.user,
         role_id: payload.role_id
       });
@@ -121,5 +121,10 @@ export class MainStoreService {
     this.userId.set(null);
     this.userEmail.set(null);
     this.userRoleId.set(null);
+  }
+
+  // Verifica si el usuario es administrador o si mismo.
+  isAdminOrSelf(userId: string): boolean {
+    return this.isAdmin() || (this.isAuthenticated() && this.userId() === userId);
   }
 }

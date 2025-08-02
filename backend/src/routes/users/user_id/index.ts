@@ -30,7 +30,10 @@ const usuariosIdRoute: FastifyPluginAsync = async (fastify) => {
         throw new UCUErrorNotFound(`Usuario ${user_id} no encontrado`);
       }
       const { password_hash, ...safeUser } = user;
-      return safeUser;
+      return {
+        ...safeUser,
+        user_id: safeUser.id, // agrega user_id para el frontend
+      };
     }
   });
 

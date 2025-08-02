@@ -14,6 +14,7 @@ import {
   selector: 'app-delete-land-modal',
   templateUrl: './delete-land-modal.component.html',
   styleUrls: ['./delete-land-modal.component.scss'],
+  standalone: true,
   imports: [
     IonHeader,
     IonToolbar,

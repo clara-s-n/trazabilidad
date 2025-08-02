@@ -1,17 +1,20 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
-import {Land} from "../../../../model/land";
-import {LandsService} from "../../../../services/lands.service";
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { Land } from '../../../../model/land';
+import { LandsService } from '../../../../services/lands.service';
 import {
   IonButton,
   IonButtons,
   IonContent,
-  IonHeader, IonItem, IonLabel, IonList,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonList,
   IonTitle,
   IonToolbar,
-  ModalController
-} from "@ionic/angular/standalone";
-import {DeleteLandModalComponent} from "../../components/delete-land-modal/delete-land-modal.component";
-import {RouterLink} from "@angular/router";
+  ModalController,
+} from '@ionic/angular/standalone';
+import { DeleteLandModalComponent } from '../../components/delete-land-modal/delete-land-modal.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-land-list',
@@ -28,23 +31,35 @@ import {RouterLink} from "@angular/router";
     IonList,
     IonItem,
     IonLabel,
-    RouterLink
-  ]
+    RouterLink,
+  ],
 })
-export class ListPage  implements OnInit {
+export class ListPage implements OnInit {
+  socket = new WebSocket('ws://localhost/backend/');
 
   public lands = signal<Land[]>([]);
 
   private landService: LandsService = inject(LandsService);
-  private modalController: ModalController = inject(ModalController)
 
-  constructor(
-  ) {}
+  private modalController: ModalController = inject(ModalController);
+
+  constructor() {}
 
   ngOnInit() {
     this.loadLands();
-  }
 
+    this.socket.addEventListener('open', (event) => {
+      // Si quiero hacer algo al establecer la conexión.
+    });
+
+    this.socket.addEventListener('message', (event) => {
+      console.log('Mensaje del servidor: ', event.data);
+      if (event.data === 'newLand') {
+        this.loadLands();
+      }
+      // window.location.reload();
+    });
+  }
   async loadLands() {
     const data = await this.landService.getAllLands();
     this.lands.set(data);
@@ -53,7 +68,7 @@ export class ListPage  implements OnInit {
   async confirmDelete(land: Land) {
     const modal = await this.modalController.create({
       component: DeleteLandModalComponent,
-      componentProps: { land }
+      componentProps: { land },
     });
     await modal.present();
     const { data } = await modal.onWillDismiss();

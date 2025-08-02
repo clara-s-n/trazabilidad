@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Usuarios</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  @if (usersResource.status() === 'loading') {
+  <ion-spinner></ion-spinner>
+  <div>Cargando usuarios...</div>
+  }
+  @if (usersResource.status() === 'error') {
+  <ion-text color="danger">
+    Error al cargar usuarios.
+  </ion-text>
+  <ion-button expand="block" (click)="reload()">
+    Reintentar
+  </ion-button>
+  }
+  @if (usersResource.status() === 'resolved') {
+  @if ((usersResource.value() ?? []).length === 0) {
+  <div class="ion-padding">
+    No hay usuarios registrados.
+  </div>
+  }
+  <ion-list>
+    @for (user of usersResource.value() ?? []; track user.email) {
+    <ion-row>
+      <ion-col>Email: {{ user.email }}</ion-col>
+      <ion-col>Rol: {{ user.role_id }}</ion-col>
+      <ion-col>
+        <ion-button (click)="goToUserProfile(user)">
+          <ion-icon slot="icon-only" name="eye-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    }
+  </ion-list>
+  }
+</ion-content>

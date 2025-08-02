@@ -15,13 +15,6 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./login/login.page').then(m => m.LoginPage)
       },
-      {
-        path: 'logout',
-        data: { menu: true, section: 'Auth', title: 'Logout de usuario' },
-        loadComponent: () =>
-          import('./logout/logout.page').then(m => m.LogoutPage)
-      },
-
       // Registro (solo admin)
       {
         path: 'register',

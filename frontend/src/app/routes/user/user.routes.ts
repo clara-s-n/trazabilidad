@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { userGuard } from 'src/app/guards/user.guard';
 import { adminGuard } from 'src/app/guards/admin.guard';
+import { adminOrSelfGuard } from 'src/app/guards/admin-or-self.guard';
 
 export const routes: Routes = [
   {
@@ -15,21 +15,21 @@ export const routes: Routes = [
         canActivate: [adminGuard],
         data: { menu: true, section: 'Usuarios', title: 'Lista de usuarios' },
         loadComponent: () =>
-          import('./user-list/user-list.page').then(m => m.ListPage)
-      },
-
-      // Delete
-      {
-        path: ':id/delete',
-        loadComponent: () =>
-          import('./user-delete/user-delete.page').then(m => m.DeletePage)
+          import('./pages/user-list/user-list.page').then(m => m.UserListPage)
       },
       // Profile
       {
-        path: ':id/profile',
-        canActivate: [userGuard],
+        path: 'edit/:id',
+        canActivate: [adminOrSelfGuard],
         loadComponent: () =>
-          import('./user-profile/user-profile.page').then(m => m.ProfilePage)
+          import('./pages/user-edit/user-edit.page').then(m => m.UserEditPage)
+      },
+      // Profile
+      {
+        path: 'profile/:id',
+        canActivate: [adminOrSelfGuard],
+        loadComponent: () =>
+          import('./pages/user-profile/user-profile.page').then(m => m.UserProfilePage)
       }
     ]
   }

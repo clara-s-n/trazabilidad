@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { LogoutPage } from './logout.page';
+import { UserEditPage } from './user-edit.page';
 
-describe('LogoutPage', () => {
-  let component: LogoutPage;
-  let fixture: ComponentFixture<LogoutPage>;
+describe('UserEditPage', () => {
+  let component: UserEditPage;
+  let fixture: ComponentFixture<UserEditPage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [LogoutPage],
+      imports: [UserEditPage],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LogoutPage);
+    fixture = TestBed.createComponent(UserEditPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
