@@ -4,19 +4,9 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <div *ngIf="!loading(); else loadingTpl">
-    <ng-container *ngIf="user(); else notFoundTpl">
-      <h2>{{ user().email }}</h2>
-      <p>Rol: {{ user().role_id }}</p>
-      <p>ID: {{ user().user_id }}</p>
-      <!-- Agrega más datos si lo necesitas -->
-    </ng-container>
-  </div>
-  <ng-template #loadingTpl>
-    <ion-spinner></ion-spinner>
-    <div>Cargando perfil...</div>
-  </ng-template>
-  <ng-template #notFoundTpl>
-    <div>No se encontró el usuario.</div>
-  </ng-template>
+  @if (this.user()){
+    <ion-item> Email: {{this.user().email}}</ion-item>
+    <ion-item> Rol: {{this.role}}</ion-item>
+    <ion-button [routerLink]="['/user/edit', this.user().id]">Editar usuario</ion-button>
+  }
 </ion-content>

@@ -5,7 +5,7 @@ import {
   output,
   signal,
   computed,
-  inject
+  inject, effect
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -38,10 +38,12 @@ import {FormsModule} from "@angular/forms";
 })
 
 export default class UserFormComponent {
-  user = input<UserFormInputs['user']>(null);
-  isEditMode = input<UserFormInputs['isEditMode']>(false);
+  //inputs
+  user = input<any | null>(null);
+  isEditMode = input<boolean>(false);
 
-  submitted = output<UserFormOutputs['submitted']>();
+  //outputs
+  submitted = output<any>();
   canceled = output<void>();
 
   private store = inject(MainStoreService);
@@ -61,10 +63,15 @@ export default class UserFormComponent {
   loading = signal(false);
 
   constructor() {
-    if (this.user()) {
-      this.email.set(this.user()!.email);
-      this.role_id.set(this.user()!.role_id);
-    }
+    // Reactivar con un effect el cambio de usuario
+    effect(() => {
+      const u = this.user();
+      if (u) {
+        this.email.set(u.email ?? '');
+        this.role_id.set(u.role_id ?? null);
+        this.password.set(u.role_id ?? null);
+      }
+    });
   }
 
   allValues = computed(() => ({

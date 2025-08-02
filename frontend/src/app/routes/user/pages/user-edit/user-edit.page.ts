@@ -1,7 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {Component, HostListener, inject, OnInit, signal} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import UserFormComponent from "../../components/user-form/user-form.component";
+import {IonSpinner, IonText} from "@ionic/angular/standalone";
+import { User } from 'src/app/model/user';
 
 @Component({
   selector: 'app-user-edit',
@@ -9,7 +11,9 @@ import UserFormComponent from "../../components/user-form/user-form.component";
   styleUrls: ['./user-edit.page.scss'],
   standalone: true,
   imports: [
-    UserFormComponent
+    UserFormComponent,
+    IonSpinner,
+    IonText
   ]
 })
 export class UserEditPage {
@@ -18,20 +22,24 @@ export class UserEditPage {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
-  user: any = null;
-  loading = false;
+  user: User | undefined = undefined;
+  loading = signal<boolean>(false);
 
-  async ngOnInit() {
-    this.loading = true;
-    const userId = this.route.snapshot.paramMap.get('userId');
+  // Se llama cada vez que la vista va a entrar
+  @HostListener('ionViewWillEnter')
+  async ionViewWillEnter() {
+    this.loading.set(true);
+    const userId = this.route.snapshot.paramMap.get('id');
+    console.log(userId)
     if (userId) {
       try {
-        this.user = await this.userService.getUserById(userId);
-      } catch (e) {
-        this.user = null;
+        const userData = await this.userService.getUserById(userId);
+        this.user.set(userData);
+      } catch {
+        this.user.set(null);
       }
     }
-    this.loading = false;
+    this.loading.set(false);
   }
 
   async onSubmit(data: { email: string; password: string; repeatPassword?: string; role_id: number }) {

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { UserFormComponent } from './user-form.component';
+import UserFormComponent from './user-form.component';
 
 describe('UserFormComponent', () => {
   let component: UserFormComponent;

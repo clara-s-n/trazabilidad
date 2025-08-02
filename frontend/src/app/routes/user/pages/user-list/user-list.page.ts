@@ -5,10 +5,10 @@ import { User } from 'src/app/model/user';
 import { CommonModule } from '@angular/common';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonList,
-  IonItem, IonSpinner, IonText, IonButton, IonRow, IonIcon
+  IonItem, IonSpinner, IonText, IonButton, IonRow, IonIcon, IonCol
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { eyeOutline, createOutline, trashOutline } from 'ionicons/icons';
+import { eyeOutline} from 'ionicons/icons';
 
 @Component({
   selector: 'app-user-list',
@@ -16,7 +16,7 @@ import { eyeOutline, createOutline, trashOutline } from 'ionicons/icons';
   styleUrls: ['./list.page.scss'],
   imports: [
     CommonModule, IonHeader, IonToolbar, IonTitle, IonContent,
-    IonList, IonItem, IonSpinner, IonText, IonButton, IonRow, IonIcon
+    IonList, IonSpinner, IonText, IonButton, IonRow, IonIcon, IonCol
   ],
   standalone: true,
 })
@@ -24,9 +24,7 @@ import { eyeOutline, createOutline, trashOutline } from 'ionicons/icons';
 export class UserListPage {
   constructor() {
     addIcons({
-      eyeOutline,
-      createOutline,
-      trashOutline
+      eyeOutline
     });
   }
 

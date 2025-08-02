@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import {Component, inject, OnInit} from '@angular/core';
+import {Router, RouterLink} from '@angular/router';
 import { MainStoreService } from 'src/app/services/main-store.service';
 import { MenuSection } from 'src/app/model/components/menuSection';
 import { CommonModule } from '@angular/common';
@@ -29,8 +29,9 @@ import { IonAccordion, IonAccordionGroup, IonButtons, IonContent, IonHeader, Ion
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.scss']
 })
-export class MainLayoutComponent implements OnInit {
-    private mainStoreService = new MainStoreService();
+export class MainLayoutComponent {
+    private mainStoreService = inject(MainStoreService);
+    private router = inject(Router);
 
   public sections: MenuSection[] = [
     { label: 'Animales', color: 'tertiary', items: [
@@ -55,10 +56,9 @@ export class MainLayoutComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
-
 
   logout() {
     this.mainStoreService.clearAuth();
+    this.router.navigate(['/']);
   }
 }

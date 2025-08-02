@@ -25,14 +25,13 @@
   <ion-list>
     @for (user of usersResource.value() ?? []; track user.email) {
     <ion-row>
-      <ion-item>Email: {{ user.email }}</ion-item>
-      <ion-item>Rol: {{ user.role_id }}</ion-item>
-      <ion-button (click)="goToUserProfile(user)" slot="end">
-        <ion-icon name="eye-outline"></ion-icon>
-      </ion-button>
-      <ion-button (click)="goToUserEdit(user)" slot="end">
-        <ion-icon name="create-outline"></ion-icon>
-      </ion-button>
+      <ion-col>Email: {{ user.email }}</ion-col>
+      <ion-col>Rol: {{ user.role_id }}</ion-col>
+      <ion-col>
+        <ion-button (click)="goToUserProfile(user)">
+          <ion-icon slot="icon-only" name="eye-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
     </ion-row>
     }
   </ion-list>
