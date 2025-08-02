@@ -1,19 +1,38 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/animal/list"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Editar Animal</ion-title>
-  </ion-toolbar>
-</ion-header>
+@if (loading()) {
+  <ion-spinner></ion-spinner>
+  <div>Cargando datos del animal...</div>
+}
+@else if (animal()) {
+  <form (ngSubmit)="onSubmit(form.value)" #form="ngForm" autocomplete="off">
+    <h2>Editar animal</h2>
 
-<ion-content class="ion-padding">
-  @if(animal) {
-  <app-animal-form
-    [animal]="animal"
-    (submitted)="handleSave($event)"
-  ></app-animal-form>
-  } @if(!animal) {
-  <p>Cargando predio...</p>
-  }
-</ion-content>
+    <label>Raza:</label>
+    <input type="text" name="breed" [ngModel]="animal().breed" #breed="ngModel">
+
+    <label>Fecha de nacimiento:</label>
+    <input type="date" name="birth_date" [ngModel]="animal().birth_date" #birth_date="ngModel">
+
+    <label>Dueño (ID):</label>
+    <input type="text" name="owner_id" [ngModel]="animal().owner_id" #owner_id="ngModel">
+
+    <label>Campo (ID):</label>
+    <input type="text" name="land_id" [ngModel]="animal().land_id" #land_id="ngModel">
+
+    <label>Estado:</label>
+    <select name="status" [ngModel]="animal().status" #status="ngModel">
+      <option value="alive">Vivo</option>
+      <option value="deceased">Muerto</option>
+      <option value="robbed">Robado</option>
+      <option value="lost">Perdido</option>
+    </select>
+
+    <div class="ion-padding">
+      <button ion-button type="submit" [disabled]="form.invalid || loading()">Guardar cambios</button>
+      <button ion-button type="button" (click)="onCancel()">Cancelar</button>
+    </div>
+    <ion-text color="danger" *ngIf="error()">{{ error() }}</ion-text>
+  </form>
+}
+@else {
+  <ion-text color="danger">No se encontró el animal.</ion-text>
+}
