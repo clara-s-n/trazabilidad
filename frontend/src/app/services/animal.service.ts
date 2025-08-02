@@ -12,30 +12,33 @@ export class AnimalService {
   constructor() {}
 
   public httpCliente = inject(HttpClient);
-  public apiUrl = `${environment.apiUrl}animals`;
+  public apiUrl = environment.apiUrl;
 
-  async getAllAnimals() {
-    return firstValueFrom(this.httpCliente.get<Animal>(`${this.apiUrl}/`));
-  }
-
-  async getAnimal(id: string): Promise<Animal> {
-    return firstValueFrom(this.httpCliente.get<Animal>(`${this.apiUrl}/${id}`));
-  }
-
-  async postAnimal(id: string, data: AnimalPost): Promise<Animal> {
-    return firstValueFrom(
-      this.httpCliente.post<Animal>(`${this.apiUrl}/${id}/`, data)
+  async getAllAnimals(): Promise<Animal[]> {
+    return await firstValueFrom(
+      this.httpCliente.get<Animal[]>(this.apiUrl + 'animals/')
     );
   }
 
+  async getAnimal(animalId: string): Promise<Animal> {
+    return await firstValueFrom(
+      this.httpCliente.get<Animal>(`${this.apiUrl}animals/${animalId}`)
+    );
+  }
+
+  async postAnimal(id: string, data: AnimalPost): Promise<Animal> {
+    const url = this.apiUrl + 'animals/';
+    return await firstValueFrom(this.httpCliente.post<Animal>(url, data));
+  }
+
   async updateAnimal(id: string, data: UpdateAnimal): Promise<Animal> {
-    return firstValueFrom(
+    return await firstValueFrom(
       this.httpCliente.put<Animal>(`${this.apiUrl}/${id}`, data)
     );
   }
 
   async deleteAnimal(params: AnimalParams): Promise<void> {
-    return firstValueFrom(
+    return await firstValueFrom(
       this.httpCliente.delete<void>(`${this.apiUrl}/${params.animal_id}`)
     );
   }

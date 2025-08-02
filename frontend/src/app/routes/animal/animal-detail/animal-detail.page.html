@@ -1,1 +1,21 @@
-<p>Animal detail works!</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Detalle del Animal</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  @if (this.animal()){
+  <ion-item> Raza: {{this.animal().breed}} </ion-item>
+  <ion-item> Fecha de Nacimiento: {{this.animal().breed}} </ion-item>
+  <ion-item> Dueño: {{this.animal().owner_id}} </ion-item>
+  <ion-item> Predio: {{this.animal().land_id}} </ion-item>
+  <ion-item> Estado: {{this.animal().status}} </ion-item>
+  <ion-item>
+    Fecha de adición al sistema: {{this.animal().created_at}}
+  </ion-item>
+  <ion-item> Última Modificación: {{this.animal().updated_at}} </ion-item>
+  <ion-button [routerLink]="['/animal/edit', this.animal().id]"
+    >Editar Animal</ion-button
+  >
+  }
+</ion-content>
