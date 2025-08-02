@@ -5,12 +5,14 @@ import {
 } from "../../../types/schemas/animal.js";
 import {
   WeighingSchema,
-  CreateWeighingParams,
-  CreateWeighingType
+  //CreateWeighingParams,
+  //CreateWeighingType,
+  CreateWeighingBody
 } from "../../../types/schemas/weighing.js";
 import { animalRepository } from "../../../services/animal.repository.js";
 import { weighingRepository } from "../../../services/weighing.repository.js";
 import { UCUErrorNotFound, UCUErrorBadRequest } from "../../../utils/index.js";
+import { eventRepository } from "../../../services/event.repository.js";
 
 const pesajesRoute: FastifyPluginAsyncTypebox = async (fastify) => {
   // GET /:animal_id → Listar pesajes
@@ -43,7 +45,7 @@ const pesajesRoute: FastifyPluginAsyncTypebox = async (fastify) => {
       summary: "Registrar un pesaje",
       description: "Crea un registro de pesaje vinculado al evento correspondiente",
       params: AnimalParams,
-      body: CreateWeighingParams,
+      body: CreateWeighingBody,
       security: [{ bearerAuth: [] }],
       response: {
         201: WeighingSchema
@@ -52,19 +54,37 @@ const pesajesRoute: FastifyPluginAsyncTypebox = async (fastify) => {
     onRequest: fastify.verifyOperator,
     handler: async (request, reply) => {
       const { animal_id } = request.params as AnimalParams;
-      const payload = request.body as CreateWeighingType;
+      const payload = request.body as CreateWeighingBody;
 
-      const valid = await weighingRepository.getValidWeighingEvent(
-        animal_id,
-        payload.event_id
-      );
-      if (!valid) {
-        throw new UCUErrorBadRequest(
-          `El event_id ${payload.event_id} no corresponde a un pesaje de este animal`
-        );
+      // Validar existencia del animal
+      const animal = await animalRepository.getByIdDetailed(animal_id);
+
+      if (!animal) {
+        throw new UCUErrorNotFound(`Animal ${animal_id} no existe`);
       }
 
-      const newWeighing = await weighingRepository.createWeighing(payload);
+      // Crear evento asociado
+      const { id: user_id } = request.user as { id: string };
+      const event = await eventRepository.createEvent({
+        event_type: 'Weighing',
+        date: payload.date,
+        comments: payload.comments,
+        created_by: user_id,
+      });
+
+      await eventRepository.linkEventToAnimal(event.id, animal_id);
+
+      // Crear pesaje
+      const newWeighing = await weighingRepository.createWeighing({
+        event_id: event.id,
+        weight: payload.weight,
+        unit: payload.unit,
+      });
+
+      if (!newWeighing) {
+        throw new UCUErrorBadRequest("Error al crear el pesaje");
+      }
+
       reply.code(201);
       return newWeighing;
     }
