@@ -1,25 +1,29 @@
-import {Component, HostListener, inject, OnInit, signal} from '@angular/core';
+import {
+  Component,
+  HostListener,
+  inject,
+  input,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
-import UserFormComponent from "../../components/user-form/user-form.component";
-import {IonSpinner, IonText} from "@ionic/angular/standalone";
+import UserFormComponent from '../../components/user-form/user-form.component';
+import { IonSpinner, IonText } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.page.html',
   styleUrls: ['./user-edit.page.scss'],
   standalone: true,
-  imports: [
-    UserFormComponent,
-    IonSpinner,
-    IonText
-  ]
+  imports: [UserFormComponent, IonSpinner, IonText],
 })
 export class UserEditPage {
-
   private userService = inject(UserService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+
+  public id = input.required<string>();
 
   user: any = null;
   loading = signal<boolean>(false);
@@ -28,8 +32,8 @@ export class UserEditPage {
   @HostListener('ionViewWillEnter')
   async ionViewWillEnter() {
     this.loading.set(true);
-    const userId = this.route.snapshot.paramMap.get('userId');
-    console.log(userId)
+    const userId = this.id();
+    console.log(userId);
     if (userId) {
       try {
         const userData = await this.userService.getUserById(userId);
@@ -41,7 +45,12 @@ export class UserEditPage {
     this.loading.set(false);
   }
 
-  async onSubmit(data: { email: string; password: string; repeatPassword?: string; role_id: number }) {
+  async onSubmit(data: {
+    email: string;
+    password: string;
+    repeatPassword?: string;
+    role_id: number;
+  }) {
     try {
       await this.userService.updateUser(this.user.user_id, data);
       this.router.navigate(['/users', this.user.user_id]);
