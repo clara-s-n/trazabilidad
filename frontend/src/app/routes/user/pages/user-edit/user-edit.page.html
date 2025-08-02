@@ -1,0 +1,14 @@
+@if (loading()) {
+  <ion-spinner></ion-spinner>
+}
+@else if (user) {
+  <app-user-form
+    [isEditMode]="true"
+    [user]="user"
+    (submitted)="onSubmit($event)"
+    (canceled)="onCancel()">
+  </app-user-form>
+}
+@else {
+  <ion-text color="danger">No se encontró el usuario.</ion-text>
+}

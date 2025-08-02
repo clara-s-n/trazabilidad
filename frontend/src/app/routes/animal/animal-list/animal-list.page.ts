@@ -1,68 +1,70 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, resource } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import {
   IonButton,
-  IonButtons,
+  IonCol,
   IonContent,
   IonHeader,
-  IonItem,
-  IonLabel,
+  IonIcon,
   IonList,
+  IonRow,
+  IonSpinner,
+  IonText,
   IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { eyeOutline } from 'ionicons/icons';
+import { Animal } from 'src/app/model/animal';
 import { AnimalService } from 'src/app/services/animal.service';
 
 @Component({
   selector: 'app-animal-list',
   templateUrl: './animal-list.page.html',
-  styleUrls: ['./list.page.scss'],
   standalone: true,
   imports: [
+    CommonModule,
     IonHeader,
     IonToolbar,
     IonTitle,
-    IonButtons,
-    IonButton,
     IonContent,
     IonList,
-    IonItem,
-    IonLabel,
-    RouterLink,
+    IonSpinner,
+    IonText,
+    IonButton,
+    IonRow,
+    IonIcon,
+    IonCol,
   ],
 })
-export class ListPage implements OnInit {
+export class ListPage {
+  constructor() {
+    addIcons({
+      eyeOutline,
+    });
+  }
   private animalService = inject(AnimalService);
-  // private modalController: ModalController = inject(ModalController);
+  private router = inject(Router);
 
-  public animalesSignal = resource({
-    loader: () => this.animalService.getAllAnimals(),
+  public animalsResource = resource({
+    loader: async () => await this.animalService.getAllAnimals(),
   });
 
-  constructor() {}
-
-  ngOnInit() {
-    this.loadAnimals();
-  }
-  async loadAnimals() {
-    const data = await this.animalService.getAllAnimals();
-    this.animalesSignal.set(data);
+  goToSpecificAnimal(animal: Animal) {
+    console.log(
+      `${animal.birth_date}, ${animal.breed}, ${animal.created_at}, ${animal.status},  ${animal.land_id},  ${animal.owner_id},  ${animal.updated_at}`
+    );
+    console.log(`Navigating to user profile with ID: ${animal.id} `);
+    this.router.navigate([`/animal/${animal.id}`]);
   }
 
-  // async confirmDelete(animal: Animal) {
-  //   const modal = await this.modalController.create({
-  //     component: DeleteAnimalModalComponent,
-  //     componentProps: { animal },
-  //   });
-  //   await modal.present();
-  //   const { data } = await modal.onWillDismiss();
-  //   if (data?.confirm) {
-  //     await this.deleteAnimal(animal.id);
-  //   }
-  // }
+  reload() {
+    window.location.reload();
+  }
 
-  async deleteAnimal(id: string) {
-    await this.animalService.deleteAnimal({ animal_id: id });
-    this.loadAnimals();
+  goToAnimalModification(animal: Animal) {
+    console.log(`Navigating to user edit with ID: ${animal.id}`);
+    this.router.navigate([`/animal/edit/${animal.id}`]);
   }
 }

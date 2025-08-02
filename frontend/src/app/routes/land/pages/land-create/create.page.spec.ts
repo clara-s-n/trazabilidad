@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { CreatePage } from './land-create.page';
+import { LandCreatePage } from './land-create.page';
 
-describe('CreatePage', () => {
-  let component: CreatePage;
-  let fixture: ComponentFixture<CreatePage>;
+describe('LandCreatePage', () => {
+  let component: LandCreatePage;
+  let fixture: ComponentFixture<LandCreatePage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [CreatePage],
+      imports: [LandCreatePage],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CreatePage);
+    fixture = TestBed.createComponent(LandCreatePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

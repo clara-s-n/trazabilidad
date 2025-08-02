@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { DeletePage } from './user-delete.page';
+import { UserProfilePage } from './user-profile.page';
 
-describe('DeletePage', () => {
-  let component: DeletePage;
-  let fixture: ComponentFixture<DeletePage>;
+describe('UserProfilePage', () => {
+  let component: UserProfilePage;
+  let fixture: ComponentFixture<UserProfilePage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [DeletePage],
+      imports: [UserProfilePage],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DeletePage);
+    fixture = TestBed.createComponent(UserProfilePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

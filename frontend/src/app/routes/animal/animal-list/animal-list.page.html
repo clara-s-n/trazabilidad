@@ -1,33 +1,34 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Animales</ion-title>
-    <ion-buttons slot="end">
-      <ion-button [routerLink]="['/animals/create']">Nuevo</ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  @if (animalsResource.status() === 'loading') {
+  <ion-spinner></ion-spinner>
+  <div>Cargando animales...</div>
+  } @if (animalsResource.status() === 'error') {
+  <ion-text color="danger"> Error al cargar animales. </ion-text>
+  <ion-button expand="block" (click)="reload()"> Reintentar </ion-button>
+  } @if (animalsResource.status() === 'resolved') { @if
+  ((animalsResource.value() ?? []).length === 0) {
+  <div class="ion-padding">No hay animales registrados.</div>
+  }
   <ion-list>
-    @for(animal of animals(); track animal.id) {
-    <ion-item>
-      <ion-label>{{ animal.name }}</ion-label>
-      <ion-button slot="end" fill="clear" [routerLink]="['/animal', animal.id]"
-        >Ver</ion-button
-      >
-      <ion-button
-        slot="end"
-        fill="clear"
-        [routerLink]="['/animal/edit', animal.id]"
-        >Editar</ion-button
-      >
-      <!-- <ion-button
-        slot="end"
-        color="danger"
-        fill="clear"
-        (click)="confirmDelete(animal)"
-        >Eliminar</ion-button
-      > -->
-    </ion-item>
+    @for (animal of animalsResource.value() ?? []; track animal.breed) {
+    <ion-row>
+      <ion-col>Raza: {{ animal.breed }}</ion-col>
+      <ion-col>Fecha de Nacimiento: {{ animal.birth_date }}</ion-col>
+      <ion-col>Dueño: {{ animal.owner_id }}</ion-col>
+      <ion-col>Predio: {{ animal.land_id }}</ion-col>
+      <ion-col>Estado: {{ animal.status }}</ion-col>
+      <ion-col>
+        <ion-button (click)="goToSpecificAnimal(animal)">
+          <ion-icon slot="icon-only" name="eye-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
     }
   </ion-list>
+  }
 </ion-content>
