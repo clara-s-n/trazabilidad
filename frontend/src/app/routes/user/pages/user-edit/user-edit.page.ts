@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import UserFormComponent from "../../components/user-form/user-form.component";
 import {IonSpinner, IonText} from "@ionic/angular/standalone";
-import { User } from 'src/app/model/user';
 
 @Component({
   selector: 'app-user-edit',
@@ -22,14 +21,14 @@ export class UserEditPage {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
-  user: User | undefined = undefined;
+  user: any = null;
   loading = signal<boolean>(false);
 
   // Se llama cada vez que la vista va a entrar
   @HostListener('ionViewWillEnter')
   async ionViewWillEnter() {
     this.loading.set(true);
-    const userId = this.route.snapshot.paramMap.get('id');
+    const userId = this.route.snapshot.paramMap.get('userId');
     console.log(userId)
     if (userId) {
       try {
