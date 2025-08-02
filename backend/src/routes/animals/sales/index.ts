@@ -1,10 +1,11 @@
 import { FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox";
 import { Type } from "@sinclair/typebox";
 import { AnimalParams } from "../../../types/schemas/animal.js";
-import { CreateSaleParams, CreateSaleType, SaleSchema } from "../../../types/schemas/sale.js";
+import { CreateSaleBody, /*CreateSaleParams, CreateSaleType,*/ SaleSchema } from "../../../types/schemas/sale.js";
 import { saleRepository } from "../../../services/sale.repository.js";
 import { animalRepository } from "../../../services/animal.repository.js";
 import { UCUErrorNotFound, UCUErrorBadRequest } from "../../../utils/index.js";
+import { eventRepository } from "../../../services/event.repository.js";
 
 const ventasRoute: FastifyPluginAsyncTypebox = async (fastify) => {
     // GET /:animal_id → listar ventas
@@ -43,7 +44,7 @@ const ventasRoute: FastifyPluginAsyncTypebox = async (fastify) => {
             summary: "Registrar una venta",
             description: "Crea una venta asociada a un evento existente del animal",
             params: AnimalParams,
-            body: CreateSaleParams,
+            body: CreateSaleBody,
             security: [{ bearerAuth: [] }],
             response: {
                 201: SaleSchema
@@ -52,24 +53,28 @@ const ventasRoute: FastifyPluginAsyncTypebox = async (fastify) => {
         onRequest: fastify.verifyOperator,
         handler: async (request, reply) => {
             const { animal_id } = request.params as AnimalParams;
-            const body = request.body as CreateSaleType;
+            const { id } = request.user as { id: string };
+            const payload = request.body as CreateSaleBody;
+            const event = await eventRepository.createEvent({
+                event_type: 'Sale',
+                date: payload.date,
+                comments: payload.comments,
+                created_by: id,
+            });
 
-            const isValid = await saleRepository.getValidSaleEvent(animal_id, body.event_id);
-            if (!isValid) {
-                throw new UCUErrorBadRequest("El event_id no corresponde a una venta de este animal");
+            await eventRepository.linkEventToAnimal(event.id, animal_id);
+
+            const sale = await saleRepository.createSale({
+                event_id: event.id,
+                buyer: payload.buyer,
+                price: payload.price,
+                currency: payload.currency,
+            });
+
+            if (!sale) {
+                throw new UCUErrorBadRequest(`No se pudo crear la venta para el animal ${animal_id}`);
             }
 
-            const animal = await animalRepository.getByIdDetailed(animal_id);
-            console.log("EVENTOS DEL ANIMAL:", JSON.stringify(animal.events, null, 2));
-            if (!animal) {
-                throw new UCUErrorNotFound(`Animal ${animal_id} no existe`);
-            }
-
-            const ventaEvent = animal.events.find(e => e.id === body.event_id && e.type === "Sale");
-            if (!ventaEvent) {
-                throw new UCUErrorBadRequest(`El event_id ${body.event_id} no pertenece a una venta de este animal`);
-            }
-            const sale = await saleRepository.createSale(body);
             reply.code(201);
             return sale;
         }

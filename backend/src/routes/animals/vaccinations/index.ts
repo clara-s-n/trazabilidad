@@ -2,8 +2,9 @@ import { FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox";
 import { Type } from "@sinclair/typebox";
 
 import {
-  CreateVaccinationParams,
-  CreateVaccinationType,
+  CreateVaccinationBody,
+  //CreateVaccinationParams,
+  //CreateVaccinationType,
   VaccinationSchema
 } from "../../../types/schemas/vaccination.js";
 
@@ -11,6 +12,7 @@ import { AnimalParams } from "../../../types/schemas/animal.js";
 import { vaccinationRepository } from "../../../services/vaccination.repository.js";
 import { animalRepository } from "../../../services/animal.repository.js";
 import { UCUErrorNotFound, UCUErrorBadRequest } from "../../../utils/index.js";
+import { eventRepository } from "../../../services/event.repository.js";
 
 const vacunacionesRoute: FastifyPluginAsyncTypebox = async (fastify) => {
   // 1) GET /:animal_id → listar todas las vacunaciones
@@ -48,7 +50,7 @@ const vacunacionesRoute: FastifyPluginAsyncTypebox = async (fastify) => {
       summary: "Registrar una vacunación",
       description: "Crea una vacunación vinculada a un evento de vacunación del animal",
       params: AnimalParams,
-      body: CreateVaccinationParams,
+      body: CreateVaccinationBody,
       security: [{ bearerAuth: [] }],
       response: {
         201: VaccinationSchema
@@ -57,26 +59,30 @@ const vacunacionesRoute: FastifyPluginAsyncTypebox = async (fastify) => {
     onRequest: fastify.verifyOperator,
     handler: async (request, reply) => {
       const { animal_id } = request.params as AnimalParams;
-      const payload = request.body as CreateVaccinationType;
+      const { id } = request.user as { id: string };
+      const payload = request.body as CreateVaccinationBody;
+      const event = await eventRepository.createEvent({
+        event_type: 'Vaccination',
+        date: payload.date,
+        comments: payload.comments,
+        created_by: id,
+      });
 
-      // Verificar que sea un evento válido para este animal
-      const ok = await vaccinationRepository.getValidVaccinationEvent(
-        animal_id,
-        payload.event_id
-      );
-      if (!ok) {
-        throw new UCUErrorBadRequest(
-          `El event_id ${payload.event_id} no corresponde a vacunación de este animal`
-        );
+      await eventRepository.linkEventToAnimal(event.id, animal_id);
+
+      const vac = await vaccinationRepository.createVaccination({
+        event_id: event.id,
+        vaccine: payload.vaccine,
+        dosage: payload.dosage,
+        provider: payload.provider,
+      });
+
+      if (!vac) {
+        throw new UCUErrorBadRequest("Error al crear la vacunación");
       }
 
-      // Crear la nueva vacunación
-      const vaccination = await vaccinationRepository.createVaccination(
-        payload
-      );
-      reply.code(201);
-      return vaccination;
-    }
+      reply.code(201).send(vac);
+    },
   });
 };
 
