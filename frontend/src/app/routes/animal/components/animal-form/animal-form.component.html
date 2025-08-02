@@ -1,3 +1,130 @@
-<p>
-  animal-form works!
-</p>
+<form (ngSubmit)="onSubmit()">
+  <ion-grid class="ion-text-center">
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" size-sm="8" size-md="6">
+        <h2>{{ isEditMode() ? "Editar animal" : "Crear nuevo animal" }}</h2>
+      </ion-col>
+    </ion-row>
+
+    <!-- Raza -->
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" size-sm="8" size-md="6">
+        <ion-input
+          labelPlacement="floating"
+          fill="solid"
+          label="Raza"
+          name="breed"
+          required
+          minlength="3"
+          [value]="breed()"
+          (ionInput)="onBreedChange($event.target.value)"
+        >
+        </ion-input>
+        <!-- <div class="error-msg">
+          {{ "email" | fieldError : email() : allValues() : touched().email }}
+        </div> -->
+      </ion-col>
+    </ion-row>
+
+    <!-- Nacimiento -->
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" size-sm="8" size-md="6">
+        <ion-input
+          labelPlacement="floating"
+          fill="solid"
+          label="Fecha de Nacimiento"
+          name="birth_date"
+          required
+          minlength="3"
+          [value]="birth_date()"
+          (ionInput)="onBirthDateChange($event.target.value)"
+        >
+        </ion-input>
+        <!-- <div class="error-msg">
+          {{ "email" | fieldError : email() : allValues() : touched().email }}
+        </div> -->
+      </ion-col>
+    </ion-row>
+
+    <!-- Dueño -->
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" size-sm="8" size-md="6">
+        <ion-input
+          labelPlacement="floating"
+          fill="solid"
+          label="Dueño"
+          name="owner_id"
+          required
+          minlength="3"
+          [value]="owner_id()"
+          (ionInput)="onOwnerIdChange($event.target.value)"
+        >
+        </ion-input>
+        <!-- <div class="error-msg">
+          {{ "email" | fieldError : email() : allValues() : touched().email }}
+        </div> -->
+      </ion-col>
+    </ion-row>
+
+    <!-- Predio -->
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" size-sm="8" size-md="6">
+        <ion-input
+          labelPlacement="floating"
+          fill="solid"
+          label="Predio"
+          name="land_id"
+          required
+          minlength="3"
+          [value]="land_id()"
+          (ionInput)="onLandIdChange($event.target.value)"
+        >
+        </ion-input>
+        <!-- <div class="error-msg">
+          {{ "email" | fieldError : email() : allValues() : touched().email }}
+        </div> -->
+      </ion-col>
+    </ion-row>
+
+    <!-- Rol -->
+    <ion-row class="ion-justify-content-center" *ngIf="showRoleSelect()">
+      <ion-col size="12" size-sm="8" size-md="6">
+        <ion-select
+          label="Rol"
+          name="role_id"
+          interface="popover"
+          required
+          [value]="role_id()"
+          (ionChange)="onRoleChange($event.detail.value)"
+        >
+          <ion-select-option [value]="alive">Vivo</ion-select-option>
+          <ion-select-option [value]="deceased">Muerto</ion-select-option>
+          <ion-select-option [value]="robbed">Robado</ion-select-option>
+          <ion-select-option [value]="lost">Perdido</ion-select-option>
+        </ion-select>
+      </ion-col>
+    </ion-row>
+
+    <!-- Botón -->
+    <ion-row class="ion-justify-content-center ion-padding-top">
+      <ion-col size="12" size-sm="8" size-md="6">
+        <ion-button
+          expand="block"
+          shape="round"
+          type="submit"
+          [disabled]="!formValid() || loading()"
+        >
+          {{ isEditMode() ? "Guardar cambios" : "Registrar" }}
+        </ion-button>
+        <ion-button
+          expand="block"
+          shape="round"
+          type="button"
+          (click)="onCancel()"
+        >
+          Cancelar
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</form>

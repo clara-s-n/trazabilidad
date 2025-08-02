@@ -19,7 +19,7 @@ export const routes: Routes = [
         data: { menu: true, section: 'Animales', title: 'Crear un animal' },
         loadComponent: () =>
           import('./animal-create/animal-create.page').then(
-            (m) => m.CreatePage
+            (m) => m.AnimalCreatePage
           ),
       },
 
@@ -27,7 +27,9 @@ export const routes: Routes = [
       {
         path: 'edit/:id',
         loadComponent: () =>
-          import('./animal-edit/animal-edit.page').then((m) => m.EditPage),
+          import('./animal-edit/animal-edit.page').then(
+            (m) => m.AnimalEditPage
+          ),
       },
       {
         path: 'events/:id',

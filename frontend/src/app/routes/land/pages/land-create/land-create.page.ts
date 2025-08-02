@@ -2,8 +2,15 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { LandsService } from '../../../../services/lands.service';
 import { CreateLand, UpdateLand } from '../../../../model/land';
-import {LandFormComponent} from "../../components/land-form/land-form.component";
-import {IonBackButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar} from "@ionic/angular/standalone";
+import { LandFormComponent } from '../../components/land-form/land-form.component';
+import {
+  IonBackButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-land-create',
@@ -15,10 +22,10 @@ import {IonBackButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar} 
     IonBackButton,
     IonButtons,
     IonToolbar,
-    IonHeader
+    IonHeader,
   ],
   templateUrl: './land-create.page.html',
-  styleUrls: ['./create.page.scss']
+  styleUrls: ['./create.page.scss'],
 })
 export class LandCreatePage {
   private landsService = inject(LandsService);
