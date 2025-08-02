@@ -12,35 +12,43 @@ export const routes: Routes = [
         path: 'list',
         data: { menu: true, section: 'Animales', title: 'Lista de animales' },
         loadComponent: () =>
-          import('./animal-list/animal-list.page').then(m => m.ListPage)
+          import('./animal-list/animal-list.page').then((m) => m.ListPage),
       },
       {
         path: 'create',
         data: { menu: true, section: 'Animales', title: 'Crear un animal' },
         loadComponent: () =>
-          import('./animal-create/animal-create.page').then(m => m.CreatePage)
+          import('./animal-create/animal-create.page').then(
+            (m) => m.CreatePage
+          ),
       },
 
       // 3. Rutas con sub-segmentos dinámicos
       {
-        path: ':id/edit',
+        path: 'edit/:id',
         loadComponent: () =>
-          import('./animal-edit/animal-edit.page').then(m => m.EditPage)
+          import('./animal-edit/animal-edit.page').then((m) => m.EditPage),
       },
       {
-        path: ':id/events',
+        path: 'events/:id',
         loadComponent: () =>
-          import('./animal-events/animal-events.page').then(m => m.EventsPage)
+          import('./animal-events/animal-events.page').then(
+            (m) => m.EventsPage
+          ),
       },
       {
-        path: ':id/history',
+        path: 'history/:id',
         loadComponent: () =>
-          import('./animal-history/animal-history.page').then(m => m.HistoryPage)
+          import('./animal-history/animal-history.page').then(
+            (m) => m.HistoryPage
+          ),
       },
       {
-        path: ':id/movements',
+        path: 'movements/:id',
         loadComponent: () =>
-          import('./animal-movements/animal-movements.page').then(m => m.MovementsPage)
+          import('./animal-movements/animal-movements.page').then(
+            (m) => m.MovementsPage
+          ),
       },
 
       // 4. Ruta “lista por usuario”
@@ -48,15 +56,19 @@ export const routes: Routes = [
         path: ':userId/list',
         pathMatch: 'full',
         loadComponent: () =>
-          import('./animal-user-list/animal-user-list.page').then(m => m.UserListPage)
+          import('./animal-user-list/animal-user-list.page').then(
+            (m) => m.UserListPage
+          ),
       },
 
       // 5. Ruta genérica detalle
       {
         path: ':id',
         loadComponent: () =>
-          import('./animal-detail/animal-detail.page').then(m => m.DetailPage)
-      }
-    ]
-  }
+          import('./animal-detail/animal-detail.page').then(
+            (m) => m.DetailPage
+          ),
+      },
+    ],
+  },
 ];
