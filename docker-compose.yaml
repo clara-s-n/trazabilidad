@@ -26,14 +26,14 @@ services:
   frontend:
     image: frontend
     container_name: frontend
-    # command: sh -c "npm install && npm start"
+    command: sh -c "npm install && npm run start2"
     build:
       context: ./frontend
     volumes:
       - ./frontend/:/frontend
     ports:
       - 4200:4200
-    tty: true
+    #tty: true
     user: 1000:1000
 
   database:
