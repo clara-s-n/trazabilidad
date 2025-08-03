@@ -14,7 +14,7 @@ export const AnimalParams = Type.Object({
 });
 
 export const Animal = Type.Object({
-  id: Type.String({
+  animal_id: Type.String({
     format: "uuid",
     examples: ["0a553254-e85c-4780-8995-34098a788256"],
   }),
@@ -63,7 +63,7 @@ export const AnimalFilter = Type.Object({
 });
 
 export const AnimalEventSchema = Type.Object({
-  id: Type.String({ format: "uuid" }),
+  animal_id: Type.String({ format: "uuid" }),
   type: Type.String(),
   date: Type.String({ format: "date-time" }),
   comments: Type.String(),
@@ -73,7 +73,7 @@ export const AnimalDetailedSchema = Type.Intersect([
   Animal,
   Type.Object({
     land: Type.Object({
-      id: Type.String({ format: "uuid" }),
+      animal_id: Type.String({ format: "uuid" }),
       name: Type.String(),
     }),
     events: Type.Array(AnimalEventSchema),
@@ -150,7 +150,10 @@ export const UpdateAnimalSchema = Type.Object(
 );
 
 export const AnimalHistorySchema = Type.Object({
-  id: Type.String({ format: "uuid", description: "History record ID" }),
+  history_id: Type.String({
+    format: "uuid",
+    description: "History record animal_id",
+  }),
   animal_id: Type.String({
     format: "uuid",
     description: "Which animal was modified",

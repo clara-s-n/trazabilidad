@@ -7,7 +7,7 @@ import { AnimalService } from 'src/app/services/animal.service';
 @Component({
   selector: 'app-animal-edit',
   templateUrl: './animal-edit.page.html',
-  styleUrls: ['./animal-edit.page.scss'],
+  styleUrls: ['./edit.page.scss'],
   standalone: true,
   imports: [AnimalFormComponent, IonSpinner, IonText],
 })
