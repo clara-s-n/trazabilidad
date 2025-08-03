@@ -32,9 +32,63 @@ export const routes: Routes = [
       {
         path: 'events/:id',
         loadComponent: () =>
-          import('./animal-events/animal-events.page').then(
-            (m) => m.EventsPage
-          ),
+          import('./animal-event/animal-event.page').then((m) => m.EventsPage),
+        children: [
+          {
+            path: 'sale',
+            pathMatch: 'full',
+            loadComponent: () =>
+              import('./animal-event/sale/pages/sale-list/sale-list.page').then(
+                (m) => m.SaleListPage
+              ),
+            children: [
+              {
+                path: 'create',
+                pathMatch: 'full',
+                loadComponent: () =>
+                  import(
+                    './animal-event/sale/pages/sale-create/sale-create.page'
+                  ).then((m) => m.SaleCreatePage),
+              },
+            ],
+          },
+          {
+            path: 'vaccination',
+            pathMatch: 'full',
+            loadComponent: () =>
+              import(
+                './animal-event/vaccination/pages/vaccination-list/vaccination-list.page'
+              ).then((m) => m.VaccinationListPage),
+            children: [
+              {
+                path: 'create',
+                pathMatch: 'full',
+                loadComponent: () =>
+                  import(
+                    './animal-event/vaccination/pages/vaccination-create/vaccination-create.page'
+                  ).then((m) => m.VaccinationCreatePage),
+              },
+            ],
+          },
+          {
+            path: 'weighing',
+            pathMatch: 'full',
+            loadComponent: () =>
+              import(
+                './animal-event/weighing/pages/weighing-list/weighing-list.page'
+              ).then((m) => m.WeighingListPage),
+            children: [
+              {
+                path: 'create',
+                pathMatch: 'full',
+                loadComponent: () =>
+                  import(
+                    './animal-event/weighing/pages/weighing-create/weighing-create.page'
+                  ).then((m) => m.WeighingCreatePage),
+              },
+            ],
+          },
+        ],
       },
       {
         path: 'history/:id',
