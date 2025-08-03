@@ -18,7 +18,6 @@ import {
   IonSelectOption,
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
-import { FieldErrorPipe } from 'src/app/pipes/field-error.pipe';
 import { FormsModule } from '@angular/forms';
 import { MainStoreService } from 'src/app/services/main-store.service';
 
@@ -36,7 +35,6 @@ import { MainStoreService } from 'src/app/services/main-store.service';
     IonButton,
     IonSelect,
     IonSelectOption,
-    FieldErrorPipe,
     FormsModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -123,7 +121,8 @@ export class AnimalFormComponent {
     this.touched.set({ ...this.touched(), owner_id: true });
   }
   onStatusChange(value: number | string | null | undefined) {
-    this.status.set(typeof value === 'string' ? value : String(value ?? ''));
+    const statusValue = typeof value === 'string' ? value : String(value ?? '');
+    this.status.set(statusValue);
     this.touched.set({ ...this.touched(), status: true });
   }
 
@@ -136,7 +135,7 @@ export class AnimalFormComponent {
         birth_date: this.birth_date(),
         land_id: this.land_id(),
         owner_id: this.owner_id(),
-        status: this.status(),
+        status: this.status()!,
       });
     } finally {
       this.loading.set(false);

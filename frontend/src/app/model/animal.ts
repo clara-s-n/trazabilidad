@@ -3,7 +3,7 @@ export interface AnimalParams {
 }
 
 export interface Animal {
-  id: string;
+  animal_id: string;
   breed: string;
   birth_date: string;
   owner_id: string;
@@ -12,7 +12,7 @@ export interface Animal {
 }
 
 export interface CompleteAnimal {
-  id: string;
+  animal_id: string;
   breed: string;
   birth_date: string;
   owner_id: string;
