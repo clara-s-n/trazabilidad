@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { SaleFormComponent } from './sale-form.component';
-
+import SaleFormComponent from './sale-form.component';
 describe('SaleFormComponent', () => {
   let component: SaleFormComponent;
   let fixture: ComponentFixture<SaleFormComponent>;

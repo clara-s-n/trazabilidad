@@ -17,7 +17,6 @@ export class WeighingService {
     );
   }
 
-  /** POST /predios → crea y devuelve el nuevo predio */
   async createWeighing(
     id: string,
     data: WeighingCreate
