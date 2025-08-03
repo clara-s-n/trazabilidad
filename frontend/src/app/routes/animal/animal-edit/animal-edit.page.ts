@@ -7,7 +7,6 @@ import { AnimalService } from 'src/app/services/animal.service';
 @Component({
   selector: 'app-animal-edit',
   templateUrl: './animal-edit.page.html',
-  styleUrls: ['./edit.page.scss'],
   standalone: true,
   imports: [AnimalFormComponent, IonSpinner, IonText],
 })
@@ -26,6 +25,7 @@ export class AnimalEditPage {
   async ionViewWillEnter() {
     this.loading.set(true);
     const animalId = this.animal_id();
+    console.warn(animalId);
     if (animalId) {
       try {
         const animalData = await this.animalService.getAnimal(animalId);
@@ -46,13 +46,13 @@ export class AnimalEditPage {
   }) {
     try {
       // Usa id en vez de animal_id
-      await this.animalService.updateAnimal(this.animal()?.id, data);
-      this.router.navigate(['/animal', this.animal()?.id]);
+      await this.animalService.updateAnimal(this.animal_id(), data);
+      this.router.navigate(['/animal', this.animal_id()]);
     } catch (error) {
       console.error('Error al actualizar el animal:', error);
     }
   }
   onCancel() {
-    this.router.navigate(['/animal', this.animal()?.id ?? '']);
+    this.router.navigate(['/animal', this.animal_id()?? '']);
   }
 }

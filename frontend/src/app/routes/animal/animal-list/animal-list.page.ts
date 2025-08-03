@@ -61,9 +61,9 @@ export class ListPage {
   reload() {
     window.location.reload();
   }
-
+/*
   goToAnimalModification(animal: Animal) {
     console.log(`Navigating to animal edit with ID: ${animal.animal_id}`);
     this.router.navigate([`/animal/edit/${animal.animal_id}`]);
-  }
+  }*/
 }

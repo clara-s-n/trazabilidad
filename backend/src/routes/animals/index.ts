@@ -28,7 +28,10 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
         200: {
           description: "Lista de animales",
           type: "array",
-          items: Type.Array(Animal),
+          items: {
+            type: "object",
+            properties: Animal.properties,
+          },
         },
       },
     },

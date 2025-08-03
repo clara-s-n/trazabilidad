@@ -33,13 +33,13 @@ export class AnimalService {
 
   async updateAnimal(id: string, data: UpdateAnimal): Promise<Animal> {
     return await firstValueFrom(
-      this.httpCliente.put<Animal>(`${this.apiUrl}/${id}`, data)
+      this.httpCliente.put<Animal>(`${this.apiUrl}animals/${id}`, data)
     );
   }
 
   async deleteAnimal(params: AnimalParams): Promise<void> {
     return await firstValueFrom(
-      this.httpCliente.delete<void>(`${this.apiUrl}/${params.animal_id}`)
+      this.httpCliente.delete<void>(`${this.apiUrl}animals/${params.animal_id}`)
     );
   }
 }

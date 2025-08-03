@@ -87,23 +87,21 @@
     </ion-row>
 
     <!-- Estado -->
-    <!-- <ion-row class="ion-justify-content-center" *ngIf="showStatusSelect()">
+    <ion-row class="ion-justify-content-center">
       <ion-col size="12" size-sm="8" size-md="6">
         <ion-select
-          label="Status"
+          label="Estado"
+          [(ngModel)]="status"
           name="status"
-          interface="popover"
           required
-          [value]="status()"
-          (ionChange)="onStatusChange($event.detail.value)"
         >
-          <ion-select-option [value]="alive">Vivo</ion-select-option>
-          <ion-select-option [value]="deceased">Muerto</ion-select-option>
-          <ion-select-option [value]="robbed">Robado</ion-select-option>
-          <ion-select-option [value]="lost">Perdido</ion-select-option>
+          <ion-select-option value="alive">Vivo</ion-select-option>
+          <ion-select-option value="deceased">Muerto</ion-select-option>
+          <ion-select-option value="robbed">Robado</ion-select-option>
+          <ion-select-option value="lost">Perdido</ion-select-option>
         </ion-select>
       </ion-col>
-    </ion-row> -->
+    </ion-row>
 
     <!-- Botón -->
     <ion-row class="ion-justify-content-center ion-padding-top">
