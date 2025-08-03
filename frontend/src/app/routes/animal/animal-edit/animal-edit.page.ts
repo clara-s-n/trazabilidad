@@ -18,7 +18,7 @@ export class AnimalEditPage {
 
   public animal_id = input.required<string>();
 
-  animal: any = null;
+  animal = signal<any | null>(null); // Cambia a signal
   loading = signal<boolean>(false);
 
   // Se llama cada vez que la vista va a entrar
@@ -26,7 +26,6 @@ export class AnimalEditPage {
   async ionViewWillEnter() {
     this.loading.set(true);
     const animalId = this.animal_id();
-    console.log(animalId);
     if (animalId) {
       try {
         const animalData = await this.animalService.getAnimal(animalId);
@@ -46,13 +45,14 @@ export class AnimalEditPage {
     status?: string;
   }) {
     try {
-      await this.animalService.updateAnimal(this.animal.animal_id, data);
-      this.router.navigate(['/animals', this.animal.animal_id]);
+      // Usa id en vez de animal_id
+      await this.animalService.updateAnimal(this.animal()?.id, data);
+      this.router.navigate(['/animal', this.animal()?.id]);
     } catch (error) {
       console.error('Error al actualizar el animal:', error);
     }
   }
   onCancel() {
-    this.router.navigate(['/animals', this.animal?.animal_id ?? '']);
+    this.router.navigate(['/animal', this.animal()?.id ?? '']);
   }
 }

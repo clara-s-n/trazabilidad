@@ -1,9 +1,9 @@
 @if (loading()) {
 <ion-spinner></ion-spinner>
-} @else if (user) {
+} @else if (animal()) {
 <app-animal-form
   [isEditMode]="true"
-  [animal]="animal"
+  [animal]="animal()"
   (submitted)="onSubmit($event)"
   (canceled)="onCancel()"
 >
