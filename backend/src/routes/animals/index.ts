@@ -5,6 +5,7 @@ import {
   AnimalHistorySchema,
   AnimalParams,
   AnimalPost,
+  AnimalWithTag,
   UpdateAnimalSchema,
   UpdateAnimalType,
 } from "../../types/schemas/animal.js";
@@ -77,17 +78,13 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
         },
       ],
       response: {
-        200: {
-          description: "Animal encontrado",
-          type: "object",
-          properties: Animal.properties,
-        },
-      },
+        200: AnimalWithTag,
+      }
     },
     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
       const params = request.params as AnimalParams;
-      const animal = await animalRepository.getByIdDetailed(params.animal_id);
+      const animal = await animalRepository.getByIdWithTag(params.animal_id);
       if (!animal) {
         return reply.status(404).send({ message: "Animal no encontrado" });
       }

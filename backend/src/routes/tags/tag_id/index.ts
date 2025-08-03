@@ -7,6 +7,8 @@ import {
 } from "../../../types/schemas/tag.js";
 import { tagRepository } from "../../../services/tag.repository.js";
 import { UCUErrorNotFound } from "../../../utils/index.js";
+import { animalRepository } from "../../../services/animal.repository.js";
+import { Type } from "@sinclair/typebox";
 
 const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
   fastify.get(
@@ -76,6 +78,89 @@ const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
               "Operación inválida. Solo se puede cambiar el status a 'inactive'.",
           });
       },
+    }
+  );
+
+  // Método para asignar una tag a un animal
+  fastify.post(
+    "/:tag_id/assign/:animal_id",
+    {
+      schema: {
+        tags: ["Caravanas"],
+        params: {
+          type: "object",
+          properties: {
+            tag_id: { type: "string" },
+            animal_id: { type: "string" },
+          },
+          required: ["tag_id", "animal_id"],
+        },
+        description: "Asignar una tag a un animal",
+        summary: "Asignar tag",
+        security: [{ bearerAuth: [] }],
+        response: {
+          200: { type: "null" },
+          404: {
+            type: "object",
+            properties: { message: { type: "string" } },
+          },
+        },
+      },
+      onRequest: fastify.verifyOperatorOrAdmin,
+      handler: async (request, reply) => {
+        const { tag_id, animal_id } = request.params as { tag_id: string; animal_id: string };
+
+        // Verifica que la tag exista
+        const tag = await tagRepository.getTagById(tag_id);
+        if (!tag) {
+          throw new UCUErrorNotFound(`Tag con id=${tag_id} no encontrado`);
+        }
+
+        // Aquí deberías verificar que el animal exista (agrega tu lógica o repositorio)
+        const animal = await animalRepository.getById(animal_id);
+         if (!animal) {
+           throw new UCUErrorNotFound(`Animal con id=${animal_id} no encontrado`);
+        }
+
+        // Asigna la tag al animal (implementa este método en tu repositorio)
+        await tagRepository.assignTagToAnimal(animal_id, tag_id);
+
+        return reply.status(200).send();
+      },
+    }
+  );
+
+  fastify.delete(
+    ':tagId/:animalId',
+    {
+      schema: {
+        tag: ['Caravanas'],
+        params: Type.Object({
+          animalId: Type.String(),
+          tagId: Type.String()
+        }),
+        response: {
+          200: Type.Object({ 
+            success: Type.Boolean(), 
+            message: Type.String() 
+          }),
+          404: Type.Object({ 
+            success: Type.Boolean(), 
+            message: Type.String() 
+          }),
+        }
+      },
+      handler: async (request, reply) => {
+        const { animalId, tagId } = request.params as { animalId: string; tagId: string };
+        const ok = await tagRepository.unassignTagFromAnimal(animalId, tagId);
+
+        if (ok) {
+          return { success: true, message: 'Tag desasignada correctamente.' };
+        } else {
+          reply.code(404);
+          return { success: false, message: 'No se encontró la relación activa entre animal y tag.' };
+        }
+      }
     }
   );
 };

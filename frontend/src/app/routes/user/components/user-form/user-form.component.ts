@@ -69,7 +69,7 @@ export default class UserFormComponent {
       if (u) {
         this.email.set(u.email ?? '');
         this.role_id.set(u.role_id ?? null);
-        this.password.set(u.role_id ?? null);
+        this.password.set(u.password ?? null);
       }
     });
   }
