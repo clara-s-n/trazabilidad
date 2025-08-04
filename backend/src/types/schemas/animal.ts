@@ -14,7 +14,7 @@ export const AnimalParams = Type.Object({
 });
 
 export const Animal = Type.Object({
-  animal_id: Type.String({
+  id: Type.String({
     format: "uuid",
     examples: ["0a553254-e85c-4780-8995-34098a788256"],
   }),

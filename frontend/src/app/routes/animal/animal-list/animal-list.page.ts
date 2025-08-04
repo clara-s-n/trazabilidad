@@ -54,8 +54,8 @@ export class ListPage {
 
   goToSpecificAnimal(animal: Animal) {
     console.log('Animal:', animal);
-    console.log(`Navigating to animal profile with ID: ${animal.animal_id} `);
-    this.router.navigate([`/animal/${animal.animal_id}`]);
+    console.log(`Navigating to animal profile with ID: ${animal.id} `);
+    this.router.navigate([`/animal/${animal.id}`]);
   }
 
   reload() {

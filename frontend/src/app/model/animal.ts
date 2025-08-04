@@ -3,7 +3,7 @@ export interface AnimalParams {
 }
 
 export interface Animal {
-  animal_id: string;
+  id: string;
   breed: string;
   birth_date: string;
   owner_id: string;
