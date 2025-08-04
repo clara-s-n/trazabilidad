@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Detalle del Animal</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- si animal() es truthy, pillamos la referencia local "animal" -->
+  <ng-container *ngIf="animal() as animal; else loading">
+    <ion-item>Raza: {{ animal.breed }}</ion-item>
+    <ion-item>Fecha de Nacimiento: {{ animal.birth_date | date }}</ion-item>
+    <ion-item>Dueño: {{ animal.owner_id }}</ion-item>
+    <ion-item>Predio: {{ animal.land_id }}</ion-item>
+    <ion-item>Estado: {{ animal.status }}</ion-item>
+    <ion-item>
+      Fecha de adición al sistema: {{ animal.created_at | date:'short' }}
+    </ion-item>
+    <ion-item>Última Modificación: {{ animal.updated_at | date:'short' }}</ion-item>
+
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" (click)="openTagModal()">
+          Gestionar Caravanas
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button expand="block" (click)="openTagHistoryModal()">
+          Ver historial de caravanas
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+    <ion-button [routerLink]="['/animal/edit', animal.id]">
+      Editar Animal
+    </ion-button>
+  </ng-container>
+
+  <!-- plantilla que se muestra mientras carga -->
+  <ng-template #loading>
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando datos…</p>
+  </ng-template>
+</ion-content>

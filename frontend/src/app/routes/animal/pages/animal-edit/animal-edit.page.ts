@@ -1,6 +1,6 @@
 import { Component, HostListener, inject, input, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AnimalFormComponent } from '../components/animal-form/animal-form.component';
+import { AnimalFormComponent } from '../../components/animal-form/animal-form.component';
 import { IonSpinner, IonText } from '@ionic/angular/standalone';
 import { AnimalService } from 'src/app/services/animal.service';
 

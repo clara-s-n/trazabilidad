@@ -12,13 +12,13 @@ export const routes: Routes = [
         path: 'list',
         data: { menu: true, section: 'Animales', title: 'Lista de animales' },
         loadComponent: () =>
-          import('./animal-list/animal-list.page').then((m) => m.ListPage),
+          import('./pages/animal-list/animal-list.page').then((m) => m.ListPage),
       },
       {
         path: 'create',
         data: { menu: true, section: 'Animales', title: 'Crear un animal' },
         loadComponent: () =>
-          import('./animal-create/animal-create.page').then(
+          import('./pages/animal-create/animal-create.page').then(
             (m) => m.AnimalCreatePage
           ),
       },
@@ -27,26 +27,26 @@ export const routes: Routes = [
       {
         path: 'edit/:animal_id',
         loadComponent: () =>
-          import('./animal-edit/animal-edit.page').then(
+          import('./pages/animal-edit/animal-edit.page').then(
             (m) => m.AnimalEditPage
           ),
       },
       {
         path: 'events/:animal_id',
         loadComponent: () =>
-          import('./animal-event/animal-event.page').then((m) => m.EventsPage),
+          import('./pages/animal-event/animal-event.page').then((m) => m.EventsPage),
       },
       {
         path: 'events/:id/sale',
         loadComponent: () =>
-          import('./animal-event/sale/pages/sale-list/sale-list.page').then(
+          import('./pages/animal-event/sale/pages/sale-list/sale-list.page').then(
             (m) => m.SaleListPage
           ),
       },
       {
         path: 'events/:id/sale/create',
         loadComponent: () =>
-          import('./animal-event/sale/pages/sale-create/sale-create.page').then(
+          import('./pages/animal-event/sale/pages/sale-create/sale-create.page').then(
             (m) => m.SaleCreatePage
           ),
       },
@@ -54,41 +54,41 @@ export const routes: Routes = [
         path: 'events/:id/vaccination',
         loadComponent: () =>
           import(
-            './animal-event/vaccination/pages/vaccination-list/vaccination-list.page'
+            './pages/animal-event/vaccination/pages/vaccination-list/vaccination-list.page'
           ).then((m) => m.VaccinationListPage),
       },
       {
         path: 'events/:id/vaccination/create',
         loadComponent: () =>
           import(
-            './animal-event/vaccination/pages/vaccination-create/vaccination-create.page'
+            './pages/animal-event/vaccination/pages/vaccination-create/vaccination-create.page'
           ).then((m) => m.VaccinationCreatePage),
       },
       {
         path: 'events/:id/weighing',
         loadComponent: () =>
           import(
-            './animal-event/weighing/pages/weighing-list/weighing-list.page'
+            './pages/animal-event/weighing/pages/weighing-list/weighing-list.page'
           ).then((m) => m.WeighingListPage),
       },
       {
         path: 'events/:id/weighing/create',
         loadComponent: () =>
           import(
-            './animal-event/weighing/pages/weighing-create/weighing-create.page'
+            './pages/animal-event/weighing/pages/weighing-create/weighing-create.page'
           ).then((m) => m.WeighingCreatePage),
       },
       {
         path: 'history/:id',
         loadComponent: () =>
-          import('./animal-history/animal-history.page').then(
+          import('./pages/animal-history/animal-history.page').then(
             (m) => m.HistoryPage
           ),
       },
       {
         path: 'movements/:animal_id',
         loadComponent: () =>
-          import('./animal-movements/animal-movements.page').then(
+          import('./pages/animal-movements/animal-movements.page').then(
             (m) => m.MovementsPage
           ),
       },
@@ -98,7 +98,7 @@ export const routes: Routes = [
         path: ':userId/list',
         pathMatch: 'full',
         loadComponent: () =>
-          import('./animal-user-list/animal-user-list.page').then(
+          import('./pages/animal-user-list/animal-user-list.page').then(
             (m) => m.UserListPage
           ),
       },
@@ -107,7 +107,7 @@ export const routes: Routes = [
       {
         path: ':animal_id',
         loadComponent: () =>
-          import('./animal-detail/animal-detail.page').then(
+          import('./pages/animal-detail/animal-detail.page').then(
             (m) => m.DetailPage
           ),
       },

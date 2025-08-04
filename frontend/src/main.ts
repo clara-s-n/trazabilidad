@@ -13,6 +13,7 @@ import { AppComponent } from './app/app.component';
 import { importProvidersFrom } from '@angular/core';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './app/interceptors/auth.interceptor';
+import { IonicModule } from '@ionic/angular';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -23,6 +24,6 @@ bootstrapApplication(AppComponent, {
       withFetch(),
       withInterceptors([authInterceptor])
     ),
-    importProvidersFrom(BrowserAnimationsModule),
+    importProvidersFrom(BrowserAnimationsModule, IonicModule.forRoot()),
   ],
 });
