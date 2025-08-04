@@ -2,7 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Animal, AnimalHistorySchema } from '../model/animal';
+import {
+  Animal,
+  AnimalHistorySchema,
+  AnimalMovementSchema,
+} from '../model/animal';
 import { AnimalParams, AnimalPost, UpdateAnimal } from '../model/animal';
 
 @Injectable({
@@ -49,6 +53,16 @@ export class AnimalService {
     return await firstValueFrom(
       this.httpCliente.get<AnimalHistorySchema[]>(
         `${this.apiUrl}animals/${animalId}/modifications`
+      )
+    );
+  }
+
+  async getAllAnimalMovments(
+    animalId: string
+  ): Promise<AnimalMovementSchema[]> {
+    return await firstValueFrom(
+      this.httpCliente.get<AnimalMovementSchema[]>(
+        `${this.apiUrl}animals/${animalId}/movements`
       )
     );
   }

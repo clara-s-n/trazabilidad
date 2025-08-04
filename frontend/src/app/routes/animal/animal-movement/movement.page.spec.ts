@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { MovementsPage } from './animal-movements.page';
+import { MovementsPage } from './animal-movement.page';
 
 describe('MovementsPage', () => {
   let component: MovementsPage;

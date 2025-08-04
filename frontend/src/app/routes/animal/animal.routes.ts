@@ -88,8 +88,8 @@ export const routes: Routes = [
       {
         path: 'movements/:id',
         loadComponent: () =>
-          import('./animal-movements/animal-movements.page').then(
-            (m) => m.MovementsPage
+          import('./animal-movement/animal-movement.page').then(
+            (m) => m.MovementPage
           ),
       },
 

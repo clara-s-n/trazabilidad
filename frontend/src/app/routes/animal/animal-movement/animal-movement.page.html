@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Movimientos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goToMovement()">Nuevo movimiento</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (animalMovementsResource.status() === 'loading') {
+  <ion-spinner></ion-spinner>
+  <div>Cargando movimientos...</div>
+  } @if (animalMovementsResource.status() === 'error') {
+  <ion-text color="danger"> Error al cargar los movimientos. </ion-text>
+  <ion-button expand="block" (click)="reload()">Reintentar</ion-button>
+  } @if (animalMovementsResource.status() === 'resolved') { @if
+  ((animalMovementsResource.value() ?? []).length === 0) {
+  <div>No hay movimientos registrados.</div>
+  }
+
+  <ion-list>
+    @for (animalMovement of animalMovementsResource.value() ?? []; track
+    animalMovement.id) {
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title
+          >Movimientos del animal: {{animalMovement.id}}</ion-card-title
+        >
+      </ion-card-header>
+      <ion-card-content>
+        <p>
+          <strong>Predio de origen: </strong> {{ animalMovement.origin_land_id
+          }}
+        </p>
+        <p>
+          <strong>Predio de destino: </strong>{{ animalMovement.destiny_land_id
+          }}
+        </p>
+        <p><strong>Fecha: </strong> {{ animalMovement.date }}</p>
+        <p><strong>Detalles: </strong> {{ animalMovement.details }}</p>
+      </ion-card-content>
+    </ion-card>
+    }
+  </ion-list>
+  }
+</ion-content>

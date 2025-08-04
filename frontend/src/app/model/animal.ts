@@ -47,3 +47,12 @@ export interface AnimalHistorySchema {
   modified_by: string;
   modification_date: string;
 }
+
+export interface AnimalMovementSchema {
+  id: string;
+  animal_id: string;
+  origin_land_id: string;
+  destiny_land_id: string;
+  date: string;
+  details: string;
+}
