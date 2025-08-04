@@ -1,5 +1,5 @@
 /** Parámetros de ruta para operaciones con weighing */
-export interface VaccinationParams {
+export interface WeighingParams {
   weighing_id: string;
 }
 
@@ -14,6 +14,6 @@ export interface WeighingCreate {
 export interface Weighing {
   id: string;
   event_id: string;
-  weight: string;
+  weight: number;
   unit: string;
 }

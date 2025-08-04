@@ -1,3 +1,12 @@
-<p>
-  weighing-create works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        defaultHref="/animals/events/:id/weighing"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>Crear Pesaje</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<app-weighing-form [id]="id()" (submitted)="handleSave($event)" />

@@ -30,6 +30,7 @@ import { Sale } from 'src/app/model/events/sale';
 @Component({
   selector: 'app-sale-list',
   templateUrl: './sale-list.page.html',
+  styleUrls: ['./sale-list.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     IonHeader,
