@@ -1,0 +1,10 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button click=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Crear Pesaje</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<app-weighing-form [id]="id()" (submitted)="handleSave($event)" />

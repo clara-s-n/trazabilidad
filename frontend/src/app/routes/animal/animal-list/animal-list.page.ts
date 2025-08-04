@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, resource } from '@angular/core';
+import { Component, inject, resource } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   IonButton,
@@ -22,6 +22,7 @@ import { AnimalService } from 'src/app/services/animal.service';
 @Component({
   selector: 'app-animal-list',
   templateUrl: './animal-list.page.html',
+  styleUrls: ['./list.page.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -52,19 +53,17 @@ export class ListPage {
   });
 
   goToSpecificAnimal(animal: Animal) {
-    console.log(
-      `${animal.birth_date}, ${animal.breed}, ${animal.created_at}, ${animal.status},  ${animal.land_id},  ${animal.owner_id},  ${animal.updated_at}`
-    );
-    console.log(`Navigating to user profile with ID: ${animal.id} `);
+    console.log('Animal:', animal);
+    console.log(`Navigating to animal profile with ID: ${animal.id} `);
     this.router.navigate([`/animal/${animal.id}`]);
   }
 
   reload() {
     window.location.reload();
   }
-
+  /*
   goToAnimalModification(animal: Animal) {
-    console.log(`Navigating to user edit with ID: ${animal.id}`);
-    this.router.navigate([`/animal/edit/${animal.id}`]);
-  }
+    console.log(`Navigating to animal edit with ID: ${animal.animal_id}`);
+    this.router.navigate([`/animal/edit/${animal.animal_id}`]);
+  }*/
 }

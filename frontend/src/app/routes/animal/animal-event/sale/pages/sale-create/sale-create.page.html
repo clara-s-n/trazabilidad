@@ -1,0 +1,12 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        defaultHref="`/animal/events/${this.id()}/sale`"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>Crear Venta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<app-sale-form [id]="id()" (submitted)="handleSave($event)" />

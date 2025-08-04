@@ -15,7 +15,7 @@
   <div class="ion-padding">No hay animales registrados.</div>
   }
   <ion-list>
-    @for (animal of animalsResource.value() ?? []; track animal.breed) {
+    @for (animal of animalsResource.value() ?? []; track animal.id) {
     <ion-row>
       <ion-col>Raza: {{ animal.breed }}</ion-col>
       <ion-col>Fecha de Nacimiento: {{ animal.birth_date }}</ion-col>

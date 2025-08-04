@@ -3,6 +3,7 @@ import {
   Animal,
   AnimalEventSchema,
   AnimalHistorySchema,
+  AnimalMovementSchema,
   AnimalParams,
   AnimalPost,
   UpdateAnimalSchema,
@@ -196,6 +197,28 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       const { animal_id } = request.params as AnimalParams;
       const events = await animalRepository.getAnimalEvents(animal_id);
       return reply.code(200).send(events);
+    }
+  );
+  fastify.get(
+    "/:animal_id/movements",
+    {
+      schema: {
+        tags: ["Animales"],
+        params: AnimalParams,
+        summary: "Ver el historial de movimientos de un animal",
+        description:
+          "Recupera todos los movimientos (traslados) asociados a un animal ordenados por fecha descendente.",
+        security: [{ bearerAuth: [] }],
+        response: {
+          200: Type.Array(AnimalMovementSchema),
+        },
+      },
+      onRequest: fastify.authenticate,
+    },
+    async (request, reply) => {
+      const { animal_id } = request.params as AnimalParams;
+      const movements = await animalRepository.getAnimalMovements(animal_id);
+      return reply.code(200).send(movements);
     }
   );
 };
