@@ -134,18 +134,91 @@ const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
         }
 
         // Asigna la tag al animal (implementa este método en tu repositorio)
-        await tagRepository.assignTagToAnimal(animal_id, tag_id);
-
-        return reply.status(200).send();
+        try {
+            await tagRepository.assignTagToAnimal(animal_id, tag_id);
+            return reply.status(200).send();
+        } catch (e: any) {
+            if (e.message === 'El animal ya tiene una caravana activa') {
+                return reply.status(400).send({ message: e.message });
+            }
+            throw e;
+        }
       },
     }
   );
 
+  // Método para 
   fastify.put(
-    ':tagId/:animalId',
+    ':tag_id/:animal_id',
     {
       schema: {
         tag: ['Caravanas'],
+        params: Type.Intersect([TagParams, AnimalParams]),
+        response: {
+          200: Type.Object({
+            success: Type.Boolean(),
+            message: Type.String()
+          }),
+          404: Type.Object({
+            success: Type.Boolean(),
+            message: Type.String()
+          }),
+        }
+      },
+      handler: async (request, reply) => {
+        const { animal_id, tag_id } = request.params as { animal_id: string; tag_id: string };
+        const ok = await tagRepository.unassignTagFromAnimal(animal_id, tag_id);
+        if (ok) {
+          return { success: true, message: 'Tag desasignada correctamente.' };
+        } else {
+          reply.code(404);
+          return { success: false, message: 'No se encontró la relación activa entre animal y tag.' };
+        }
+      }
+    }
+  );
+
+  // Método para cambiarle la tag a un animal
+  fastify.put(
+    '/:tag_id/:animal_id/change',
+    {
+      schema: {
+        tags: ['Caravanas'],
+        params: Type.Intersect([TagParams, AnimalParams]),
+        body: TagParams,
+        description: 'Cambiar la tag de un animal',
+        response: {
+          200: Type.Object({
+            success: Type.Boolean(),
+            message: Type.String()
+          }),
+          404: Type.Object({
+            success: Type.Boolean(),
+            message: Type.String()
+          }),
+        }
+      },
+      handler: async (request, reply) => {
+        const { animal_id, tag_id } = request.params as { animal_id: string; tag_id: string };
+        const { tag_id: new_tag_id } = request.body as TagParams;
+        const ok = await tagRepository.changeAnimalTag(animal_id, tag_id, new_tag_id);
+
+        if (ok) {
+          return { success: true, message: 'Tag cambiada correctamente.' };
+        } else {
+          reply.code(404);
+          return { success: false, message: 'No se encontró la relación activa entre animal y tag.' };
+        }
+      }
+    }
+  );
+
+  // Método para eliminar una tag de un animal
+  fastify.delete(
+    '/:tagId/:animalId',
+    {
+      schema: {
+        tags: ['Caravanas'],
         params: Type.Intersect([TagParams, AnimalParams]),
         response: {
           200: Type.Object({
@@ -171,6 +244,6 @@ const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
       }
     }
   );
-};
+}
 
 export default idTagsRoute;

@@ -15,16 +15,32 @@
       <ion-item>Agregado: {{ animal.created_at | date:'short' }}</ion-item>
       <ion-item>Modificado: {{ animal.updated_at | date:'short' }}</ion-item>
 
+      @if (!this.currentTag) {
+      <ion-item>No tiene caravana asignada actualmente.</ion-item>
       <ion-row>
         <ion-col>
-          <ion-button expand="block" (click)="openTagModal()">Gestionar Caravanas</ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button expand="block" (click)="openTagHistoryModal()">Ver Historial</ion-button>
+          <ion-button expand="block" (click)="openTagModal()">Asignar Caravana</ion-button>
         </ion-col>
       </ion-row>
+      } @else{
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            Caravana Actual: {{ animal.currentTag?.tag_number || animal.currentTag?.id }}
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-button expand="block" (click)="openTagModal()">Cambiar Caravana</ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="block" (click)="openTagHistoryModal()">Ver historial de caravanas</ion-button>
+        </ion-col>
+      </ion-row>
+      }
 
-      <ion-button [routerLink]="['/animal/edit', animal.animal_id]">Editar Animal</ion-button>
+      <ion-button [routerLink]="['/animal/edit', animal.id]">Editar Animal</ion-button>
     </ng-container>
     <ng-template #noData>
       <p>No se encontró el animal.</p>

@@ -22,16 +22,12 @@
 
   <!-- Lista de caravanas -->
   <ion-list>
-    @for (tag of tagsResource.value() ?? []; track tag.id) {
+    @for (tag of inactiveTags(); track tag.id) {
     <ion-item>
       <ion-label>
         {{ tag.tag_number }} ({{ tag.status }})
       </ion-label>
-      @if (!assignedTagIds().has(tag.id)) {
       <ion-button color="primary" (click)="assignTag(tag.id)">Asignar</ion-button>
-      } @else {
-      <ion-button color="danger" (click)="unassignTag(tag.id)">Desasignar</ion-button>
-      }
     </ion-item>
     }
   </ion-list>

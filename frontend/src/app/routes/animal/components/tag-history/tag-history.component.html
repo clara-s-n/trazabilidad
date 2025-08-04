@@ -13,9 +13,9 @@
     <ion-item>
       <ion-label>
         <strong>{{ rec.tag_number || rec.tag_id }}</strong>
-        <div>Asignada: {{ rec.assignment_date }}</div>
+        <div>Asignada: {{ rec.assignment_date | date:'short' }}</div>
         @if (rec.unassignment_date) {
-        <div>Desasignada: {{ rec.unassignment_date }}</div>
+        <div>Desasignada: {{ rec.unassignment_date | date:'short' }}</div>
         }
       </ion-label>
     </ion-item>

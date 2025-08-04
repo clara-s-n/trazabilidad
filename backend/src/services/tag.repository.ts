@@ -11,10 +11,24 @@ export class TagRepository {
         ); return rows[0];
     }
 
-    async getAllTags(): Promise<Tag[]> {
-        const { rows } = await query(`SELECT * FROM tags ORDER BY tag_number`);
-        return rows;
-    }
+    async getAllTags(): Promise<any[]> {
+    const { rows } = await query(`
+        SELECT 
+          t.*, 
+          at.animal_id, 
+          a.breed, 
+          a.birth_date, 
+          a.status as animal_status
+        FROM tags t
+        LEFT JOIN animal_tag at 
+          ON at.tag_id = t.id AND at.unassignment_date IS NULL
+        LEFT JOIN animals a
+          ON a.id = at.animal_id
+        ORDER BY t.tag_number
+    `);
+    return rows;
+}
+
 
     async getTagById(id: string): Promise<Tag | null> {
         const { rows } = await query(`SELECT * FROM tags WHERE id=$1`, [id]);
@@ -32,12 +46,15 @@ export class TagRepository {
     async assignTagToAnimal(animalId: string, tagId: string): Promise<boolean> {
         if (!animalId || !tagId) throw new Error('Faltan parámetros');
 
-        // 1. Check existencia
+        // 1. Verificar si el animal ya tiene una tag activa (sin unassignment_date)
         const res = await query(
-            'SELECT 1 FROM animal_tag WHERE animal_id = $1 AND tag_id = $2',
-            [animalId, tagId]
+            `SELECT 1 FROM animal_tag WHERE animal_id = $1 AND unassignment_date IS NULL`,
+            [animalId]
         );
-        if ((res.rowCount ?? 0) > 0) return false;
+        if ((res.rowCount ?? 0) > 0) {
+            // Ya tiene una tag activa
+            throw new Error('El animal ya tiene una caravana activa');
+        }
 
         // 2. Insertar relación
         await query(
@@ -96,37 +113,49 @@ export class TagRepository {
         }
     }
 
-
-    async getCurrentTagByAnimal(animalId: string): Promise<any | null> {
-        const { rows } = await query(
-            `
-    SELECT t.id, t.tag_number, t.status, t.country_code, t.country_iso, t.ministry
-    FROM animal_tag at
-    JOIN tags t ON at.tag_id = t.id
-    WHERE at.animal_id = $1
-      AND at.unassignment_date IS NULL
-    ORDER BY at.assignment_date DESC
-    LIMIT 1
-    `,
-            [animalId]
-        );
-        return rows[0] ?? null;
-    }
-
     async getCurrentAnimalByTag(tagId: string): Promise<any | null> {
         const { rows } = await query(
             `SELECT a.*
-         FROM animal_tag at
-         JOIN animals a ON at.animal_id = a.id
-         WHERE at.tag_id = $1
-           AND at.unassignment_date IS NULL
-         ORDER BY at.assignment_date DESC
-         LIMIT 1`,
+            FROM animal_tag at
+            JOIN animals a ON at.animal_id = a.id
+            WHERE at.tag_id = $1
+            AND at.unassignment_date IS NULL
+            ORDER BY at.assignment_date DESC
+            LIMIT 1`,
             [tagId]
         );
         return rows[0] ?? null;
     }
 
+
+    async changeAnimalTag(
+        animalId: string,
+        oldTagId: string,
+        newTagId: string
+    ): Promise<boolean> {
+        if (!animalId || !oldTagId || !newTagId) throw new Error('Faltan parámetros');
+
+        try {
+            await query('BEGIN');
+
+            // 1. Desasignar la tag antigua
+            const res = await query(
+                `UPDATE animal_tag
+                SET unassignment_date = NOW()
+                WHERE animal_id = $1 AND tag_id = $2 AND unassignment_date IS NULL`,
+                [animalId, oldTagId]
+            );
+
+            // 2. Asignar la nueva tag
+            await this.assignTagToAnimal(animalId, newTagId);
+
+            await query('COMMIT');
+            return (res.rowCount ?? 0) > 0;
+        } catch (e) {
+            await query('ROLLBACK');
+            throw e;
+        }
+    }
 }
 
 

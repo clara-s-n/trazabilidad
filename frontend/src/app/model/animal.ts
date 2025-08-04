@@ -1,3 +1,5 @@
+import { Tag } from "./tag";
+
 export interface AnimalParams {
   animal_id: string; // UUID del predio
 }
@@ -12,7 +14,7 @@ export interface Animal {
 }
 
 export interface CompleteAnimal {
-  animal_id: string;
+  id: string;
   breed: string;
   birth_date: string;
   owner_id: string;
@@ -20,6 +22,7 @@ export interface CompleteAnimal {
   status: string;
   created_at: string;
   updated_at: string;
+  currentTag?: Tag | null; // Número de la caravana actual
 }
 
 export interface AnimalPost {

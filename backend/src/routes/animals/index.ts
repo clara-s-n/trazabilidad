@@ -195,6 +195,33 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       return reply.code(200).send(events);
     }
   );
+
+  // Ruta para obtener la caravana actual de un animal
+  fastify.get("/:animal_id/current-tag", {
+    schema: {
+      tags: ["Animales"],
+      params: AnimalParams,
+      summary: "Obtener la caravana actual de un animal",
+      description: "Recupera la caravana actual asociada a un animal.",
+      security: [{ bearerAuth: [] }],
+      response: {
+        200: Type.Object({
+          tag: Type.String(),
+        }),
+      },
+    },
+    onRequest: fastify.authenticate,
+    handler: async (request, reply) => {
+      const { animal_id } = request.params as AnimalParams;
+      const currentTag = await animalRepository.getCurrentTag(animal_id);
+      if (!currentTag) {
+        return reply.status(404).send({ message: "Caravana no encontrada" });
+      }
+      return reply.code(200).send({ tag: currentTag });
+    },
+  });
+
+
 };
 
 export default animalesRoute;

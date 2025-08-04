@@ -20,13 +20,17 @@ import { TagService } from 'src/app/services/tag.service';
 })
 export class ChangeTagStatusComponent {
   /** ID del animal al que se gestionan las caravanas */
-  readonly id = input.required<string>();
+  readonly id = input<string>('');
 
   /** Asignaciones actuales del animal */
   readonly tags = input<{ tag_id: string; unassignment_date: string | null }[]>();
 
   private readonly tagService = inject(TagService);
   private readonly modalController = inject(ModalController);
+
+  get animalId(): string {
+    return typeof this.id === 'function' ? this.id() : this.id;
+  }
 
   /** Recurso que carga todas las caravanas del sistema */
   readonly tagsResource = resource<
@@ -39,11 +43,25 @@ export class ChangeTagStatusComponent {
     (this.tags() ?? []).filter(t => !t.unassignment_date).map(t => t.tag_id)
   ));
 
+  /** Lista de caravanas inactivas para asignar */
+  readonly inactiveTags = computed(() =>
+    (this.tagsResource.value() ?? []).filter(t => t.status === 'inactive')
+  );
+
   /** Asigna una caravana al animal */
   async assignTag(tagId: string) {
-    await this.tagService.assignTagToAnimal(tagId, this.id());
-    this.modalController.dismiss({ refresh: true });
+    try {
+        await this.tagService.assignTagToAnimal(tagId, this.id());
+        this.modalController.dismiss({ refresh: true });
+    } catch (e: any) {
+        if (e?.error?.message) {
+            alert(e.error.message); // O usa un toast/modal de Ionic
+        } else {
+            alert('Error inesperado al asignar caravana');
+        }
+    }
   }
+
 
   /** Desasigna una caravana del animal */
   async unassignTag(tagId: string) {

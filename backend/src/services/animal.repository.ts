@@ -163,7 +163,7 @@ export class AnimalRepository {
 
   async getByIdWithTag(id: string): Promise<AnimalDetailed> {
     const { rows } = await query(
-    `
+      `
       SELECT 
         a.*,
         json_build_object('id', l.id, 'name', l.name) AS land,
@@ -197,10 +197,26 @@ export class AnimalRepository {
       LEFT JOIN event_type et ON e.event_type = et.id
       WHERE a.id = $1
       GROUP BY a.id, l.id
-    `, [id] );
+    `, [id]);
     return rows[0];
   }
-  
+
+  async getCurrentTag(animalId: string): Promise<any | null> {
+    const { rows } = await query(
+      `
+      SELECT t.id, t.tag_number, t.status, t.country_code, t.country_iso, t.ministry
+      FROM animal_tag at
+      JOIN tags t ON at.tag_id = t.id
+      WHERE at.animal_id = $1
+        AND at.unassignment_date IS NULL
+      ORDER BY at.assignment_date DESC
+      LIMIT 1
+    `,
+      [animalId]
+    );
+    return rows[0] ?? null;
+  }
+
 }
 
 export const animalRepository = new AnimalRepository();

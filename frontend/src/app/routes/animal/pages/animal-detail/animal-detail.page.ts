@@ -11,6 +11,7 @@ import { TagService } from 'src/app/services/tag.service';
 import { ChangeTagStatusComponent } from '../../components/change-tag-status/change-tag-status.component';
 import { TagHistoryComponent } from '../../components/tag-history/tag-history.component';
 import { Animal, CompleteAnimal } from 'src/app/model/animal';
+import { Tag } from 'src/app/model/tag';
 
 @Component({
   selector: 'app-animal-detail',
@@ -27,6 +28,7 @@ import { Animal, CompleteAnimal } from 'src/app/model/animal';
 export class DetailPage implements OnInit {
   public animal_id = input.required<string>();
   public router = inject(Router)
+  public currentTag : Tag | null = null;
 
   private readonly animalService = inject(AnimalService);
   private readonly tagService = inject(TagService);
@@ -41,6 +43,15 @@ export class DetailPage implements OnInit {
     if (id) {
       try {
         this.animal = await this.animalService.getCompleteAnimal(id);
+        // Obtener la caravana actual
+        const currentTagResponse = await this.animalService.getCurrentTag(id);
+        if (currentTagResponse && currentTagResponse.tag) {
+          this.currentTag = currentTagResponse.tag; // Objeto completo
+          this.animal.currentTag = currentTagResponse.tag; // <-- Guarda el objeto completo
+        } else {
+          this.currentTag = null;
+          this.animal.currentTag = null;
+        }
       } catch {
         this.animal = null;
       }
@@ -53,7 +64,7 @@ export class DetailPage implements OnInit {
     const modal = await this.modalController.create({
       component: ChangeTagStatusComponent,
       componentProps: {
-        id: this.animal.animal_id,
+        id: this.animal.id,
         tags: []
       }
     });

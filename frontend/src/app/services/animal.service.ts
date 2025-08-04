@@ -48,4 +48,10 @@ export class AnimalService {
       this.httpCliente.delete<void>(`${this.apiUrl}animals/${params.animal_id}`)
     );
   }
+
+  async getCurrentTag(animalId: string): Promise<any | null> {
+    return await firstValueFrom(
+      this.httpCliente.get<any>(`${this.apiUrl}animals/${animalId}/current-tag`)
+    );
+  }
 }
