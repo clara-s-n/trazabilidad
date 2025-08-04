@@ -25,14 +25,14 @@ export const routes: Routes = [
 
       // 3. Rutas con sub-segmentos dinámicos
       {
-        path: 'edit/:animal_id',
+        path: 'edit/:id',
         loadComponent: () =>
           import('./animal-edit/animal-edit.page').then(
             (m) => m.AnimalEditPage
           ),
       },
       {
-        path: 'events/:animal_id',
+        path: 'events/:id',
         loadComponent: () =>
           import('./animal-event/animal-event.page').then((m) => m.EventsPage),
       },
@@ -86,7 +86,7 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'movements/:animal_id',
+        path: 'movements/:id',
         loadComponent: () =>
           import('./animal-movements/animal-movements.page').then(
             (m) => m.MovementsPage

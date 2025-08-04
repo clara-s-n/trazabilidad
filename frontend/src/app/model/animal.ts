@@ -37,3 +37,13 @@ export interface UpdateAnimal {
   land_id?: string;
   status?: string;
 }
+
+export interface AnimalHistorySchema {
+  id: string;
+  animal_id: string;
+  modified: string;
+  old_value?: string;
+  new_value?: string;
+  modified_by: string;
+  modification_date: string;
+}

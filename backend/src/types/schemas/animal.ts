@@ -150,7 +150,7 @@ export const UpdateAnimalSchema = Type.Object(
 );
 
 export const AnimalHistorySchema = Type.Object({
-  history_id: Type.String({
+  id: Type.String({
     format: "uuid",
     description: "History record animal_id",
   }),
