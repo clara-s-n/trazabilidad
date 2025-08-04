@@ -92,8 +92,8 @@ export const routes: Routes = [
       {
         path: 'movements/:id',
         loadComponent: () =>
-          import('./pages/animal-movements/animal-movements.page').then(
-            (m) => m.MovementsPage
+          import('./pages/animal-movement/animal-movement.page').then(
+            (m) => m.MovementPage
           ),
       },
 
@@ -103,7 +103,7 @@ export const routes: Routes = [
         pathMatch: 'full',
         loadComponent: () =>
           import('./pages/animal-user-list/animal-user-list.page').then(
-            (m) => m.UserListPage
+            (m) => m.AnimalUserListPage
           ),
       },
 
