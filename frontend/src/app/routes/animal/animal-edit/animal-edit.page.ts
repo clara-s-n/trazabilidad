@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AnimalFormComponent } from '../components/animal-form/animal-form.component';
 import { IonSpinner, IonText } from '@ionic/angular/standalone';
 import { AnimalService } from 'src/app/services/animal.service';
-import { AnimalFormComponent } from '../components/animal-form/animal-form.component';
 
 @Component({
   selector: 'app-animal-edit',
@@ -54,6 +53,6 @@ export class AnimalEditPage {
     }
   }
   onCancel() {
-    this.router.navigate(['/animal', this.animal_id()?? '']);
+    this.router.navigate(['/animal', this.animal_id() ?? '']);
   }
 }
