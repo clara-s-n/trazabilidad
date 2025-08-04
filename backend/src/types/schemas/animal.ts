@@ -194,6 +194,44 @@ export const AnimalMovementSchema = Type.Object({
   }),
 });
 
+export const AnimalTagInfo = Type.Object({
+  id: Type.String(),
+  assignment_date: Type.Date(),
+});
+
+export const AnimalWithTag = Type.Object({
+  id: Type.String({
+    format: "uuid",
+    examples: ["0a553254-e85c-4780-8995-34098a788256"],
+  }),
+  breed: Type.String({ examples: ["Abigar"] }),
+  birth_date: Type.String({ format: "date", examples: ["2020-01-01"] }),
+  owner_id: Type.String({
+    format: "uuid",
+    examples: ["56b33cc3-6e43-4aac-99cf-a90bc681d583"],
+  }),
+  land_id: Type.String({
+    format: "uuid",
+    examples: ["ca751bd3-3df5-4967-8282-252ac89543ba"],
+  }),
+  status: Type.Union(
+    [
+      Type.Literal("alive"),
+      Type.Literal("deceased"),
+      Type.Literal("robbed"),
+      Type.Literal("lost"),
+    ],
+    { default: "alive", examples: ["alive", "deceased", "robbed", "lost"] }
+  ),
+  created_at: Type.String({
+    format: "date-time",
+    examples: ["2020-01-01T00:00:00Z"],
+  }),
+  updated_at: Type.String({ format: "date-time" }),
+  //current_tag: Type.Object(AnimalTagInfo),
+});
+
+export type AnimalWithTag = Static<typeof AnimalWithTag>;
 export type AnimalHistory = Static<typeof AnimalHistorySchema>;
 export type UpdateAnimalType = Static<typeof UpdateAnimalSchema>;
 export type AnimalDetailed = Static<typeof AnimalDetailedSchema>;

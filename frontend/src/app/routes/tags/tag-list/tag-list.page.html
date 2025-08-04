@@ -1,0 +1,24 @@
+<!-- tag-list.page.html -->
+<ion-content>
+  <ion-grid>
+    <ion-list>
+      @for (tag of tagsResource.value(); track tag.id) {
+        <ion-item>
+          <ion-label>
+            <div><strong>{{ tag.tag_number }}</strong></div>
+            <div>ID: {{ tag.id }}</div>
+            @if (tag.animal.id) {
+              <span>Asignada a animal: {{ tag.animal.id }}</span>
+            } @else {
+              <span>No asignada</span>
+            }
+          </ion-label>
+          <ion-select [value]="tag.status" (ionChange)="onStatusChange(tag, $event.detail.value)">
+            <ion-select-option value="active">Activo</ion-select-option>
+            <ion-select-option value="inactive">Inactivo</ion-select-option>
+          </ion-select>
+        </ion-item>
+      }
+    </ion-list>
+  </ion-grid>
+</ion-content>

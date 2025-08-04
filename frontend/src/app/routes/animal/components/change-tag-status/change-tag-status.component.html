@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Gestionar Caravanas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Estado de carga -->
+  @if (tagsResource.status() === 'loading') {
+  <ion-spinner></ion-spinner>
+  <div>Cargando caravanas...</div>
+  }
+
+  <!-- Error al cargar -->
+  @if (tagsResource.status() === 'error') {
+  <ion-text color="danger">Error al cargar caravanas.</ion-text>
+  <ion-button expand="block" (click)="reload()">Reintentar</ion-button>
+  }
+
+  <!-- Lista de caravanas -->
+  <ion-list>
+    @for (tag of inactiveTags(); track tag.id) {
+    <ion-item>
+      <ion-label>
+        {{ tag.tag_number }} ({{ tag.status }})
+      </ion-label>
+      @if (!change) {
+      <ion-button color="primary" (click)="assignTag(tag.id)">Asignar</ion-button>
+      } @else {
+        <ion-button color="secondary" (click)="changeAnimalTag(tag.id)">Asignar</ion-button>
+      }
+    </ion-item>
+    }
+  </ion-list>
+</ion-content>

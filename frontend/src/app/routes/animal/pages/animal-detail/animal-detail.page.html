@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Detalle del Animal</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-container *ngIf="!loading; else loadingTpl">
+    <ng-container *ngIf="animal; else noData">
+      <ion-item>Raza: {{ animal.breed }}</ion-item>
+      <ion-item>Fecha de Nacimiento: {{ animal.birth_date | date }}</ion-item>
+      <ion-item>Dueño: {{ animal.owner_id }}</ion-item>
+      <ion-item>Predio: {{ animal.land_id }}</ion-item>
+      <ion-item>Estado: {{ animal.status }}</ion-item>
+      <ion-item>Agregado: {{ animal.created_at | date:'short' }}</ion-item>
+      <ion-item>Modificado: {{ animal.updated_at | date:'short' }}</ion-item>
+
+      @if (!this.currentTag) {
+      <ion-item>No tiene caravana asignada actualmente.</ion-item>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="block" (click)="openTagModal()">Asignar Caravana</ion-button>
+        </ion-col>
+      </ion-row>
+      } @else{
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            Caravana Actual: {{ animal.currentTag?.tag_number || animal.currentTag?.id }}
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-button expand="block" (click)="openTagModal()">Cambiar Caravana</ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="block" (click)="openTagHistoryModal()">Ver historial de caravanas</ion-button>
+        </ion-col>
+      </ion-row>
+      }
+
+      <ion-button [routerLink]="['/animal/edit', animal.id]">Editar Animal</ion-button>
+    </ng-container>
+    <ng-template #noData>
+      <p>No se encontró el animal.</p>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #loadingTpl>
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando datos…</p>
+  </ng-template>
+</ion-content>

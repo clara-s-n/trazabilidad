@@ -7,7 +7,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
-import { AnimalFormComponent } from '../components/animal-form/animal-form.component';
+import { AnimalFormComponent } from '../../components/animal-form/animal-form.component';
 import { AnimalService } from 'src/app/services/animal.service';
 import { AnimalPost, UpdateAnimal } from 'src/app/model/animal';
 
