@@ -34,12 +34,52 @@ export const routes: Routes = [
       {
         path: 'events/:animal_id',
         loadComponent: () =>
-          import('./animal-events/animal-events.page').then(
-            (m) => m.EventsPage
+          import('./animal-event/animal-event.page').then((m) => m.EventsPage),
+      },
+      {
+        path: 'events/:id/sale',
+        loadComponent: () =>
+          import('./animal-event/sale/pages/sale-list/sale-list.page').then(
+            (m) => m.SaleListPage
           ),
       },
       {
-        path: 'history/:animal_id',
+        path: 'events/:id/sale/create',
+        loadComponent: () =>
+          import('./animal-event/sale/pages/sale-create/sale-create.page').then(
+            (m) => m.SaleCreatePage
+          ),
+      },
+      {
+        path: 'events/:id/vaccination',
+        loadComponent: () =>
+          import(
+            './animal-event/vaccination/pages/vaccination-list/vaccination-list.page'
+          ).then((m) => m.VaccinationListPage),
+      },
+      {
+        path: 'events/:id/vaccination/create',
+        loadComponent: () =>
+          import(
+            './animal-event/vaccination/pages/vaccination-create/vaccination-create.page'
+          ).then((m) => m.VaccinationCreatePage),
+      },
+      {
+        path: 'events/:id/weighing',
+        loadComponent: () =>
+          import(
+            './animal-event/weighing/pages/weighing-list/weighing-list.page'
+          ).then((m) => m.WeighingListPage),
+      },
+      {
+        path: 'events/:id/weighing/create',
+        loadComponent: () =>
+          import(
+            './animal-event/weighing/pages/weighing-create/weighing-create.page'
+          ).then((m) => m.WeighingCreatePage),
+      },
+      {
+        path: 'history/:id',
         loadComponent: () =>
           import('./animal-history/animal-history.page').then(
             (m) => m.HistoryPage

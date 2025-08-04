@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Ventas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goToCreate()">Nueva venta</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (salesResource.status() === 'loading') {
+  <ion-spinner></ion-spinner>
+  <div>Cargando ventas...</div>
+  } @if (salesResource.status() === 'error') {
+  <ion-text color="danger"> Error al cargar ventas. </ion-text>
+  <ion-button expand="block" (click)="reload()">Reintentar</ion-button>
+  } @if (salesResource.status() === 'resolved') { @if ((salesResource.value() ??
+  []).length === 0) {
+  <div>No hay ventas registradas.</div>
+  }
+
+  <ion-list>
+    @for (sale of salesResource.value() ?? []; track sale.id) {
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ sale.buyer }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Precio:</strong> {{ sale.price }} {{ sale.currency }}</p>
+        <p><strong>ID Evento:</strong> {{ sale.event_id }}</p>
+      </ion-card-content>
+    </ion-card>
+    }
+  </ion-list>
+  }
+</ion-content>

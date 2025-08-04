@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { EventsPage } from './animal-events.page';
+import { WeighingCreatePage } from './weighing-create.page';
 
-describe('EventsPage', () => {
-  let component: EventsPage;
-  let fixture: ComponentFixture<EventsPage>;
+describe('WeighingCreatePage', () => {
+  let component: WeighingCreatePage;
+  let fixture: ComponentFixture<WeighingCreatePage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [EventsPage],
+      imports: [WeighingCreatePage],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(EventsPage);
+    fixture = TestBed.createComponent(WeighingCreatePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
