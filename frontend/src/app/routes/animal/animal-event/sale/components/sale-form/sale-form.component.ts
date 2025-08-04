@@ -23,6 +23,7 @@ import { SaleCreate } from 'src/app/model/events/sale';
 @Component({
   selector: 'app-sale-form',
   templateUrl: './sale-form.component.html',
+  standalone: true,
   styleUrls: ['./sale-form.component.scss'],
   imports: [IonGrid, IonRow, IonCol, IonInput, IonButton, ReactiveFormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +32,7 @@ import { SaleCreate } from 'src/app/model/events/sale';
 export default class SaleFormComponent {
   private fb = inject(FormBuilder);
 
-  public animalId = input.required<string>();
+  public id = input.required<string>();
   public submitted = output<SaleCreate>();
 
   /** Formulario reactivo de venta */
@@ -45,7 +46,7 @@ export default class SaleFormComponent {
     comments: [''], // no required, y default a ''
   });
 
-  isValid = computed(() => this.form.valid);
+  // isValid = computed(() => this.form.valid);
 
   /** Emite el formulario con fecha generada automáticamente */
   onSubmit() {
@@ -54,7 +55,7 @@ export default class SaleFormComponent {
     const raw = this.form.getRawValue();
 
     const payload: SaleCreate = {
-      animal_id: this.animalId(),
+      animal_id: this.id(),
       buyer: raw.buyer ?? '',
       price: raw.price ?? 0,
       currency: raw.currency ?? '',

@@ -1,5 +1,5 @@
 // sale-create.page.ts
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SaleService } from 'src/app/services/events/sale/sale.service';
 import { SaleCreate } from 'src/app/model/events/sale';
@@ -23,12 +23,13 @@ export class SaleCreatePage {
   private router = inject(Router);
   private saleService = inject(SaleService);
 
-  animalId = this.route.snapshot.paramMap.get('animal_id') ?? '';
+  public id = input.required<string>();
+  //animalId = this.route.snapshot.paramMap.get('animal_id') ?? '';
 
   async handleSave(data: SaleCreate) {
     try {
-      await this.saleService.createSale(this.animalId, data);
-      this.router.navigate(['/eventos', this.animalId]);
+      await this.saleService.createSale(this.id(), data);
+      this.router.navigate(['/animal/events/sale', this.id()]);
     } catch (err) {
       console.error('Error creando venta', err);
     }
