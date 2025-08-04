@@ -1,71 +1,63 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject, computed, signal, OutputEmitterRef, input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject, ChangeDetectionStrategy, input, computed, resource } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { 
+import {
   IonHeader, IonToolbar, IonTitle, IonButtons, IonButton,
-  IonContent, IonList, IonItem, IonLabel 
+  IonContent, IonList, IonItem, IonLabel, IonSpinner, IonText
 } from '@ionic/angular/standalone';
 import { TagService } from 'src/app/services/tag.service';
 
-/**
- * Componente para asignar o desasignar tags a un animal.
- */
 @Component({
   selector: 'app-change-tag-status',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,  // Solo dispara CD cuando cambian inputs o eventos 
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    CommonModule,
     IonHeader, IonToolbar, IonTitle, IonButtons, IonButton,
-    IonContent, IonList, IonItem, IonLabel
+    IonContent, IonList, IonItem, IonLabel, IonSpinner, IonText
   ],
   templateUrl: './change-tag-status.component.html',
 })
-export class ChangeTagStatusComponent implements OnInit {
-  /** ID del animal al que asignar/desasignar tags. */
+export class ChangeTagStatusComponent {
+  /** ID del animal al que se gestionan las caravanas */
   readonly id = input.required<string>();
 
-  /** Lista de asignaciones actuales (con posibles fechas de desasignación). */
-  readonly tags = input<{ tag_id: string; unassignment_date: string |null }[]>();
-
-  /** Todas las tags disponibles. */
-  readonly allTags = signal<{ id: string; tag_number: string; status: string }[]>([]);
-
-  /**
-   * Conjunto de IDs de tags actualmente asignadas (sin fecha de desasignación).
-   */
-  readonly assignedTagIds = computed(() => 
-    new Set((this.tags() ?? []).filter(t => !t.unassignment_date).map(t => t.tag_id))
-  );  
+  /** Asignaciones actuales del animal */
+  readonly tags = input<{ tag_id: string; unassignment_date: string | null }[]>();
 
   private readonly tagService = inject(TagService);
   private readonly modalController = inject(ModalController);
 
-  constructor() {}
+  /** Recurso que carga todas las caravanas del sistema */
+  readonly tagsResource = resource<
+    { id: string; tag_number: string; status: string }[],
+    undefined
+  >({ loader: () => this.tagService.getAllTags() });
 
-  /** Carga todas las tags disponibles al iniciar el componente. */
-  async ngOnInit(): Promise<void> {
-    this.allTags.set(await this.tagService.getAllTags());
-  }
+  /** Conjunto de IDs actualmente asignadas (sin fecha de desasignación) */
+  readonly assignedTagIds = computed(() => new Set(
+    (this.tags() ?? []).filter(t => !t.unassignment_date).map(t => t.tag_id)
+  ));
 
-  /**
-   * Asigna la tag indicada al animal.
-   * @param tagId ID de la tag a asignar
-   */
-  async assignTag(tagId: string): Promise<void> {
+  /** Asigna una caravana al animal */
+  async assignTag(tagId: string) {
     await this.tagService.assignTagToAnimal(tagId, this.id());
     this.modalController.dismiss({ refresh: true });
   }
 
-  /**
-   * Desasigna la tag indicada del animal.
-   * @param tagId ID de la tag a desasignar
-   */
-  async unassignTag(tagId: string): Promise<void> {
+  /** Desasigna una caravana del animal */
+  async unassignTag(tagId: string) {
     await this.tagService.unassignTagFromAnimal(this.id(), tagId);
     this.modalController.dismiss({ refresh: true });
   }
 
-  /** Cierra el modal sin cambios. */
-  close(): void {
+  /** Cierra el modal sin cambios */
+  close() {
     this.modalController.dismiss();
+  }
+
+  /** Recarga la página en caso de error */
+  reload() {
+    window.location.reload();
   }
 }

@@ -5,39 +5,33 @@
 </ion-header>
 
 <ion-content>
+  <ng-container *ngIf="!loading; else loadingTpl">
+    <ng-container *ngIf="animal; else noData">
+      <ion-item>Raza: {{ animal.breed }}</ion-item>
+      <ion-item>Fecha de Nacimiento: {{ animal.birth_date | date }}</ion-item>
+      <ion-item>Dueño: {{ animal.owner_id }}</ion-item>
+      <ion-item>Predio: {{ animal.land_id }}</ion-item>
+      <ion-item>Estado: {{ animal.status }}</ion-item>
+      <ion-item>Agregado: {{ animal.created_at | date:'short' }}</ion-item>
+      <ion-item>Modificado: {{ animal.updated_at | date:'short' }}</ion-item>
 
-  <!-- si animal() es truthy, pillamos la referencia local "animal" -->
-  <ng-container *ngIf="animal() as animal; else loading">
-    <ion-item>Raza: {{ animal.breed }}</ion-item>
-    <ion-item>Fecha de Nacimiento: {{ animal.birth_date | date }}</ion-item>
-    <ion-item>Dueño: {{ animal.owner_id }}</ion-item>
-    <ion-item>Predio: {{ animal.land_id }}</ion-item>
-    <ion-item>Estado: {{ animal.status }}</ion-item>
-    <ion-item>
-      Fecha de adición al sistema: {{ animal.created_at | date:'short' }}
-    </ion-item>
-    <ion-item>Última Modificación: {{ animal.updated_at | date:'short' }}</ion-item>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="block" (click)="openTagModal()">Gestionar Caravanas</ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button expand="block" (click)="openTagHistoryModal()">Ver Historial</ion-button>
+        </ion-col>
+      </ion-row>
 
-    <ion-row>
-      <ion-col>
-        <ion-button expand="block" (click)="openTagModal()">
-          Gestionar Caravanas
-        </ion-button>
-      </ion-col>
-      <ion-col>
-        <ion-button expand="block" (click)="openTagHistoryModal()">
-          Ver historial de caravanas
-        </ion-button>
-      </ion-col>
-    </ion-row>
-
-    <ion-button [routerLink]="['/animal/edit', animal.id]">
-      Editar Animal
-    </ion-button>
+      <ion-button [routerLink]="['/animal/edit', animal.animal_id]">Editar Animal</ion-button>
+    </ng-container>
+    <ng-template #noData>
+      <p>No se encontró el animal.</p>
+    </ng-template>
   </ng-container>
 
-  <!-- plantilla que se muestra mientras carga -->
-  <ng-template #loading>
+  <ng-template #loadingTpl>
     <ion-spinner name="crescent"></ion-spinner>
     <p>Cargando datos…</p>
   </ng-template>

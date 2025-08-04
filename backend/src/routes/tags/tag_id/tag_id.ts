@@ -9,6 +9,7 @@ import { tagRepository } from "../../../services/tag.repository.js";
 import { UCUErrorNotFound } from "../../../utils/index.js";
 import { animalRepository } from "../../../services/animal.repository.js";
 import { Type } from "@sinclair/typebox";
+import { AnimalParams } from "../../../types/schemas/animal.js";
 
 const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
   fastify.get(
@@ -67,6 +68,16 @@ const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
 
         // Solo permitimos desactivar (status='inactive')
         if (payload.status === "inactive") {
+          // Chequeamos si está asignada a algún animal
+          const assignedAnimal = await tagRepository.getCurrentAnimalByTag(tag_id);
+          // Si está asignada, no se puede desactivar
+          if (assignedAnimal) {
+            return reply
+              .status(400)
+              .send({
+                message: `No se puede desactivar la tag porque está asignada al animal con ID ${assignedAnimal.id}.`,
+              });
+          }
           await tagRepository.deactivateTag(tag_id);
           return reply.status(204).send();
         }
@@ -118,8 +129,8 @@ const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
 
         // Aquí deberías verificar que el animal exista (agrega tu lógica o repositorio)
         const animal = await animalRepository.getById(animal_id);
-         if (!animal) {
-           throw new UCUErrorNotFound(`Animal con id=${animal_id} no encontrado`);
+        if (!animal) {
+          throw new UCUErrorNotFound(`Animal con id=${animal_id} no encontrado`);
         }
 
         // Asigna la tag al animal (implementa este método en tu repositorio)
@@ -130,23 +141,20 @@ const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
     }
   );
 
-  fastify.delete(
+  fastify.put(
     ':tagId/:animalId',
     {
       schema: {
         tag: ['Caravanas'],
-        params: Type.Object({
-          animalId: Type.String(),
-          tagId: Type.String()
-        }),
+        params: Type.Intersect([TagParams, AnimalParams]),
         response: {
-          200: Type.Object({ 
-            success: Type.Boolean(), 
-            message: Type.String() 
+          200: Type.Object({
+            success: Type.Boolean(),
+            message: Type.String()
           }),
-          404: Type.Object({ 
-            success: Type.Boolean(), 
-            message: Type.String() 
+          404: Type.Object({
+            success: Type.Boolean(),
+            message: Type.String()
           }),
         }
       },

@@ -1,3 +1,17 @@
-<p>
-  tag-list works!
-</p>
+<!-- tag-list.page.html -->
+<ion-content>
+  <ion-grid>
+    <ion-list>
+      @for (tag of tagsResource.value(); track tag.id) {
+      <ion-item>
+        <ion-label>{{ tag.tag_number }}</ion-label>
+
+        <!-- Inline ion-select: -->
+        <ion-select [value]="tag.status" (ionChange)="onStatusChange(tag, $event.detail.value)">
+          <ion-select-option value="active">Activo</ion-select-option>
+          <ion-select-option value="inactive">Inactivo</ion-select-option>
+        </ion-select>
+      </ion-item>}
+    </ion-list>
+  </ion-grid>
+</ion-content>

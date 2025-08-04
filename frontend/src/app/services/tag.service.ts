@@ -5,12 +5,12 @@ import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class TagService {
-  private http : HttpClient = inject(HttpClient);
+  private http: HttpClient = inject(HttpClient);
   public apiUrl = environment.apiUrl;
   public tagsUrl = `${this.apiUrl}tags/`;
   public specificTagsUrl = `${this.apiUrl}tags/tag_id/`;
 
-  constructor() {}
+  constructor() { }
 
   async getAllTags() {
     return await firstValueFrom(this.http.get<any[]>(`${this.tagsUrl}`));
@@ -25,6 +25,10 @@ export class TagService {
   }
 
   async unassignTagFromAnimal(animalId: string, tagId: string) {
-    return await firstValueFrom(this.http.delete(`${this.specificTagsUrl}${tagId}/${animalId}`));
+    return await firstValueFrom(this.http.put(`${this.specificTagsUrl}${tagId}/${animalId}`, {}));
+  }
+
+  async updateTagStatus(tagId: string, newStatus: string) {
+    return await firstValueFrom(this.http.put(`${this.specificTagsUrl}${tagId}`, { status: newStatus }));
   }
 }

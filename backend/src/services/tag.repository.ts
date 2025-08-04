@@ -7,7 +7,7 @@ export class TagRepository {
             `INSERT INTO tags(id,country_code,country_iso,ministry,tag_number,status)
             VALUES(gen_random_uuid(),$1,$2,$3,$4,'active')
             RETURNING *`,
-            ['00014','858','MGAP UY',data.tag_number]
+            ['00014', '858', 'MGAP UY', data.tag_number]
         ); return rows[0];
     }
 
@@ -16,29 +16,33 @@ export class TagRepository {
         return rows;
     }
 
-    async getTagById(id: string): Promise<Tag|null> {
-        const { rows } = await query(`SELECT * FROM tags WHERE id=$1`,[id]);
-        return rows[0]||null;
+    async getTagById(id: string): Promise<Tag | null> {
+        const { rows } = await query(`SELECT * FROM tags WHERE id=$1`, [id]);
+        return rows[0] || null;
     }
-    
+
     async deactivateTag(id: string): Promise<void> {
-        await query(`UPDATE tags SET status='inactive' WHERE id=$1`,[id]);
+        await query(`UPDATE tags SET status='inactive' WHERE id=$1`, [id]);
     }
-    
+
+    async activateTag(id: string): Promise<void> {
+        await query(`UPDATE tags SET status='active' WHERE id=$1`, [id]);
+    }
+
     async assignTagToAnimal(animalId: string, tagId: string): Promise<boolean> {
         if (!animalId || !tagId) throw new Error('Faltan parámetros');
 
         // 1. Check existencia
         const res = await query(
-        'SELECT 1 FROM animal_tag WHERE animal_id = $1 AND tag_id = $2',
-        [animalId, tagId]
+            'SELECT 1 FROM animal_tag WHERE animal_id = $1 AND tag_id = $2',
+            [animalId, tagId]
         );
         if ((res.rowCount ?? 0) > 0) return false;
 
         // 2. Insertar relación
         await query(
-        'INSERT INTO animal_tag (id, animal_id, tag_id, assignment_date) VALUES (gen_random_uuid(), $1, $2, now())',
-        [animalId, tagId]
+            'INSERT INTO animal_tag (id, animal_id, tag_id, assignment_date) VALUES (gen_random_uuid(), $1, $2, now())',
+            [animalId, tagId]
         );
         return true;
     }
@@ -52,12 +56,12 @@ export class TagRepository {
         if (!animalId) throw new Error('El parámetro animalId es requerido');
 
         const result = await query(
-        `
+            `
         SELECT * FROM animal_tag 
         WHERE animal_id = $1
         ORDER BY assignment_date ASC
         `,
-        [animalId]
+            [animalId]
         );
         return result.rows;
     }
@@ -65,20 +69,37 @@ export class TagRepository {
     async unassignTagFromAnimal(animalId: string, tagId: string): Promise<boolean> {
         if (!animalId || !tagId) throw new Error('Faltan parámetros');
 
-        const res = await query(
-        `
-        UPDATE animal_tag
-        SET unassignment_date = NOW()
-        WHERE animal_id = $1 AND tag_id = $2 AND unassignment_date IS NULL
-        `,
-        [animalId, tagId]
-        );
-        return ((res.rowCount ?? 0) > 0);
+        try {
+            await query('BEGIN');
+
+            // 1. Marcar la asignación como finalizada
+            const res = await query(
+                `UPDATE animal_tag
+                SET unassignment_date = NOW()
+                WHERE animal_id = $1 AND tag_id = $2 AND unassignment_date IS NULL`,
+                [animalId, tagId]
+            );
+
+            // 2. Cambiar el estado de la tag
+            await query(
+                `UPDATE tags
+             SET status = 'retired'
+             WHERE id = $1`,
+                [tagId]
+            );
+
+            await query('COMMIT');
+            return (res.rowCount ?? 0) > 0;
+        } catch (e) {
+            await query('ROLLBACK');
+            throw e;
+        }
     }
 
+
     async getCurrentTagByAnimal(animalId: string): Promise<any | null> {
-  const { rows } = await query(
-    `
+        const { rows } = await query(
+            `
     SELECT t.id, t.tag_number, t.status, t.country_code, t.country_iso, t.ministry
     FROM animal_tag at
     JOIN tags t ON at.tag_id = t.id
@@ -87,10 +108,25 @@ export class TagRepository {
     ORDER BY at.assignment_date DESC
     LIMIT 1
     `,
-    [animalId]
-  );
-  return rows[0] ?? null;
-}
+            [animalId]
+        );
+        return rows[0] ?? null;
+    }
+
+    async getCurrentAnimalByTag(tagId: string): Promise<any | null> {
+        const { rows } = await query(
+            `SELECT a.*
+         FROM animal_tag at
+         JOIN animals a ON at.animal_id = a.id
+         WHERE at.tag_id = $1
+           AND at.unassignment_date IS NULL
+         ORDER BY at.assignment_date DESC
+         LIMIT 1`,
+            [tagId]
+        );
+        return rows[0] ?? null;
+    }
+
 }
 
 

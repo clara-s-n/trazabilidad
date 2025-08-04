@@ -2,14 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Animal } from '../model/animal';
+import { Animal, CompleteAnimal } from '../model/animal';
 import { AnimalParams, AnimalPost, UpdateAnimal } from '../model/animal';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AnimalService {
-  constructor() {}
+  constructor() { }
 
   public httpCliente = inject(HttpClient);
   public apiUrl = environment.apiUrl;
@@ -23,6 +23,12 @@ export class AnimalService {
   async getAnimal(animalId: string): Promise<Animal> {
     return await firstValueFrom(
       this.httpCliente.get<Animal>(`${this.apiUrl}animals/${animalId}`)
+    );
+  }
+
+  async getCompleteAnimal(animalId: string): Promise<CompleteAnimal> {
+    return await firstValueFrom(
+      this.httpCliente.get<CompleteAnimal>(`${this.apiUrl}animals/${animalId}`)
     );
   }
 

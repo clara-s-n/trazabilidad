@@ -1,29 +1,24 @@
 <ion-header>
-      <ion-toolbar>
-        <ion-title>Historial de Caravanas</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="close()">Cerrar</ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content>
-      <ion-list>
-        @for (rec of historyRecords(); track rec.tag_id) {
-          <ion-item>
-            <ion-label>
-              <strong>
-                {{ rec.tag_number || rec.tag_id }}
-              </strong>
-              <div>
-                Asignada: {{ datePipe.transform(rec.assignment_date, 'short') }}
-              </div>
-              @if (rec.unassignment_date) {
-                <div>
-                  Desasignada: {{ datePipe.transform(rec.unassignment_date, 'short') }}
-                </div>
-              }
-            </ion-label>
-          </ion-item>
+  <ion-toolbar>
+    <ion-title>Historial de Caravanas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    @for (rec of historyRecords() ?? []; track rec.tag_id) {
+    <ion-item>
+      <ion-label>
+        <strong>{{ rec.tag_number || rec.tag_id }}</strong>
+        <div>Asignada: {{ rec.assignment_date }}</div>
+        @if (rec.unassignment_date) {
+        <div>Desasignada: {{ rec.unassignment_date }}</div>
         }
-      </ion-list>
-    </ion-content>
+      </ion-label>
+    </ion-item>
+    }
+  </ion-list>
+</ion-content>

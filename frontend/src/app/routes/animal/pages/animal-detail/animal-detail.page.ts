@@ -1,25 +1,16 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, inject, input, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, inject, input, OnInit } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { 
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonItem,
-  IonButton,
-  //IonLabel,
-  //IonList,
-  IonCol,
-  IonRow,
-  IonSpinner,
-  ModalController
+import {
+  IonHeader, IonToolbar, IonTitle, IonContent, IonItem,
+  IonButton, IonCol, IonRow, IonSpinner, ModalController
 } from '@ionic/angular/standalone';
 import { AnimalService } from 'src/app/services/animal.service';
 import { TagService } from 'src/app/services/tag.service';
 import { ChangeTagStatusComponent } from '../../components/change-tag-status/change-tag-status.component';
 import { TagHistoryComponent } from '../../components/tag-history/tag-history.component';
+import { Animal, CompleteAnimal } from 'src/app/model/animal';
 
 @Component({
   selector: 'app-animal-detail',
@@ -27,73 +18,59 @@ import { TagHistoryComponent } from '../../components/tag-history/tag-history.co
   styleUrls: ['./detail.page.scss'],
   standalone: true,
   imports: [
-    DatePipe,
-    CommonModule,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonSpinner,
-    IonItem,
-    IonButton,
     RouterLink,
-    IonCol,
-    IonRow,
-    DatePipe,
+    CommonModule, DatePipe,
+    IonHeader, IonToolbar, IonTitle, IonContent, IonItem,
+    IonButton, IonCol, IonRow, IonSpinner
   ],
 })
 export class DetailPage implements OnInit {
   public animal_id = input.required<string>();
-  private animalService = inject(AnimalService);
-  private tagService = inject(TagService);
-  private modalController = inject(ModalController);
-  private route = inject(ActivatedRoute);
+  public router = inject(Router)
 
-  animal = signal<any | null>(null);
-  loading = signal(false);
-  tags = signal<any[]>([]);
+  private readonly animalService = inject(AnimalService);
+  private readonly tagService = inject(TagService);
+  private readonly modalController = inject(ModalController);
+
+  animal: CompleteAnimal | null = null;
+  loading = false;
 
   async ngOnInit() {
-    this.loading.set(true);
-    const animalId = this.animal_id();
-    console.log(animalId);
-    if (animalId) {
+    this.loading = true;
+    const id = this.animal_id();
+    if (id) {
       try {
-        const animalData = await this.animalService.getAnimal(animalId);
-        this.animal.set(animalData);
-
-        // Cargar historial de tags
-        this.tags.set(await this.tagService.getTagsByAnimal(animalId));
+        this.animal = await this.animalService.getCompleteAnimal(id);
       } catch {
-        this.animal.set(null);
+        this.animal = null;
       }
     }
-    this.loading.set(false);
+    this.loading = false;
   }
 
   async openTagModal() {
+    if (!this.animal) return;
     const modal = await this.modalController.create({
-      component: ChangeTagStatusComponent, // crea este componente/modal
+      component: ChangeTagStatusComponent,
       componentProps: {
-        animalId: this.animal()?.id,
-        tags: this.tags(),
-      },
+        id: this.animal.animal_id,
+        tags: []
+      }
     });
     await modal.present();
     const { data } = await modal.onWillDismiss();
     if (data?.refresh) {
-      this.tags.set(await this.tagService.getTagsByAnimal(this.animal()?.id));
+      // Actualizar datos si es necesario
     }
   }
 
   async openTagHistoryModal() {
+    if (!this.animal) return;
     const modal = await this.modalController.create({
       component: TagHistoryComponent,
-      componentProps: {
-        tags: this.tags(),
-        animal: this.animal()
-      }
+      componentProps: { animal: this.animal }
     });
     await modal.present();
   }
+
 }
