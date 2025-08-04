@@ -4,6 +4,15 @@ export const routes: Routes = [
   {
     path: '',
     children: [
+      // 4. Ruta "lista por usuario"
+      {
+        path: ':userId/list',
+        pathMatch: 'full',
+        loadComponent: () =>
+          import('./animal-user-list/animal-user-list.page').then(
+            (m) => m.AnimalUserListPage
+          ),
+      },
       // 1. Redirect inicial
       { path: '', redirectTo: 'list', pathMatch: 'full' },
 
@@ -99,7 +108,7 @@ export const routes: Routes = [
         pathMatch: 'full',
         loadComponent: () =>
           import('./animal-user-list/animal-user-list.page').then(
-            (m) => m.UserListPage
+            (m) => m.AnimalUserListPage
           ),
       },
 

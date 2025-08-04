@@ -6,15 +6,23 @@ import {
   IonButtons,
   IonContent,
   IonHeader,
+  IonIcon,
   IonItem,
-  IonLabel,
   IonList,
+  IonText,
   IonTitle,
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
 import { DeleteLandModalComponent } from '../../components/delete-land-modal/delete-land-modal.component';
 import { RouterLink } from '@angular/router';
+import { addIcons } from 'ionicons';
+import {
+  locationOutline,
+  eyeOutline,
+  createOutline,
+  trashOutline,
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-land-list',
@@ -30,7 +38,8 @@ import { RouterLink } from '@angular/router';
     IonContent,
     IonList,
     IonItem,
-    IonLabel,
+    IonIcon,
+    IonText,
     RouterLink,
   ],
 })
@@ -40,10 +49,16 @@ export class ListPage implements OnInit {
   public lands = signal<Land[]>([]);
 
   private landService: LandsService = inject(LandsService);
-
   private modalController: ModalController = inject(ModalController);
 
-  constructor() {}
+  constructor() {
+    addIcons({
+      locationOutline,
+      eyeOutline,
+      createOutline,
+      trashOutline,
+    });
+  }
 
   ngOnInit() {
     this.loadLands();
@@ -80,5 +95,17 @@ export class ListPage implements OnInit {
   async deleteLand(id: string) {
     await this.landService.deleteLand({ land_id: id });
     this.loadLands();
+  }
+
+  // Helper method to format coordinates
+  formatCoordinate(value: number, isLatitude: boolean): string {
+    const direction = isLatitude
+      ? value >= 0
+        ? 'N'
+        : 'S'
+      : value >= 0
+      ? 'E'
+      : 'W';
+    return `${Math.abs(value).toFixed(4)}° ${direction}`;
   }
 }

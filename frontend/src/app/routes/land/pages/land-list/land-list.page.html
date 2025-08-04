@@ -2,19 +2,61 @@
   <ion-toolbar>
     <ion-title>Predios</ion-title>
     <ion-buttons slot="end">
-      <ion-button [routerLink]="['/land/create']">Nuevo</ion-button>
+      <ion-button [routerLink]="['/land/create']">Nuevo Predio</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content class="ion-padding">
+  @if(lands().length === 0) {
+  <div class="empty-state">
+    <ion-text color="medium">
+      <h2>No hay predios registrados</h2>
+      <p>Comience creando su primer predio para gestionar los animales.</p>
+    </ion-text>
+    <ion-button expand="block" [routerLink]="['/land/create']">
+      Crear Primer Predio
+    </ion-button>
+  </div>
+  } @else {
   <ion-list>
     @for(land of lands(); track land.id) {
-      <ion-item>
-        <ion-label>{{ land.name }}</ion-label>
-        <ion-button slot="end" fill="clear" [routerLink]="['/land', land.id]">Ver</ion-button>
-        <ion-button slot="end" fill="clear" [routerLink]="['/land/edit', land.id]">Editar</ion-button>
-        <ion-button slot="end" color="danger" fill="clear" (click)="confirmDelete(land)">Eliminar</ion-button>
-      </ion-item>
+    <ion-item class="land-item">
+      <div class="land-info">
+        <h2>{{ land.name }}</h2>
+        <p class="coordinates">
+          <ion-icon name="location-outline"></ion-icon>
+          {{ formatCoordinate(land.latitude, true) }}, {{
+          formatCoordinate(land.longitude, false) }}
+        </p>
+        <p class="coordinates-decimal">
+          {{ land.latitude }}, {{ land.longitude }}
+        </p>
+      </div>
+      <div class="land-actions" slot="end">
+        <ion-button size="small" fill="clear" [routerLink]="['/land', land.id]">
+          <ion-icon name="eye-outline"></ion-icon>
+          Ver
+        </ion-button>
+        <ion-button
+          size="small"
+          fill="clear"
+          [routerLink]="['/land/edit', land.id]"
+        >
+          <ion-icon name="create-outline"></ion-icon>
+          Editar
+        </ion-button>
+        <ion-button
+          size="small"
+          color="danger"
+          fill="clear"
+          (click)="confirmDelete(land)"
+        >
+          <ion-icon name="trash-outline"></ion-icon>
+          Eliminar
+        </ion-button>
+      </div>
+    </ion-item>
     }
   </ion-list>
+  }
 </ion-content>
