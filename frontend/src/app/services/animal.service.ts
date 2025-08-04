@@ -2,14 +2,19 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Animal, CompleteAnimal } from '../model/animal';
+import {
+  Animal,
+  AnimalHistorySchema,
+  AnimalMovementSchema,
+  CompleteAnimal,
+} from '../model/animal';
 import { AnimalParams, AnimalPost, UpdateAnimal } from '../model/animal';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AnimalService {
-  constructor() { }
+  constructor() {}
 
   public httpCliente = inject(HttpClient);
   public apiUrl = environment.apiUrl;
@@ -46,6 +51,26 @@ export class AnimalService {
   async deleteAnimal(params: AnimalParams): Promise<void> {
     return await firstValueFrom(
       this.httpCliente.delete<void>(`${this.apiUrl}animals/${params.animal_id}`)
+    );
+  }
+
+  async getAllAnimalModification(
+    animalId: string
+  ): Promise<AnimalHistorySchema[]> {
+    return await firstValueFrom(
+      this.httpCliente.get<AnimalHistorySchema[]>(
+        `${this.apiUrl}animals/${animalId}/modifications`
+      )
+    );
+  }
+
+  async getAllAnimalMovments(
+    animalId: string
+  ): Promise<AnimalMovementSchema[]> {
+    return await firstValueFrom(
+      this.httpCliente.get<AnimalMovementSchema[]>(
+        `${this.apiUrl}animals/${animalId}/movements`
+      )
     );
   }
 

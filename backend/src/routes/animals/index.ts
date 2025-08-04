@@ -3,6 +3,7 @@ import {
   Animal,
   AnimalEventSchema,
   AnimalHistorySchema,
+  AnimalMovementSchema,
   AnimalParams,
   AnimalPost,
   AnimalWithTag,
@@ -79,7 +80,7 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       ],
       response: {
         200: AnimalWithTag,
-      }
+      },
     },
     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
@@ -195,6 +196,28 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       return reply.code(200).send(events);
     }
   );
+  fastify.get(
+    "/:animal_id/movements",
+    {
+      schema: {
+        tags: ["Animales"],
+        params: AnimalParams,
+        summary: "Ver el historial de movimientos de un animal",
+        description:
+          "Recupera todos los movimientos (traslados) asociados a un animal ordenados por fecha descendente.",
+        security: [{ bearerAuth: [] }],
+        response: {
+          200: Type.Array(AnimalMovementSchema),
+        },
+      },
+      onRequest: fastify.authenticate,
+    },
+    async (request, reply) => {
+      const { animal_id } = request.params as AnimalParams;
+      const movements = await animalRepository.getAnimalMovements(animal_id);
+      return reply.code(200).send(movements);
+    }
+  );
 
   // Ruta para obtener la caravana actual de un animal
   fastify.get("/:animal_id/current-tag", {
@@ -220,8 +243,6 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       return reply.code(200).send({ tag: currentTag });
     },
   });
-
-
 };
 
 export default animalesRoute;

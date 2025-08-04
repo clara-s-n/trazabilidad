@@ -1,5 +1,10 @@
 // sale-create.page.ts
-import { Component, ChangeDetectionStrategy, inject, input } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+  input,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SaleService } from 'src/app/services/events/sale/sale.service';
 import { SaleCreate } from 'src/app/model/events/sale';
@@ -29,7 +34,7 @@ export class SaleCreatePage {
   async handleSave(data: SaleCreate) {
     try {
       await this.saleService.createSale(this.id(), data);
-      this.router.navigate(['/animal/events/sale', this.id()]);
+      this.router.navigate([`/animal/events/${this.id()}/weighing`]);
     } catch (err) {
       console.error('Error creando venta', err);
     }

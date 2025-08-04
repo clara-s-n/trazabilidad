@@ -1,3 +1,51 @@
-<p>
-  history works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Modificaciones</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goToModify()">Nueva Modificación</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (animalModificationsResource.status() === 'loading') {
+  <ion-spinner></ion-spinner>
+  <div>Cargando modificaciones...</div>
+  } @if (animalModificationsResource.status() === 'error') {
+  <ion-text color="danger"> Error al cargar las modificaciones. </ion-text>
+  <ion-button expand="block" (click)="reload()">Reintentar</ion-button>
+  } @if (animalModificationsResource.status() === 'resolved') { @if
+  ((animalModificationsResource.value() ?? []).length === 0) {
+  <div>No hay modificaciones registradas.</div>
+  }
+
+  <ion-list>
+    @for (animalModification of animalModificationsResource.value() ?? []; track
+    animalModification.id) {
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title
+          >Modificaciones del animal: {{animalModification.id}}</ion-card-title
+        >
+      </ion-card-header>
+      <ion-card-content>
+        <p>
+          <strong>Campo modificado: </strong> {{ animalModification.modified }}
+        </p>
+        <p><strong>Valor actual: </strong>{{ animalModification.old_value }}</p>
+        <p>
+          <strong>Valor anterior: </strong> {{ animalModification.new_value }}
+        </p>
+        <p>
+          <strong>Modificado por: </strong> {{ animalModification.modified_by }}
+        </p>
+        <p>
+          <strong>Fecha de modificación: </strong> {{
+          animalModification.modification_date }}
+        </p>
+      </ion-card-content>
+    </ion-card>
+    }
+  </ion-list>
+  }
+</ion-content>

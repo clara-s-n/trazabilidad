@@ -1,3 +1,36 @@
-<p>
-  weighing-list works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Pesajes</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goToCreate()">Nuevo Pesaje</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (weighingsResource.status() === 'loading') {
+  <ion-spinner></ion-spinner>
+  <div>Cargando pesajes...</div>
+  } @if (weighingsResource.status() === 'error') {
+  <ion-text color="danger"> Error al cargar pesajes. </ion-text>
+  <ion-button expand="block" (click)="reload()">Reintentar</ion-button>
+  } @if (weighingsResource.status() === 'resolved') { @if
+  ((weighingsResource.value() ?? []).length === 0) {
+  <div>No hay pesajes registrados.</div>
+  }
+
+  <ion-list>
+    @for (weighing of weighingsResource.value() ?? []; track weighing.id) {
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title
+          >Pesaje del Animal:
+          <p><strong></strong> {{ weighing.weight }} {{ weighing.unit }}</p>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content> </ion-card-content>
+    </ion-card>
+    }
+  </ion-list>
+  }
+</ion-content>

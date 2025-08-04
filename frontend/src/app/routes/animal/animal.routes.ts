@@ -12,7 +12,9 @@ export const routes: Routes = [
         path: 'list',
         data: { menu: true, section: 'Animales', title: 'Lista de animales' },
         loadComponent: () =>
-          import('./pages/animal-list/animal-list.page').then((m) => m.ListPage),
+          import('./pages/animal-list/animal-list.page').then(
+            (m) => m.ListPage
+          ),
       },
       {
         path: 'create',
@@ -25,30 +27,32 @@ export const routes: Routes = [
 
       // 3. Rutas con sub-segmentos dinámicos
       {
-        path: 'edit/:animal_id',
+        path: 'edit/:id',
         loadComponent: () =>
           import('./pages/animal-edit/animal-edit.page').then(
             (m) => m.AnimalEditPage
           ),
       },
       {
-        path: 'events/:animal_id',
+        path: 'events/:id',
         loadComponent: () =>
-          import('./pages/animal-event/animal-event.page').then((m) => m.EventsPage),
+          import('./pages/animal-event/animal-event.page').then(
+            (m) => m.EventsPage
+          ),
       },
       {
         path: 'events/:id/sale',
         loadComponent: () =>
-          import('./pages/animal-event/sale/pages/sale-list/sale-list.page').then(
-            (m) => m.SaleListPage
-          ),
+          import(
+            './pages/animal-event/sale/pages/sale-list/sale-list.page'
+          ).then((m) => m.SaleListPage),
       },
       {
         path: 'events/:id/sale/create',
         loadComponent: () =>
-          import('./pages/animal-event/sale/pages/sale-create/sale-create.page').then(
-            (m) => m.SaleCreatePage
-          ),
+          import(
+            './pages/animal-event/sale/pages/sale-create/sale-create.page'
+          ).then((m) => m.SaleCreatePage),
       },
       {
         path: 'events/:id/vaccination',
@@ -86,7 +90,7 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'movements/:animal_id',
+        path: 'movements/:id',
         loadComponent: () =>
           import('./pages/animal-movements/animal-movements.page').then(
             (m) => m.MovementsPage

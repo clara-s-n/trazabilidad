@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, resource } from '@angular/core';
+import { Component, inject, resource } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   IonButton,
@@ -16,7 +16,7 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { eyeOutline } from 'ionicons/icons';
-import { Animal, AnimalParams, CompleteAnimal } from 'src/app/model/animal';
+import { Animal } from 'src/app/model/animal';
 import { AnimalService } from 'src/app/services/animal.service';
 
 @Component({
@@ -61,7 +61,7 @@ export class ListPage {
   reload() {
     window.location.reload();
   }
-/*
+  /*
   goToAnimalModification(animal: Animal) {
     console.log(`Navigating to animal edit with ID: ${animal.animal_id}`);
     this.router.navigate([`/animal/edit/${animal.animal_id}`]);

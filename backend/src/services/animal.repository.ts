@@ -73,6 +73,16 @@ export class AnimalRepository {
     return rows;
   }
 
+  async getAnimalMovements(animalId: string): Promise<any[]> {
+    const { rows } = await query(
+      `SELECT * FROM transports
+            WHERE animal_id = $1
+            ORDER BY details DESC`,
+      [animalId]
+    );
+    return rows;
+  }
+
   async filter(filters: {
     breed?: string;
     landId?: string;
