@@ -19,18 +19,20 @@ export const routes: Routes = [
         data: { menu: true, section: 'Animales', title: 'Crear un animal' },
         loadComponent: () =>
           import('./animal-create/animal-create.page').then(
-            (m) => m.CreatePage
+            (m) => m.AnimalCreatePage
           ),
       },
 
       // 3. Rutas con sub-segmentos dinámicos
       {
-        path: 'edit/:id',
+        path: 'edit/:animal_id',
         loadComponent: () =>
-          import('./animal-edit/animal-edit.page').then((m) => m.EditPage),
+          import('./animal-edit/animal-edit.page').then(
+            (m) => m.AnimalEditPage
+          ),
       },
       {
-        path: 'events/:id',
+        path: 'events/:animal_id',
         loadComponent: () =>
           import('./animal-event/animal-event.page').then((m) => m.EventsPage),
       },
@@ -84,7 +86,7 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'movements/:id',
+        path: 'movements/:animal_id',
         loadComponent: () =>
           import('./animal-movements/animal-movements.page').then(
             (m) => m.MovementsPage
@@ -103,7 +105,7 @@ export const routes: Routes = [
 
       // 5. Ruta genérica detalle
       {
-        path: ':id',
+        path: ':animal_id',
         loadComponent: () =>
           import('./animal-detail/animal-detail.page').then(
             (m) => m.DetailPage

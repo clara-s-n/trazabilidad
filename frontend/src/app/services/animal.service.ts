@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Animal } from '../model/animal';
-import { AnimalParams, AnimalPost, UpdateAnimal } from '../model/animalPost';
+import { AnimalParams, AnimalPost, UpdateAnimal } from '../model/animal';
 
 @Injectable({
   providedIn: 'root',
@@ -26,20 +26,20 @@ export class AnimalService {
     );
   }
 
-  async postAnimal(id: string, data: AnimalPost): Promise<Animal> {
+  async postAnimal(data: AnimalPost): Promise<Animal> {
     const url = this.apiUrl + 'animals/';
     return await firstValueFrom(this.httpCliente.post<Animal>(url, data));
   }
 
   async updateAnimal(id: string, data: UpdateAnimal): Promise<Animal> {
     return await firstValueFrom(
-      this.httpCliente.put<Animal>(`${this.apiUrl}/${id}`, data)
+      this.httpCliente.put<Animal>(`${this.apiUrl}animals/${id}`, data)
     );
   }
 
   async deleteAnimal(params: AnimalParams): Promise<void> {
     return await firstValueFrom(
-      this.httpCliente.delete<void>(`${this.apiUrl}/${params.animal_id}`)
+      this.httpCliente.delete<void>(`${this.apiUrl}animals/${params.animal_id}`)
     );
   }
 }

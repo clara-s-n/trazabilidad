@@ -1,19 +1,13 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/animal/list"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Editar Animal</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="ion-padding">
-  @if(animal) {
-  <app-animal-form
-    [animal]="animal"
-    (submitted)="handleSave($event)"
-  ></app-animal-form>
-  } @if(!animal) {
-  <p>Cargando predio...</p>
-  }
-</ion-content> -->
+@if (loading()) {
+<ion-spinner></ion-spinner>
+} @else if (animal()) {
+<app-animal-form
+  [isEditMode]="true"
+  [animal]="animal()"
+  (submitted)="onSubmit($event)"
+  (canceled)="onCancel()"
+>
+</app-animal-form>
+} @else {
+<ion-text color="danger">No se encontró el animal.</ion-text>
+}
