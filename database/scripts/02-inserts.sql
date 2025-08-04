@@ -26,28 +26,6 @@ INSERT INTO lands (id, name, latitude, longitude) VALUES
   ('2f9a2990-ee27-44ea-9d44-cf0b645487de', 'Campo 18', -31.180000, -57.180000),
   ('e4b8e1c2-641c-4fee-bfb9-cc7c0153594c', 'Campo 19', -31.190000, -57.190000),
   ('1fd1c9f8-90a5-4ca5-ad1c-cd6a65cdfa45', 'Campo 20', -31.200000, -57.200000);
--- 2) Lands
-INSERT INTO lands (id, name, latitude, longitude) VALUES
-  ('43666c09-a0b0-4b6b-9558-e44b50a25d57', 'Campo 1', -31.010000, -57.010000),
-  ('bf52757b-7a5a-4748-b78f-459471979493', 'Campo 2', -31.020000, -57.020000),
-  ('584630da-cc70-40dd-9599-aa539d788894', 'Campo 3', -31.030000, -57.030000),
-  ('362d303b-5994-419c-a884-1656f074db63', 'Campo 4', -31.040000, -57.040000),
-  ('9535a62f-310e-4a39-9a8d-c01f4f53cb07', 'Campo 5', -31.050000, -57.050000),
-  ('f9cf94b3-c8ea-4cc2-9bf1-288442fc7322', 'Campo 6', -31.060000, -57.060000),
-  ('983a18d1-f72f-44c0-b11b-376ff22f74dc', 'Campo 7', -31.070000, -57.070000),
-  ('ba239ce6-a158-4b5c-b0e9-66eb62273805', 'Campo 8', -31.080000, -57.080000),
-  ('5c491f13-e1b2-4862-b8b0-3335de115b06', 'Campo 9', -31.090000, -57.090000),
-  ('f6d85189-85a0-4e55-a54f-e6c4f56c6e43', 'Campo 10', -31.100000, -57.100000),
-  ('112f887d-11db-493c-b897-91e62ed8b7c6', 'Campo 11', -31.110000, -57.110000),
-  ('b6bba35b-e915-4138-85f7-40a9a38c081c', 'Campo 12', -31.120000, -57.120000),
-  ('c3c8944c-803a-4d4f-81b3-2d00d3194061', 'Campo 13', -31.130000, -57.130000),
-  ('a42c16cf-8ae9-41a9-a5c4-17970ab0c9c1', 'Campo 14', -31.140000, -57.140000),
-  ('33c5c051-557c-4372-ab37-a0f04316ed5c', 'Campo 15', -31.150000, -57.150000),
-  ('475acb5e-217b-4374-9fa0-d0aeaaed2b9b', 'Campo 16', -31.160000, -57.160000),
-  ('6c3fdecb-d99d-450f-93a6-2a064b794968', 'Campo 17', -31.170000, -57.170000),
-  ('2f9a2990-ee27-44ea-9d44-cf0b645487de', 'Campo 18', -31.180000, -57.180000),
-  ('e4b8e1c2-641c-4fee-bfb9-cc7c0153594c', 'Campo 19', -31.190000, -57.190000),
-  ('1fd1c9f8-90a5-4ca5-ad1c-cd6a65cdfa45', 'Campo 20', -31.200000, -57.200000);
 
 -- 3) Tags
 INSERT INTO tags (id, status, tag_number, country_code, country_iso, ministry) VALUES
@@ -165,17 +143,9 @@ INSERT INTO transports (id, animal_id, origin_land_id, destiny_land_id, date, de
   ('e0e14e7f-9520-484f-bd1d-f41a3c7e4788', '38fe6bc6-4554-4e5f-9425-5cb7c25cb6c5', '1fd1c9f8-90a5-4ca5-ad1c-cd6a65cdfa45', '43666c09-a0b0-4b6b-9558-e44b50a25d57', now(), 'Transporte 20');
 
 -- 8) Event Types
+
+-- 8) Event Types
 INSERT INTO event_type (name, description) VALUES
-  ('Birth',            'Registro de nacimiento'),
-  ('Sale',             'Venta de animal'),
-  ('Vaccination',      'Aplicación de vacuna'),
-  ('Weighing',         'Registración de peso'),
-  ('Transport',        'Movimiento entre campos'),
-  ('Tag Assignment',   'Asignación de tag'),
-  ('Tag Unassignment', 'Desasignación de tag'),
-  ('Health Check',     'Control sanitario'),
-  ('Inspection',       'Inspección técnica'),
-  ('Retirement',       'Retiro del sistema');
   ('Birth',            'Registro de nacimiento'),
   ('Sale',             'Venta de animal'),
   ('Vaccination',      'Aplicación de vacuna'),
