@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
   IonHeader,
@@ -28,6 +28,7 @@ import { AnimalService } from 'src/app/services/animal.service';
   ],
 })
 export class DetailPage implements OnInit {
+  public animal_id = input.required<string>();
   private animalService = inject(AnimalService);
   private route = inject(ActivatedRoute);
 
@@ -35,7 +36,8 @@ export class DetailPage implements OnInit {
   loading = signal(false);
   async ngOnInit() {
     this.loading.set(true);
-    const animalId = this.route.snapshot.paramMap.get('id');
+    const animalId = this.animal_id();
+    console.log(animalId);
     if (animalId) {
       try {
         const animalData = await this.animalService.getAnimal(animalId);
