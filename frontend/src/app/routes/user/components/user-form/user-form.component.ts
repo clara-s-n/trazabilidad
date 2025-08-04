@@ -5,17 +5,22 @@ import {
   output,
   signal,
   computed,
-  inject, effect
+  inject,
+  effect,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  IonGrid, IonRow, IonCol, IonInput, IonButton, IonSelect, IonSelectOption
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonInput,
+  IonButton,
+  IonSelect,
+  IonSelectOption,
 } from '@ionic/angular/standalone';
 import { FieldErrorPipe } from 'src/app/pipes/field-error.pipe';
 import { MainStoreService } from 'src/app/services/main-store.service';
-import { UserFormInputs, UserFormOutputs } from 'src/app/model/userForm';
-import {FormsModule} from "@angular/forms";
-
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-user-form',
@@ -31,12 +36,11 @@ import {FormsModule} from "@angular/forms";
     IonSelect,
     IonSelectOption,
     FieldErrorPipe,
-    FormsModule
+    FormsModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'app-user-form' }
+  host: { class: 'app-user-form' },
 })
-
 export default class UserFormComponent {
   //inputs
   user = input<any | null>(null);
@@ -57,7 +61,7 @@ export default class UserFormComponent {
     email: false,
     password: false,
     repeatPassword: false,
-    role: false
+    role: false,
   });
 
   loading = signal(false);
@@ -78,13 +82,11 @@ export default class UserFormComponent {
     email: this.email(),
     password: this.password(),
     repeatPassword: this.repeatPassword(),
-    role_id: this.role_id()
+    role_id: this.role_id(),
   }));
 
   showRoleSelect = computed(
-    () =>
-      !this.isEditMode() ||
-      (this.isEditMode() && this.store.isAdmin())
+    () => !this.isEditMode() || (this.isEditMode() && this.store.isAdmin())
   );
 
   formValid = computed(() => {
@@ -106,7 +108,9 @@ export default class UserFormComponent {
     this.touched.set({ ...this.touched(), password: true });
   }
   onRepeatPasswordChange(value: string | number | null | undefined) {
-    this.repeatPassword.set(typeof value === 'string' ? value : String(value ?? ''));
+    this.repeatPassword.set(
+      typeof value === 'string' ? value : String(value ?? '')
+    );
     this.touched.set({ ...this.touched(), repeatPassword: true });
   }
   onRoleChange(value: number | string | null | undefined) {
@@ -116,7 +120,6 @@ export default class UserFormComponent {
     this.touched.set({ ...this.touched(), role: true });
   }
 
-
   async onSubmit() {
     if (!this.formValid()) return;
     this.loading.set(true);
@@ -125,7 +128,7 @@ export default class UserFormComponent {
         email: this.email(),
         password: this.password(),
         ...(this.isEditMode() ? {} : { repeatPassword: this.repeatPassword() }),
-        role_id: this.role_id()!
+        role_id: this.role_id()!,
       });
     } finally {
       this.loading.set(false);
