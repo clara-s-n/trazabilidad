@@ -30,7 +30,7 @@ const pesajesRoute: FastifyPluginAsyncTypebox = async (fastify) => {
     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
       const { animal_id } = request.params as AnimalParams;
-      const animal = await animalRepository.getByIdDetailed(animal_id);
+      const animal = await animalRepository.getById(animal_id);
       if (!animal) {
         throw new UCUErrorNotFound(`Animal ${animal_id} no existe`);
       }
@@ -57,7 +57,7 @@ const pesajesRoute: FastifyPluginAsyncTypebox = async (fastify) => {
       const payload = request.body as CreateWeighingBody;
 
       // Validar existencia del animal
-      const animal = await animalRepository.getByIdDetailed(animal_id);
+      const animal = await animalRepository.getById(animal_id);
 
       if (!animal) {
         throw new UCUErrorNotFound(`Animal ${animal_id} no existe`);

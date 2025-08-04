@@ -1,4 +1,5 @@
 import { Static, Type } from '@sinclair/typebox';
+import { Animal } from './animal.js';
 
 export const TagParams = Type.Object({
   tag_id: Type.String({ format: 'uuid' }),
@@ -25,6 +26,14 @@ export const UpdateTagSchema = Type.Object({
   ]),
 });
 
+export const TagResponse = Type.Intersect([
+  TagSchema,
+  Type.Object({
+    animal: Type.Optional(Type.Partial(Animal)),
+  }),
+]);
+
+export type TagResponse = Static<typeof TagResponse>;
 export type UpdateTagType = Static<typeof UpdateTagSchema>;
 export type Tag = Static<typeof TagSchema>;
 export type TagParams = Static<typeof TagParams>;

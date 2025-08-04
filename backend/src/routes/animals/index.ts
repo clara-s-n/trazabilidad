@@ -6,6 +6,7 @@ import {
   AnimalMovementSchema,
   AnimalParams,
   AnimalPost,
+  AnimalWithTag,
   UpdateAnimalSchema,
   UpdateAnimalType,
 } from "../../types/schemas/animal.js";
@@ -78,17 +79,13 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
         },
       ],
       response: {
-        200: {
-          description: "Animal encontrado",
-          type: "object",
-          properties: Animal.properties,
-        },
+        200: AnimalWithTag,
       },
     },
     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
       const params = request.params as AnimalParams;
-      const animal = await animalRepository.getByIdDetailed(params.animal_id);
+      const animal = await animalRepository.getByIdWithTag(params.animal_id);
       if (!animal) {
         return reply.status(404).send({ message: "Animal no encontrado" });
       }
@@ -221,6 +218,31 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       return reply.code(200).send(movements);
     }
   );
+
+  // Ruta para obtener la caravana actual de un animal
+  fastify.get("/:animal_id/current-tag", {
+    schema: {
+      tags: ["Animales"],
+      params: AnimalParams,
+      summary: "Obtener la caravana actual de un animal",
+      description: "Recupera la caravana actual asociada a un animal.",
+      security: [{ bearerAuth: [] }],
+      response: {
+        200: Type.Object({
+          tag: Type.String(),
+        }),
+      },
+    },
+    onRequest: fastify.authenticate,
+    handler: async (request, reply) => {
+      const { animal_id } = request.params as AnimalParams;
+      const currentTag = await animalRepository.getCurrentTag(animal_id);
+      if (!currentTag) {
+        return reply.status(404).send({ message: "Caravana no encontrada" });
+      }
+      return reply.code(200).send({ tag: currentTag });
+    },
+  });
 };
 
 export default animalesRoute;

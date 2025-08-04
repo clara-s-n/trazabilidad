@@ -6,6 +6,7 @@ import {
   Animal,
   AnimalHistorySchema,
   AnimalMovementSchema,
+  CompleteAnimal,
 } from '../model/animal';
 import { AnimalParams, AnimalPost, UpdateAnimal } from '../model/animal';
 
@@ -27,6 +28,12 @@ export class AnimalService {
   async getAnimal(animalId: string): Promise<Animal> {
     return await firstValueFrom(
       this.httpCliente.get<Animal>(`${this.apiUrl}animals/${animalId}`)
+    );
+  }
+
+  async getCompleteAnimal(animalId: string): Promise<CompleteAnimal> {
+    return await firstValueFrom(
+      this.httpCliente.get<CompleteAnimal>(`${this.apiUrl}animals/${animalId}`)
     );
   }
 
@@ -64,6 +71,12 @@ export class AnimalService {
       this.httpCliente.get<AnimalMovementSchema[]>(
         `${this.apiUrl}animals/${animalId}/movements`
       )
+    );
+  }
+
+  async getCurrentTag(animalId: string): Promise<any | null> {
+    return await firstValueFrom(
+      this.httpCliente.get<any>(`${this.apiUrl}animals/${animalId}/current-tag`)
     );
   }
 }

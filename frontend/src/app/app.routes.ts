@@ -7,6 +7,9 @@ export const routes: Routes = [
   { path: 'land', loadChildren: () => import('./routes/land/land.routes').then(m => m.routes) },
   { path: 'animal', loadChildren: () => import('./routes/animal/animal.routes').then(m => m.routes) },
   { path: 'event', loadChildren: () => import('./routes/event/event.routes').then(m => m.routes) },
+  {
+    path: 'tags', loadChildren: () => import('./routes/tags/tag.routes').then(m => m.routes)
+  },
   /*{
     path: '**',
     loadComponent: () =>

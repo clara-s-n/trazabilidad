@@ -56,6 +56,8 @@ INSERT INTO transports (id, animal_id, origin_land_id, destiny_land_id, date, de
   ('bfc730e6-c700-4bd9-a1b3-4c98efa97f19', '8cfef1a6-77ed-4b17-ab30-176e88b8af37', '9535a62f-310e-4a39-9a8d-c01f4f53cb07', '584630da-cc70-40dd-9599-aa539d788894', now(), 'Transporte 5');
 
 -- 8) Event Types
+
+-- 8) Event Types
 INSERT INTO event_type (name, description) VALUES
   ('Birth',            'Registro de nacimiento'),
   ('Sale',             'Venta de animal'),

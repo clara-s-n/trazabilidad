@@ -25,7 +25,7 @@ const ventasRoute: FastifyPluginAsyncTypebox = async (fastify) => {
             const { animal_id } = request.params as AnimalParams;
 
             // Verifico que el animal exista
-            const exists = await animalRepository.getByIdDetailed(animal_id);
+            const exists = await animalRepository.getById(animal_id);
             if (!exists) {
                 throw new UCUErrorNotFound(`Animal ${animal_id} no existe`);
             }
