@@ -12,7 +12,7 @@ export class UserService {
   public httpClient = inject(HttpClient);
   public apiUrl = environment.apiUrl;
 
-  constructor() {}
+  constructor() { }
 
   async postUser(data: UserPost) {
     const url = this.apiUrl + 'users/';
@@ -45,7 +45,7 @@ export class UserService {
 
   async getUserAnimals(userId: string): Promise<Animal[]> {
     return await firstValueFrom(
-      this.httpClient.get<Animal[]>(`${this.apiUrl}users/${userId}/animal`)
+      this.httpClient.get<Animal[]>(`${this.apiUrl}users/user_id/${userId}/animals`)
     );
   }
 }

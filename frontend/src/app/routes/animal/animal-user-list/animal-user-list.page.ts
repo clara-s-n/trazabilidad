@@ -51,16 +51,22 @@ export class UserListPage {
   private animalService = inject(AnimalService);
   private router = inject(Router);
 
-  readonly id = input.required<string>();
-  readonly animal_id = input.required<string>();
+  readonly userId = input.required<string>();
+  /*readonly animal_id = input.required<string>();
 
   public animalsResource = resource({
     loader: async () => await this.animalService.getAnimal(this.animal_id()),
-  });
+  });*/
 
   public userAnimalsResource = resource({
-    loader: async () => await this.userService.getUserAnimals(this.id()),
+    params: () => ({ id: this.userId() }),
+    loader: async ({ params }) => await this.userService.getUserAnimals(params.id),
   });
+
+  ngOnInit() {
+    console.log(`User ID: ${this.userId()}`);
+    console.log(`Animals for User ID: ${this.userAnimalsResource.value()}`);
+  }
 
   goToSpecificAnimal(animal_id: Animal) {
     console.log('Animal:');

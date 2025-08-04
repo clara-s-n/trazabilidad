@@ -7,22 +7,29 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content>
   @if (userAnimalsResource.status() === 'loading') {
   <ion-spinner></ion-spinner>
-  <div>Cargando animales...</div>
-  } @if (userAnimalsResource.status() === 'error') {
-  <ion-text color="danger"> Error al cargar los animales. </ion-text>
-  <ion-button expand="block" (click)="reload()">Reintentar</ion-button>
-  } @if (animalsResource.status() === 'resolved') { @if
-  ((userAnimalsResource.value() ?? []).length === 0) {
-  <div>No hay animales registrados.</div>
+  <div>Cargando animales del usuario...</div>
   }
-
+  @if (userAnimalsResource.status() === 'error') {
+  <ion-text color="danger">
+    Error al cargar animales del usuario.
+  </ion-text>
+  <ion-button expand="block" (click)="reload()">
+    Reintentar
+  </ion-button>
+  }
+  @if (userAnimalsResource.status() === 'resolved') {
+  @if ((userAnimalsResource.value() ?? []).length === 0) {
+  <div class="ion-padding">
+    No hay animales registrados para este usuario.
+  </div>
+  }
+  <ion-title>Animales del usuario {{userId()}}</ion-title>
   <ion-list>
     @for (userAnimal of userAnimalsResource.value() ?? []; track userAnimal.id)
     {
-    <ion-title>Animales del usuario {{userAnimal.id}}</ion-title>
     <ion-row>
       <ion-col>Raza: {{ userAnimal.breed }}</ion-col>
       <ion-col>Fecha de Nacimiento: {{ userAnimal.birth_date }}</ion-col>
