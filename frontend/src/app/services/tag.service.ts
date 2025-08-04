@@ -31,4 +31,13 @@ export class TagService {
   async updateTagStatus(tagId: string, newStatus: string) {
     return await firstValueFrom(this.http.put(`${this.specificTagsUrl}${tagId}`, { status: newStatus }));
   }
+
+  async changeAnimalTag(animalId: string, oldTagId: string, newTagId: string): Promise<any> {
+    return await firstValueFrom(
+      this.http.put(
+        `${this.apiUrl}tags/${oldTagId}/${animalId}/change`,
+        { tag_id: newTagId }
+      )
+    );
+  }
 }

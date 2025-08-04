@@ -21,6 +21,9 @@ import { TagService } from 'src/app/services/tag.service';
 export class ChangeTagStatusComponent {
   /** ID del animal al que se gestionan las caravanas */
   readonly id = input<string>('');
+  isChange = input<boolean>(false);
+  /** Caravana asignada */
+  readonly oldTagId = input<string>('');
 
   /** Asignaciones actuales del animal */
   readonly tags = input<{ tag_id: string; unassignment_date: string | null }[]>();
@@ -30,6 +33,10 @@ export class ChangeTagStatusComponent {
 
   get animalId(): string {
     return typeof this.id === 'function' ? this.id() : this.id;
+  }
+
+  get change(): boolean {
+    return typeof this.isChange === 'function' ? this.isChange() : this.isChange;
   }
 
   /** Recurso que carga todas las caravanas del sistema */
@@ -67,6 +74,17 @@ export class ChangeTagStatusComponent {
   async unassignTag(tagId: string) {
     await this.tagService.unassignTagFromAnimal(this.id(), tagId);
     this.modalController.dismiss({ refresh: true });
+  }
+
+  async changeAnimalTag(newTagId: string) {
+    console.log('Cambiando tag', this.animalId, this.oldTagId, newTagId)
+    try {
+      //await this.tagService.changeAnimalTag(this.animalId, this.oldTagId, newTagId);
+      alert('Tag cambiada correctamente');
+      // Recarga datos si es necesario
+    } catch (e: any) {
+      alert(e?.error?.message || 'Error al cambiar la tag');
+    }
   }
 
   /** Cierra el modal sin cambios */

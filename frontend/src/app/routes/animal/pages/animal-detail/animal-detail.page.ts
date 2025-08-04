@@ -65,13 +65,16 @@ export class DetailPage implements OnInit {
       component: ChangeTagStatusComponent,
       componentProps: {
         id: this.animal.id,
-        tags: []
+        tags: this.animal.currentTag ?? [], // <-- PASA LAS ASIGNACIONES ACTUALES
+        isChange: !!this.currentTag,   // true si hay tag actual, false si no
+        oldTagId: this.currentTag ? this.currentTag.id : '', // <-- PASA LA TAG ACTUAL
       }
     });
     await modal.present();
     const { data } = await modal.onWillDismiss();
     if (data?.refresh) {
       // Actualizar datos si es necesario
+      await this.ngOnInit();
     }
   }
 

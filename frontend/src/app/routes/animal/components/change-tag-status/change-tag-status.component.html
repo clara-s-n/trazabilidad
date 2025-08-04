@@ -27,7 +27,11 @@
       <ion-label>
         {{ tag.tag_number }} ({{ tag.status }})
       </ion-label>
+      @if (!change) {
       <ion-button color="primary" (click)="assignTag(tag.id)">Asignar</ion-button>
+      } @else {
+        <ion-button color="secondary" (click)="changeAnimalTag(tag.id)">Asignar</ion-button>
+      }
     </ion-item>
     }
   </ion-list>
