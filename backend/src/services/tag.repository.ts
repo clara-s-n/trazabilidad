@@ -26,7 +26,25 @@ export class TagRepository {
           ON a.id = at.animal_id
         ORDER BY t.tag_number
     `);
-    return rows;
+    return rows.map(row => ({
+        id: row.id,
+        country_code: row.country_code,
+        country_iso: row.country_iso,
+        ministry: row.ministry,
+        tag_number: row.tag_number,
+        status: row.status,
+        animal_id: row.animal_id ?? null,
+        animal: row.animal_id
+            ? {
+                id: row.animal_id, // <-- AGREGA ESTA LÍNEA
+                animal_id: row.animal_id,
+                breed: row.breed,
+                birth_date: row.birth_date,
+                status: row.animal_status,
+            }
+            : undefined,
+    }));
+
 }
 
 

@@ -1,7 +1,7 @@
 import { FastifyPluginAsync } from "fastify";
 import { tagRepository } from "../../services/tag.repository.js";
 import { Type } from "@sinclair/typebox";
-import { TagSchema } from "../../types/schemas/tag.js";
+import { TagResponse } from "../../types/schemas/tag.js";
 import { AnimalParams } from "../../types/schemas/animal.js";
 
 const tagsRoute: FastifyPluginAsync = async (fastify, options) => {
@@ -14,7 +14,7 @@ const tagsRoute: FastifyPluginAsync = async (fastify, options) => {
         summary: "Obtener todos los tags",
         security: [{ bearerAuth: [] }],
         response: {
-          200: Type.Array(TagSchema),
+          200: Type.Array(TagResponse),
         },
       },
       onRequest: fastify.verifyOperatorOrAdmin,

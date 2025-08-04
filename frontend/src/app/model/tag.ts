@@ -1,3 +1,5 @@
+import { Animal } from "./animal";
+
 /**
  * Parámetros para rutas que requieren un ID de tag
  */
@@ -27,6 +29,7 @@ export interface Tag {
   tag_number: string;
   /** Estado actual de la tag */
   status: TagStatus;
+  animal: Animal; // ID del animal al que está asignada, si aplica
 }
 
 /**
