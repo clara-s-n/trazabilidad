@@ -10,6 +10,7 @@ import { userRepository } from "../../../services/user.repository.js";
 import { UCUErrorNotFound } from "../../../utils/index.js";
 import { animalRepository } from "../../../services/animal.repository.js";
 import { Animal } from "../../../types/schemas/animal.js";
+import { Type } from "@sinclair/typebox";
 
 const usuariosIdRoute: FastifyPluginAsync = async (fastify) => {
   fastify.get("/:user_id", {
@@ -48,7 +49,11 @@ const usuariosIdRoute: FastifyPluginAsync = async (fastify) => {
         "Obtener información detallada de todos los animales referenciados a un usuario específico",
       security: [{ bearerAuth: [] }],
       response: {
-        200: Animal,
+        200: Type.Array(Animal),
+        400: { description: "Parámetros inválidos" },
+        500: { description: "Error interno del servidor" },
+        401: { description: "No autorizado" },
+        403: { description: "Prohibido" },
         404: { description: "Animales no encontrados" },
       },
     },
@@ -56,11 +61,10 @@ const usuariosIdRoute: FastifyPluginAsync = async (fastify) => {
     handler: async (request, reply) => {
       const { user_id } = request.params as UserParamsType;
       const userAnimalList = await animalRepository.getByOwner(user_id);
-      if (!userAnimalList) {
-        throw new UCUErrorNotFound(
-          `Animales del usuario ${user_id} no encontrados.`
-        );
+      if (!userAnimalList || userAnimalList.length === 0) {
+        return [];
       }
+      return userAnimalList;
     },
   });
 

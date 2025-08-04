@@ -24,7 +24,7 @@ import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-animal-user-list',
   templateUrl: './animal-user-list.page.html',
-  styleUrls: ['./user-list.page.scss'],
+  styleUrls: ['./animal-user-list.page.scss'],
   imports: [
     CommonModule,
     IonButtons,
@@ -41,7 +41,7 @@ import { UserService } from 'src/app/services/user.service';
     IonCol,
   ],
 })
-export class UserListPage {
+export class AnimalUserListPage {
   constructor() {
     addIcons({
       eyeOutline,
@@ -59,13 +59,19 @@ export class UserListPage {
   });*/
 
   public userAnimalsResource = resource({
-    params: () => ({ id: this.userId() }),
-    loader: async ({ params }) => await this.userService.getUserAnimals(params.id),
+    loader: async () => {
+      try {
+        return await this.userService.getUserAnimals(this.userId());
+      } catch (error) {
+        console.error('Error loading user animals:', error);
+        throw error;
+      }
+    },
   });
 
   ngOnInit() {
     console.log(`User ID: ${this.userId()}`);
-    console.log(`Animals for User ID: ${this.userAnimalsResource.value()}`);
+    // Don't access resource value immediately - it may not be loaded yet
   }
 
   goToSpecificAnimal(animal_id: Animal) {
