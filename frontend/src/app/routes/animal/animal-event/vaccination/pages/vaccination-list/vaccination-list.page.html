@@ -1,3 +1,38 @@
-<p>
-  vaccination-list works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Vacunaciones</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goToCreate()">Nueva vacunación</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (vaccinationsResource.status() === 'loading') {
+  <ion-spinner></ion-spinner>
+  <div>Cargando vacunaciones...</div>
+  } @if (vaccinationsResource.status() === 'error') {
+  <ion-text color="danger"> Error al cargar vacunaciones. </ion-text>
+  <ion-button expand="block" (click)="reload()">Reintentar</ion-button>
+  } @if (vaccinationsResource.status() === 'resolved') { @if
+  ((vaccinationsResource.value() ?? []).length === 0) {
+  <div>No hay vacunaciones registradas.</div>
+  }
+
+  <ion-list>
+    @for (vaccination of vaccinationsResource.value() ?? []; track
+    vaccination.id) {
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ vaccination.vaccine }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Dosis:</strong> {{ vaccination.dosage }}</p>
+        <p><strong>Proveedor</strong>{{ vaccination.provider }}</p>
+        <p><strong>ID Evento:</strong> {{ vaccination.event_id }}</p>
+      </ion-card-content>
+    </ion-card>
+    }
+  </ion-list>
+  }
+</ion-content>

@@ -1,3 +1,10 @@
-<p>
-  vaccination-create works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/animals/vaccination/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Crear Venta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<app-vaccination-form [id]="id()" (submitted)="handleSave($event)" />
