@@ -28,7 +28,7 @@ export class VaccinationCreatePage {
   async handleSave(data: VaccinationCreate) {
     try {
       await this.vaccinationService.createVaccination(this.id(), data);
-      this.router.navigate(['/animal/events/vaccination', this.id()]);
+      this.router.navigate([`/animal/events/${this.id()}/vaccination`]);
     } catch (err) {
       console.error('Error creando vacunación', err);
     }

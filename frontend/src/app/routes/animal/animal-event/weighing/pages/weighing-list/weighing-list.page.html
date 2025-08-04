@@ -23,11 +23,12 @@
     @for (weighing of weighingsResource.value() ?? []; track weighing.id) {
     <ion-card>
       <ion-card-header>
-        <ion-card-title>Pesaje del Animal:</ion-card-title>
+        <ion-card-title
+          >Pesaje del Animal:
+          <p><strong></strong> {{ weighing.weight }} {{ weighing.unit }}</p>
+        </ion-card-title>
       </ion-card-header>
-      <ion-card-content>
-        <p><strong>•</strong> {{ weighing.weight }} {{ weighing.unit }}</p>
-      </ion-card-content>
+      <ion-card-content> </ion-card-content>
     </ion-card>
     }
   </ion-list>

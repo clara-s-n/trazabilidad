@@ -28,7 +28,7 @@ export class WeighingCreatePage {
   async handleSave(data: WeighingCreate) {
     try {
       await this.weighingService.createWeighing(this.id(), data);
-      this.router.navigate(['/animal/events/:id/weighing', this.id()]);
+      this.router.navigate([`/animal/events/${this.id()}/weighing`]);
     } catch (err) {
       console.error('Error creando pesaje', err);
     }

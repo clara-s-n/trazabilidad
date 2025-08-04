@@ -1,13 +1,11 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  computed,
   inject,
   input,
   output,
 } from '@angular/core';
 import {
-  DefaultValueAccessor,
   FormBuilder,
   ReactiveFormsModule,
   Validators,
@@ -19,7 +17,6 @@ import {
   IonInput,
   IonButton,
 } from '@ionic/angular/standalone';
-import { defaultIfEmpty } from 'rxjs';
 import { WeighingCreate } from 'src/app/model/events/weighing';
 @Component({
   selector: 'app-weighing-form',
