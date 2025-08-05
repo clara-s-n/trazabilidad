@@ -22,7 +22,6 @@ import {
 } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
 import { LandsService } from '../../../../services/lands.service';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-land-form',
@@ -39,7 +38,6 @@ import { NgIf } from '@angular/common';
     IonLabel,
     IonText,
     IonImg,
-    NgIf,
     IonIcon,
   ],
 })

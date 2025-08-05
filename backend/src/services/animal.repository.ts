@@ -303,6 +303,16 @@ async getTransportHistoryByAnimalId(animal_id: string): Promise<any[]> {
   return rows;
 }
 
+  async getAnimalStatuses(): Promise<any[]> {
+    // Return the list of possible animal statuses with their labels
+    return [
+      { key: "alive", label_es: "Vivo", label_en: "Alive" },
+      { key: "deceased", label_es: "Fallecido", label_en: "Deceased" },
+      { key: "robbed", label_es: "Robado", label_en: "Robbed" },
+      { key: "lost", label_es: "Perdido", label_en: "Lost" }
+    ];
+  }
+
 }
 
 

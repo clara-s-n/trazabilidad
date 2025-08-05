@@ -89,36 +89,65 @@
             <ion-card-title>Información de Caravana</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            @if (currentTag) {
-            <ion-item>
-              <ion-label>
-                <h3>Caravana Actual</h3>
-                <p>{{ currentTag.tag_number }}</p>
-              </ion-label>
-            </ion-item>
+            <!-- Loading state for tag -->
+            @if (isLoadingTag()) {
+              <div class="ion-text-center">
+                <ion-spinner></ion-spinner>
+                <p>Cargando información de caravana...</p>
+              </div>
             } @else {
-            <ion-item>
-              <ion-label>
-                <h3>Sin caravana asignada</h3>
-              </ion-label>
-            </ion-item>
+              <!-- Tag exists -->
+              @if (currentTag()) {
+                <ion-item>
+                  <ion-label>
+                    <h3>Caravana Actual</h3>
+                    <p>{{ currentTag()!.tag_number }}</p>
+                  </ion-label>
+                </ion-item>
+              } 
+              <!-- Tag needs assignment -->
+              @else if (needsTagAssignment()) {
+                <ion-item color="light">
+                  <ion-label>
+                    <h3>Sin caravana asignada</h3>
+                    <p>Este animal necesita una caravana</p>
+                  </ion-label>
+                </ion-item>
+                @if (canEditAnimals()) {
+                  <div class="ion-padding-top ion-text-center">
+                    <ion-button color="primary" expand="block" (click)="openTagModal()">
+                      Asignar Caravana
+                    </ion-button>
+                  </div>
+                }
+              } 
+              <!-- No tag but not explicitly needs assignment -->
+              @else {
+                <ion-item>
+                  <ion-label>
+                    <h3>Sin caravana asignada</h3>
+                  </ion-label>
+                </ion-item>
+              }
+
+              <!-- Tag actions section -->
+              <div class="tag-actions ion-padding-top">
+                @if (canEditAnimals()) {
+                  <ion-button fill="outline" size="small" (click)="openTagModal()">
+                    {{ currentTag() ? 'Cambiar Caravana' : 'Asignar Caravana' }}
+                  </ion-button>
+                }
+                @if (currentTag()) {
+                  <ion-button
+                    fill="clear"
+                    size="small"
+                    (click)="openTagHistoryModal()"
+                  >
+                    Historial de Caravanas
+                  </ion-button>
+                }
+              </div>
             }
-            <div class="tag-actions">
-              @if (canEditAnimals()) {
-              <ion-button fill="outline" size="small" (click)="openTagModal()">
-                {{ currentTag ? 'Cambiar Caravana' : 'Asignar Caravana' }}
-              </ion-button>
-              }
-              @if (currentTag) {
-              <ion-button
-                fill="clear"
-                size="small"
-                (click)="openTagHistoryModal()"
-              >
-                Historial de Caravanas
-              </ion-button>
-              }
-            </div>
           </ion-card-content>
         </ion-card>
       </ion-col>

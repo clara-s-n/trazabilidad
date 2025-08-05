@@ -49,16 +49,25 @@
           <ion-col size="12" size-md="6">
             <ion-item [class.ion-invalid]="isFieldInvalid('status')">
               <ion-label position="stacked">Estado *</ion-label>
-              <ion-select
-                formControlName="status"
-                placeholder="Selecciona el estado"
-              >
-                @for (status of statuses; track status) {
-                <ion-select-option [value]="status">{{
-                  status
-                }}</ion-select-option>
-                }
-              </ion-select>
+              
+              <!-- Status select with options from resource -->
+              @if (statusesResource.status() === 'loading') {
+                <ion-spinner></ion-spinner>
+              } @else if (statusesResource.hasValue()) {
+                <ion-select formControlName="status" placeholder="Selecciona el estado">
+                  @for (statusOption of statusesResource.value(); track statusOption.key) {
+                    <ion-select-option [value]="statusOption.key">
+                      {{ statusOption.label_en }}
+                    </ion-select-option>
+                  }
+                </ion-select>
+              } @else {
+                <ion-select formControlName="status" placeholder="Cargando estados...">
+                  <ion-select-option value="Activo">Activo</ion-select-option>
+                  <ion-select-option value="Vendido">Vendido</ion-select-option>
+                  <ion-select-option value="Muerto">Muerto</ion-select-option>
+                </ion-select>
+              }
             </ion-item>
             @if (isFieldInvalid('status')) {
             <div class="error-message">{{ getFieldError("status") }}</div>
@@ -70,12 +79,20 @@
         <ion-row>
           <ion-col size="12" size-md="6">
             <ion-item [class.ion-invalid]="isFieldInvalid('owner_id')">
-              <ion-label position="stacked">ID Propietario *</ion-label>
-              <ion-input
-                formControlName="owner_id"
-                placeholder="Ingresa el ID del propietario"
-              >
-              </ion-input>
+              <ion-label position="stacked">Propietario *</ion-label>
+              
+              <!-- User select with options from resource -->
+              @if (usersResource.status() === 'loading') {
+                <ion-spinner></ion-spinner>
+              } @else if (usersResource.hasValue()) {
+                <ion-select formControlName="owner_id" placeholder="Selecciona el propietario">
+                  @for (user of usersResource.value(); track user.id) {
+                    <ion-select-option [value]="user.id">{{ user.email }}</ion-select-option>
+                  }
+                </ion-select>
+              } @else {
+                <ion-input formControlName="owner_id" placeholder="Error al cargar usuarios"></ion-input>
+              }
             </ion-item>
             @if (isFieldInvalid('owner_id')) {
             <div class="error-message">{{ getFieldError("owner_id") }}</div>
@@ -84,12 +101,20 @@
 
           <ion-col size="12" size-md="6">
             <ion-item [class.ion-invalid]="isFieldInvalid('land_id')">
-              <ion-label position="stacked">ID Predio *</ion-label>
-              <ion-input
-                formControlName="land_id"
-                placeholder="Ingresa el ID del predio"
-              >
-              </ion-input>
+              <ion-label position="stacked">Predio *</ion-label>
+              
+              <!-- Land select with options from resource -->
+              @if (landsResource.status() === 'loading') {
+                <ion-spinner></ion-spinner>
+              } @else if (landsResource.hasValue()) {
+                <ion-select formControlName="land_id" placeholder="Selecciona el predio">
+                  @for (land of landsResource.value(); track land.id) {
+                    <ion-select-option [value]="land.id">{{ land.name }}</ion-select-option>
+                  }
+                </ion-select>
+              } @else {
+                <ion-input formControlName="land_id" placeholder="Error al cargar predios"></ion-input>
+              }
             </ion-item>
             @if (isFieldInvalid('land_id')) {
             <div class="error-message">{{ getFieldError("land_id") }}</div>

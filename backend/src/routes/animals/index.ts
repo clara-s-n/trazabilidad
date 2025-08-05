@@ -241,6 +241,32 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       return reply.code(200).send({ tag: currentTag });
     },
   });
+
+  fastify.get(
+    "/statuses",
+    {
+      schema: {
+        tags: ["Animales"],
+        summary: "Obtener todos los estados posibles para animales",
+        description: "Devuelve la lista de posibles estados para un animal",
+        security: [{ bearerAuth: [] }],
+        response: {
+          200: Type.Array(
+            Type.Object({
+              key: Type.String(),
+              label_es: Type.String(),
+              label_en: Type.String(),
+            })
+          ),
+        },
+      },
+      onRequest: fastify.authenticate,
+      handler: async (request, reply) => {
+        const statuses = await animalRepository.getAnimalStatuses();
+        return reply.code(200).send(statuses);
+      },
+    }
+  );
 };
 
 export default animalesRoute;

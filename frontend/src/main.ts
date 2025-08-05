@@ -22,6 +22,7 @@ import {
 import { authInterceptor } from './app/interceptors/auth.interceptor';
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import { environment } from './environments/environment';
+import { IonicModule } from '@ionic/angular';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -33,7 +34,7 @@ bootstrapApplication(AppComponent, {
       withComponentInputBinding()
     ),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
-    importProvidersFrom(BrowserAnimationsModule),
+    importProvidersFrom(BrowserAnimationsModule, IonicModule.forRoot()),
   ],
 });
 

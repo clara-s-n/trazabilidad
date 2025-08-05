@@ -7,6 +7,8 @@ import {
   Output,
   inject,
   signal,
+  computed,
+  resource,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -31,9 +33,20 @@ import {
   IonRow,
   IonSelect,
   IonSelectOption,
+  IonSpinner,
   IonTextarea,
 } from '@ionic/angular/standalone';
+import { firstValueFrom } from 'rxjs';
 import { Animal, AnimalPost } from 'src/app/model/animal';
+import { UserService } from 'src/app/services/user.service';
+import { LandsService } from 'src/app/services/lands.service';
+import { AnimalService } from 'src/app/services/animal.service';
+
+interface AnimalStatus {
+  key: string;
+  label_es: string;
+  label_en: string;
+}
 
 @Component({
   selector: 'app-animal-form',
@@ -54,6 +67,7 @@ import { Animal, AnimalPost } from 'src/app/model/animal';
     IonGrid,
     IonRow,
     IonCol,
+    IonSpinner,
   ],
   templateUrl: './animal-form.component.html',
   styleUrls: ['./animal-form.component.scss'],
@@ -65,13 +79,30 @@ export class AnimalFormComponent implements OnInit {
   @Output() canceled = new EventEmitter<void>();
 
   private fb = inject(FormBuilder);
+  private userService = inject(UserService);
+  private landsService = inject(LandsService);
+  private animalService = inject(AnimalService);
 
   animalForm!: FormGroup;
   loading = signal(false);
 
-  // Mock data - replace with actual service calls
+  // Define resources for fetching data
+  readonly usersResource = resource({
+    loader: async () => await this.userService.getAllUsers(),
+  });
+
+  readonly landsResource = resource({
+    loader: async () => await this.landsService.getAllLands(),
+  });
+
+  readonly statusesResource = resource<AnimalStatus[], undefined>({
+    loader: async () => {
+      return await this.animalService.getAnimalStatuses();
+    },
+  });
+
+  // Legacy breed options in case needed as fallback
   breeds = ['Holstein', 'Jersey', 'Angus', 'Hereford', 'Charolais'];
-  statuses = ['Activo', 'Vendido', 'Muerto', 'Transferido'];
 
   ngOnInit() {
     this.initializeForm();
@@ -83,7 +114,7 @@ export class AnimalFormComponent implements OnInit {
       birth_date: [this.animal?.birth_date || '', [Validators.required]],
       owner_id: [this.animal?.owner_id || '', [Validators.required]],
       land_id: [this.animal?.land_id || '', [Validators.required]],
-      status: [this.animal?.status || 'Activo', [Validators.required]],
+      status: [this.animal?.status || '', [Validators.required]],
     });
   }
 
@@ -91,7 +122,17 @@ export class AnimalFormComponent implements OnInit {
     if (this.animalForm.valid) {
       this.loading.set(true);
       try {
-        const formData = this.animalForm.value;
+        const formData = { ...this.animalForm.value };
+
+        // Format birth_date to YYYY-MM-DD format
+        if (formData.birth_date) {
+          // Handle different date input formats
+          const date = new Date(formData.birth_date);
+          if (!isNaN(date.getTime())) {
+            formData.birth_date = date.toISOString().split('T')[0]; // YYYY-MM-DD format
+          }
+        }
+
         this.submitted.emit(formData);
       } catch (error) {
         console.error('Error submitting form:', error);
