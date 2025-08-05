@@ -21,7 +21,7 @@ export const routes: Routes = [
       },
       // Edit user
       {
-        path: 'edit/:id',
+        path: 'edit/:userId',
         canActivate: [adminOrSelfGuard],
         data: { title: 'Editar Usuario' },
         loadComponent: () =>
@@ -31,7 +31,7 @@ export const routes: Routes = [
       },
       // User profile
       {
-        path: 'profile/:id',
+        path: 'profile/:userId',
         canActivate: [adminOrSelfGuard],
         data: { title: 'Perfil de Usuario' },
         loadComponent: () =>

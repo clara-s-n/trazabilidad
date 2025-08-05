@@ -24,24 +24,24 @@ export class UserEditPage {
   private userService = inject(UserService);
   private router = inject(Router);
 
-  public id = input.required<string>();
+  public userId = input.required<string>();
 
   userResource = resource<UserPost,undefined>({loader: async () => {
-    const id = this.id();
-    if (!id) throw new Error('ID aún no disponible');
-    return await this.userService.getUserById(id)
+    const userId = this.userId();
+    if (!userId) throw new Error('userId aún no disponible');
+    return await this.userService.getUserById(userId)
   }});
 
   async onSubmit(data: { email: string; role_id: number }) {
     try {
-      await this.userService.updateUser(this.id(), data);
-      this.router.navigate(['/user/profile', this.id()]);
+      await this.userService.updateUser(this.userId(), data);
+      this.router.navigate(['/user/profile', this.userId()]);
     } catch (error) {
       console.error('Error al actualizar el usuario:', error);
     }
   }
 
   onCancel() {
-    this.router.navigate(['/users', this.id()]);
+    this.router.navigate(['/user/profile', this.userId()]); // Fix navigation path
   }
 }

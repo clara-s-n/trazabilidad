@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { DeleteUserModalComponent } from './delete-user-modal.component';
 
@@ -9,8 +8,7 @@ describe('DeleteUserModalComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DeleteUserModalComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [DeleteUserModalComponent] // Import as standalone component
     }).compileComponents();
 
     fixture = TestBed.createComponent(DeleteUserModalComponent);

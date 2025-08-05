@@ -10,6 +10,11 @@
   <ion-toolbar>
     <ion-title>Usuarios</ion-title>
   </ion-toolbar>
+  <ion-buttons slot="end">
+    <ion-button [routerLink]="['/auth/register']" routerLinkActive="selected">
+      <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+    </ion-button>
+  </ion-buttons>
 </ion-header>
 <ion-content>
   @if (usersResource.status() === 'loading') {
