@@ -32,7 +32,7 @@ export class DeleteUserModalComponent {
   deleted = output<void>();
   private modalController = inject(ModalController);
 
-  confirm() {
+  confirmDelete() {
     this.deleted.emit();
     this.modalController.dismiss({ confirm: true });
   }

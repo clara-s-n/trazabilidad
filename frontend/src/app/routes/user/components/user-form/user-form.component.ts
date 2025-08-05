@@ -20,7 +20,7 @@ import {
 } from '@ionic/angular/standalone';
 import { FieldErrorPipe } from 'src/app/pipes/field-error.pipe';
 import { MainStoreService } from 'src/app/services/main-store.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-user-form',
@@ -37,6 +37,7 @@ import { FormsModule } from '@angular/forms';
     IonSelectOption,
     FieldErrorPipe,
     FormsModule,
+    ReactiveFormsModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'app-user-form' },
