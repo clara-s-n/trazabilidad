@@ -47,8 +47,6 @@ import { UserService } from 'src/app/services/user.service';
     IonRow,
     IonIcon,
     IonCol,
-    IonFab,
-    IonFabButton,
   ],
 })
 export class UserListPage {

@@ -1,4 +1,13 @@
-import { Component, ChangeDetectionStrategy, computed, inject, input, resource } from '@angular/core';
+// animal-edit.page.ts
+
+import {
+  Component,
+  ChangeDetectionStrategy,
+  computed,
+  inject,
+  input,
+  resource,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { AnimalFormComponent } from '../../components/animal-form/animal-form.component';
 import {
@@ -21,7 +30,7 @@ import { Animal } from 'src/app/model/animal';
 
 /**
  * Página de edición de animal.
- * Carga los datos automáticamente con resource() usando el ID de la ruta.
+ * Usa `resource()` para cargar el animal automáticamente desde la URL.
  */
 @Component({
   selector: 'app-animal-edit',
@@ -45,26 +54,23 @@ import { Animal } from 'src/app/model/animal';
     IonCardContent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'animal-edit-page' }
-
+  host: { class: 'animal-edit-page' },
 })
-export class AnimalEditPage implements OnInit {
-  private animalService = inject(AnimalService);
-  private router = inject(Router);
+export class AnimalEditPage {
+  private readonly animalService = inject(AnimalService);
+  private readonly router = inject(Router);
 
-  /** ID inyectado por el sistema de rutas con @route */
-  readonly animal_id = input.required<string>();
+  id = input.required<string>();
 
-  /** Recurso que obtiene el animal en base al ID */
+  /** Recurso reactivo que carga el animal automáticamente */
   readonly animalResource = resource<Animal, undefined>({
-    loader: () => {
-    const id = this.animal_id();
-    if (!id) throw new Error('ID no disponible aún');
-    return this.animalService.getAnimal(id);
-    }});
-
-  /** Señal reactiva del animal */
-  readonly animal = computed(() => this.animalResource.value() ?? undefined);
+    loader: async () => {
+    const id = this.id();
+    console.log(this.id)
+    console.log(id)
+    if (!id) throw new Error('ID no disponible');
+    return await this.animalService.getAnimal(id);
+  }});
 
   async onSubmit(data: {
     breed?: string;
@@ -74,15 +80,14 @@ export class AnimalEditPage implements OnInit {
     status?: string;
   }) {
     try {
-      await this.animalService.updateAnimal(this.animal_id(), data);
-      // Redirect to detail page after successful update
-      this.router.navigate(['/animal', this.animal_id()]);
+      await this.animalService.updateAnimal(this.id(), data);
+      this.router.navigate(['/animal', this.id()]);
     } catch (error) {
       console.error('Error al actualizar el animal:', error);
     }
   }
 
   onCancel() {
-    this.router.navigate(['/animal', this.animal_id()]);
+    this.router.navigate(['/animal', this.id()]);
   }
 }
