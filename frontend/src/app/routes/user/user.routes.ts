@@ -23,6 +23,7 @@ export const routes: Routes = [
       {
         path: 'edit/:id',
         canActivate: [adminOrSelfGuard],
+        data: { title: 'Editar Usuario' },
         loadComponent: () =>
           import('./pages/user-edit/user-edit.page').then(
             (m) => m.UserEditPage
@@ -32,6 +33,7 @@ export const routes: Routes = [
       {
         path: 'profile/:id',
         canActivate: [adminOrSelfGuard],
+        data: { title: 'Perfil de Usuario' },
         loadComponent: () =>
           import('./pages/user-profile/user-profile.page').then(
             (m) => m.UserProfilePage

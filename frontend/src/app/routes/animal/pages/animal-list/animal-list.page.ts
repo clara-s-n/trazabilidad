@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, resource } from '@angular/core';
+import { Component, inject, resource, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 import {
   IonButton,
   IonButtons,
@@ -61,7 +62,11 @@ import { AnimalService } from 'src/app/services/animal.service';
     IonLabel,
   ],
 })
-export class ListPage {
+export class ListPage implements OnInit {
+  private router = inject(Router);
+  private animalService = inject(AnimalService);
+  private title = inject(Title);
+
   constructor() {
     addIcons({
       eyeOutline,
@@ -71,8 +76,9 @@ export class ListPage {
     });
   }
 
-  private animalService = inject(AnimalService);
-  private router = inject(Router);
+  ngOnInit() {
+    this.title.setTitle('Lista de Animales | Sistema de Trazabilidad');
+  }
 
   public animalsResource = resource({
     loader: async () => await this.animalService.getAllAnimals(),

@@ -11,7 +11,7 @@ export const routes: Routes = [
   {
     path: '',
     canActivate: [authGuard],
-
+    data: { title: 'Sistema de Trazabilidad' },
     loadComponent: () =>
       import('./layout/main-layout/main-layout.component').then(
         (m) => m.MainLayoutComponent
@@ -19,6 +19,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'dashboard',
+        data: { title: 'Panel de Control' },
         loadComponent: () =>
           import('./pages/dashboard/dashboard.component').then(
             (m) => m.DashboardComponent

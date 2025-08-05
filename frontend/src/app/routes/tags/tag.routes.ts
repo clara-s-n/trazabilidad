@@ -13,10 +13,10 @@ export const routes: Routes = [
       {
         path: 'list',
         //canActivate: [adminGuard],
-        //data: { menu: true, section: 'Usuarios', title: 'Lista de usuarios' },
+        data: { menu: true, section: 'Caravanas', title: 'Lista de Caravanas' },
         loadComponent: () =>
-          import('./tag-list/tag-list.page').then(m => m.TagListPage)
+          import('./tag-list/tag-list.page').then((m) => m.TagListPage),
       },
-    ]
-  }
+    ],
+  },
 ];

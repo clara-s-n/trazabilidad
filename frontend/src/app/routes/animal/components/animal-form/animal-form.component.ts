@@ -60,7 +60,7 @@ import { Animal, AnimalPost } from 'src/app/model/animal';
 })
 export class AnimalFormComponent implements OnInit {
   @Input() isEditMode = false;
-  @Input() animal: Animal | null = null;
+  @Input() animal: Animal | null | undefined = null;
   @Output() submitted = new EventEmitter<AnimalPost>();
   @Output() canceled = new EventEmitter<void>();
 

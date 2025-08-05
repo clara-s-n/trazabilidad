@@ -1,5 +1,15 @@
-import { Component, ChangeDetectionStrategy, computed, inject, input, resource } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  computed,
+  inject,
+  input,
+  resource,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 import { AnimalFormComponent } from '../../components/animal-form/animal-form.component';
 import {
   IonSpinner,
@@ -45,12 +55,15 @@ import { Animal } from 'src/app/model/animal';
     IonCardContent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'animal-edit-page' }
-
+  host: { class: 'animal-edit-page' },
 })
 export class AnimalEditPage implements OnInit {
   private animalService = inject(AnimalService);
   private router = inject(Router);
+  private title = inject(Title);
+
+  /** Loading signal for template */
+  readonly loading = computed(() => this.animalResource.status() === 'loading');
 
   /** ID inyectado por el sistema de rutas con @route */
   readonly animal_id = input.required<string>();
@@ -58,13 +71,18 @@ export class AnimalEditPage implements OnInit {
   /** Recurso que obtiene el animal en base al ID */
   readonly animalResource = resource<Animal, undefined>({
     loader: () => {
-    const id = this.animal_id();
-    if (!id) throw new Error('ID no disponible aún');
-    return this.animalService.getAnimal(id);
-    }});
+      const id = this.animal_id();
+      if (!id) throw new Error('ID no disponible aún');
+      return this.animalService.getAnimal(id);
+    },
+  });
 
   /** Señal reactiva del animal */
   readonly animal = computed(() => this.animalResource.value() ?? undefined);
+
+  ngOnInit() {
+    this.title.setTitle('Editar Animal | Sistema de Trazabilidad');
+  }
 
   async onSubmit(data: {
     breed?: string;

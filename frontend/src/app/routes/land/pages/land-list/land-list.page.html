@@ -65,8 +65,14 @@
           <ion-card-content>
             <ion-item lines="none">
               <ion-label>
-                <p><strong>Superficie:</strong> {{ land.area }} ha</p>
-                <p><strong>Ubicación:</strong> {{ land.location }}</p>
+                <p>
+                  <strong>Superficie:</strong> {{ land.area || 'No especificada'
+                  }} ha
+                </p>
+                <p>
+                  <strong>Ubicación:</strong> {{ land.location || 'No
+                  especificada' }}
+                </p>
               </ion-label>
             </ion-item>
 

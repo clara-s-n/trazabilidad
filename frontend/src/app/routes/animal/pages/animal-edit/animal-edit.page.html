@@ -6,7 +6,8 @@
       ></ion-back-button>
     </ion-buttons>
     <ion-title>
-      @if (animal()) { Editar: {{ animal().breed }} } @else { Editar Animal }
+      @if (animal()) { Editar: {{ animal()?.breed || 'Animal' }} } @else {
+      Editar Animal }
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -25,7 +26,7 @@
         } @else if (animal()) {
         <app-animal-form
           [isEditMode]="true"
-          [animal]="animal()"
+          [animal]="animal() ?? null"
           (submitted)="onSubmit($event)"
           (canceled)="onCancel()"
         >
