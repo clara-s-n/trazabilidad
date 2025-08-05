@@ -11,7 +11,7 @@
     <ion-row>
       <!-- Animals Section - All users can view, but editing depends on role -->
       <ion-col size="12" size-md="6" size-lg="4">
-        <ion-card button="true" [routerLink]="['/animal/list']">
+        <ion-card button="true" [routerLink]="isAdmin() ? ['/animal/list/'] : ['/animal', userIdValue, 'list']">
           <ion-card-header>
             <ion-icon
               name="paw-outline"

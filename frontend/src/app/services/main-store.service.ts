@@ -126,8 +126,27 @@ export class MainStoreService {
     this.userRoleId.set(null);
   }
 
-  // Verifica si el usuario es administrador o si mismo.
+  /**
+   * Devuelve true si el usuario autenticado es administrador o es el mismo usuario indicado por userId.
+   * @param userId El id del usuario a comparar.
+   */
   isAdminOrSelf(userId: string): boolean {
-    return this.isAdmin() || (this.isAuthenticated() && this.userId() === userId);
+    // Extraer el userId real si es un objeto Computed
+    let userIdValue = userId;
+    if (typeof userId === 'string' && userId.includes('[Computed:')) {
+      const match = userId.match(/\[Computed: ([^]+)\]/);
+      if (match && match[1]) {
+        userIdValue = match[1].trim();
+      }
+    }
+
+    const currentUserId = this.userId();
+    console.log('Verificando si es admin o self:', currentUserId, userIdValue);
+    const isAdmin = this.isAdmin();
+    const isSelf = !!currentUserId && currentUserId === userIdValue;
+    
+    console.log('isAdmin:', isAdmin, 'isSelf:', isSelf);
+    
+    return isAdmin || isSelf;
   }
 }

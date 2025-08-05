@@ -10,45 +10,19 @@
         }
 
         <ion-item>
-          <ion-input
-            type="email"
-            [ngModel]="email()"
-            (ngModelChange)="email.set($event)"
-            placeholder="Email"
-            name="email"
-            required
-          >
+          <ion-input type="email" [ngModel]="email()" (ngModelChange)="email.set($event)" placeholder="Email"
+            name="email" required>
           </ion-input>
         </ion-item>
 
         <ion-item>
-          <ion-input
-            type="password"
-            [ngModel]="password()"
-            (ngModelChange)="password.set($event)"
-            placeholder="Contraseña"
-            name="password"
-            required
-          >
+          <ion-input type="password" [ngModel]="password()" (ngModelChange)="password.set($event)"
+            placeholder="Contraseña" name="password" required>
           </ion-input>
         </ion-item>
 
-        <ion-button
-          expand="block"
-          type="submit"
-          [disabled]="loading()"
-          class="ion-margin-top"
-        >
+        <ion-button expand="block" type="submit" [disabled]="loading()" class="ion-margin-top">
           @if (loading()) { Iniciando sesión... } @else { Iniciar Sesión }
-        </ion-button>
-        <ion-button
-          expand="block"
-          fill="outline"
-          (click)="goToRegister()"
-          [disabled]="loading()"
-          class="ion-margin-top"
-        >
-          Registrarse
         </ion-button>
       </form>
     </ion-col>

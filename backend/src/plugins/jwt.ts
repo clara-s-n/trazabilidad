@@ -67,10 +67,15 @@ const jwtPlugin = fp<FastifyJWTOptions>(async (fastify) => {
   const verifySelfOrAdmin: authenticateFunction = async (request, reply) => {
     await request.jwtVerify();
     const { user_id: targetId } = request.params as { user_id: string };
-    const { id, role_id } = request.user as { id: string, role_id: number };
+    const user = request.user as any;
+    // Intenta obtener el ID desde varias posibles propiedades
+    const userId = user.id || user.user_id; 
+    const { role_id } = user;
 
+    console.log('JWT verify - User data:', { userId, role_id, targetId, user });
+    
     // Si es el mismo usuario, permitir acceso
-    if (id === targetId) {
+    if (userId === targetId) {
       return; 
     }
     
@@ -81,8 +86,38 @@ const jwtPlugin = fp<FastifyJWTOptions>(async (fastify) => {
     
     // Si no es ni el mismo usuario ni admin, denegar acceso
     return reply.code(403).send({
-      error: `Forbidden: Admin or Owner only, user_id: ${id}, target: ${targetId}`
+      error: `Forbidden: Admin or Owner only, user_id: ${userId}, target: ${targetId}`
     });
+  };
+
+  // --- 6) Operador (solo sus propios recursos) o Admin (cualquier recurso) ---
+  const verifyOperatorSelfOrAdmin: authenticateFunction = async (request, reply) => {
+    try {
+      await request.jwtVerify();
+      
+      const { userId } = request.params as { userId: string };
+      const { id, role_id } = request.user as { id: string, role_id: number };
+      
+      // Si es admin, permitir acceso a cualquier recurso
+      if (role_id === 3) {
+        return;
+      }
+      
+      // Si es operador y accede a sus propios recursos, permitir
+      if (role_id === 1 && id === userId) {
+        return;
+      }
+      
+      // En cualquier otro caso (operador intentando acceder a otro usuario o rol diferente)
+      return reply.code(403).send({
+        error: `Forbidden: Admin or self-operator only, user_id: ${id}, target: ${userId}, role: ${role_id}`
+      });
+    } catch (err) {
+      // Error de JWT inválido o expirado genera 401 Unauthorized
+      return reply.code(401).send({
+        error: "Unauthorized: Invalid or expired token"
+      });
+    }
   };
 
   // Registrar los métodos de autenticación
@@ -91,5 +126,6 @@ const jwtPlugin = fp<FastifyJWTOptions>(async (fastify) => {
   fastify.decorate("verifyOperator", verifyOperator);
   fastify.decorate("verifyOperatorOrAdmin", verifyOperatorOrAdmin);
   fastify.decorate("verifySelfOrAdmin", verifySelfOrAdmin);
+  fastify.decorate("verifyOperatorSelfOrAdmin", verifyOperatorSelfOrAdmin);
 });
 export default jwtPlugin;
