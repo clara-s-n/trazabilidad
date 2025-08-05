@@ -1,0 +1,104 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" [routerLink]="['/dashboard']">
+        <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Mapa de Animales</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="goToList()">
+        <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+      </ion-button>
+      @if (canCreateAnimals()) {
+      <ion-button [routerLink]="['/animal/create']" fill="clear">
+        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+      </ion-button>
+      } @else {
+      <ion-badge color="medium">Solo lectura</ion-badge>
+      }
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Filters Section -->
+  <app-animal-filters
+    [speciesList]="speciesList()"
+    [regionsList]="regionsList()"
+    [initialSpecies]="speciesFilter()"
+    [initialRegion]="regionFilter()"
+    [initialFromDate]="fromDate()"
+    [initialToDate]="toDate()"
+    (filtersApplied)="onFiltersApplied($event)"
+    (filtersCleared)="onFiltersCleared()">
+  </app-animal-filters>
+
+  <!-- Map Container -->
+  <div class="map-container">
+    @if (loading()) {
+      <div class="loading-state ion-padding ion-text-center">
+        <ion-spinner></ion-spinner>
+        <p>Cargando datos del mapa...</p>
+      </div>
+    } @else if (filteredAnimals().length === 0 && animals().length > 0) {
+      <div class="empty-state ion-padding ion-text-center">
+        <ion-icon name="filter-outline" size="large"></ion-icon>
+        <h3>No se encontraron animales</h3>
+        <p>No hay animales que coincidan con los filtros seleccionados para mostrar en el mapa.</p>
+        <ion-button fill="clear" (click)="onFiltersCleared()">
+          Limpiar filtros
+        </ion-button>
+      </div>
+    } @else if (animals().length === 0) {
+      <div class="empty-state ion-padding ion-text-center">
+        <ion-icon name="paw-outline" size="large"></ion-icon>
+        <h3>No hay animales registrados</h3>
+        <p>Comienza creando tu primer animal para verlo en el mapa.</p>
+        @if (canCreateAnimals()) {
+        <ion-button expand="block" [routerLink]="['/animal/create']">
+          <ion-icon slot="start" name="add-outline"></ion-icon>
+          Crear Animal
+        </ion-button>
+        } @else {
+        <ion-badge color="warning">Permisos insuficientes para crear animales</ion-badge>
+        }
+      </div>
+    } @else {
+      <!-- Map will be implemented here -->
+      <div class="map-placeholder ion-padding ion-text-center">
+        <ion-icon name="map-outline" size="large" color="primary"></ion-icon>
+        <h3>Mapa de Animales</h3>
+        <p>{{ filteredAnimals().length }} animal(es) para mostrar</p>
+        
+        <!-- Temporary list view until map is implemented -->
+        <div class="animals-summary">
+          <h4>Animales filtrados:</h4>
+          @for (animal of filteredAnimals(); track animal.id) {
+            <div class="animal-item ion-margin-bottom">
+              <ion-button 
+                expand="block" 
+                fill="outline" 
+                (click)="goToSpecificAnimal(animal)">
+                <div class="animal-info">
+                  <strong>{{ animal.breed }}</strong><br>
+                  <small>Nacimiento: {{ animal.birth_date | date:'short' }}</small><br>
+                  <small>Estado: {{ animal.status }}</small>
+                </div>
+              </ion-button>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Floating Action Button -->
+  @if (canCreateAnimals()) {
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button [routerLink]="['/animal/create']">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  }
+</ion-content>

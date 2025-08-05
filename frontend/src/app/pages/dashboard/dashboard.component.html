@@ -1,0 +1,151 @@
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <h1>Panel de Control</h1>
+        <p>Bienvenido al Sistema de Trazabilidad Animal</p>
+        <ion-badge color="primary">{{ roleName() }}</ion-badge>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <!-- Animals Section - All users can view, but editing depends on role -->
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card button="true" [routerLink]="isAdmin() ? ['/animal/list/'] : ['/animal', userIdValue, 'list']">
+          <ion-card-header>
+            <ion-icon
+              name="paw-outline"
+              size="large"
+              color="primary"
+            ></ion-icon>
+            <ion-card-title>
+              Animales
+              @if (!permissions().canEditAnimals) {
+                <ion-badge color="medium" style="margin-left: 8px;">Solo lectura</ion-badge>
+              }
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            @if (permissions().canEditAnimals) {
+              Gestionar registro de animales, historial y eventos
+            } @else {
+              Ver información de animales e historial
+            }
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Lands Section - All users can view, but editing depends on role -->
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card button="true" [routerLink]="['/land/list']">
+          <ion-card-header>
+            <ion-icon
+              name="business-outline"
+              size="large"
+              color="success"
+            ></ion-icon>
+            <ion-card-title>
+              Predios
+              @if (!permissions().canEditLands) {
+                <ion-badge color="medium" style="margin-left: 8px;">Solo lectura</ion-badge>
+              }
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            @if (permissions().canEditLands) {
+              Administrar predios y ubicaciones de animales
+            } @else {
+              Ver información de predios y ubicaciones
+            }
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Users Section - Show for all but restrict access through guards -->
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card button="true" [routerLink]="['/user/list']">
+          <ion-card-header>
+            <ion-icon
+              name="people-outline"
+              size="large"
+              [color]="permissions().canViewUsers ? 'warning' : 'medium'"
+            ></ion-icon>
+            <ion-card-title>
+              Usuarios
+              @if (!permissions().canViewUsers) {
+                <ion-badge color="danger" style="margin-left: 8px;">Restringido</ion-badge>
+              }
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            @if (permissions().canViewUsers) {
+              Gestionar usuarios y permisos del sistema
+            } @else {
+              Gestión de usuarios (solo administradores)
+            }
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Tags Section - Show for all but restrict access through guards -->
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card button="true" [routerLink]="['/tags/list']">
+          <ion-card-header>
+            <ion-icon
+              name="pricetag-outline"
+              size="large"
+              [color]="permissions().canViewTags ? 'secondary' : 'medium'"
+            ></ion-icon>
+            <ion-card-title>
+              Caravanas
+              @if (!permissions().canViewTags) {
+                <ion-badge color="danger" style="margin-left: 8px;">Restringido</ion-badge>
+              }
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            @if (permissions().canViewTags) {
+              Administrar caravanas electrónicas y asignaciones
+            } @else {
+              Gestión de caravanas (administradores y operadores)
+            }
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Reports Section - All users -->
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card button="true" (click)="navigateTo('/reports')">
+          <ion-card-header>
+            <ion-icon
+              name="stats-chart-outline"
+              size="large"
+              color="tertiary"
+            ></ion-icon>
+            <ion-card-title>Reportes</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            Generar reportes y estadísticas del sistema
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Documentation Section - All users -->
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card button="true" (click)="navigateTo('/help')">
+          <ion-card-header>
+            <ion-icon
+              name="document-text-outline"
+              size="large"
+              color="medium"
+            ></ion-icon>
+            <ion-card-title>Ayuda</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            Documentación y guías del sistema
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

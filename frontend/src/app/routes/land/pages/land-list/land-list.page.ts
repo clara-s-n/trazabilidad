@@ -1,20 +1,43 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, resource, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Land } from '../../../../model/land';
 import { LandsService } from '../../../../services/lands.service';
+import { environment } from '../../../../../environments/environment';
 import {
   IonButton,
   IonButtons,
+  IonCol,
   IonContent,
+  IonFab,
+  IonFabButton,
   IonHeader,
-  IonItem,
-  IonLabel,
-  IonList,
+  IonIcon,
+  IonRow,
+  IonSpinner,
   IonTitle,
   IonToolbar,
+  IonGrid,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonItem,
+  IonLabel,
   ModalController,
 } from '@ionic/angular/standalone';
 import { DeleteLandModalComponent } from '../../components/delete-land-modal/delete-land-modal.component';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { addIcons } from 'ionicons';
+import {
+  locationOutline,
+  eyeOutline,
+  createOutline,
+  trashOutline,
+  addOutline,
+  pencilOutline,
+  homeOutline,
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-land-list',
@@ -22,16 +45,27 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['./list.page.scss'],
   standalone: true,
   imports: [
+    CommonModule,
+    RouterLink,
     IonHeader,
     IonToolbar,
     IonTitle,
     IonButtons,
     IonButton,
     IonContent,
-    IonList,
+    IonSpinner,
+    IonRow,
+    IonIcon,
+    IonCol,
+    IonFab,
+    IonFabButton,
+    IonGrid,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardTitle,
     IonItem,
     IonLabel,
-    RouterLink,
   ],
 })
 export class ListPage implements OnInit {
@@ -40,12 +74,28 @@ export class ListPage implements OnInit {
   public lands = signal<Land[]>([]);
 
   private landService: LandsService = inject(LandsService);
-
   private modalController: ModalController = inject(ModalController);
+  private router = inject(Router);
+  private title = inject(Title);
 
-  constructor() {}
+  public landsResource = resource({
+    loader: async () => await this.landService.getAllLands(),
+  });
+
+  constructor() {
+    addIcons({
+      locationOutline,
+      eyeOutline,
+      createOutline,
+      trashOutline,
+      addOutline,
+      pencilOutline,
+      homeOutline,
+    });
+  }
 
   ngOnInit() {
+    this.title.setTitle('Lista de Predios | Sistema de Trazabilidad');
     this.loadLands();
 
     this.socket.addEventListener('open', (event) => {
@@ -80,5 +130,54 @@ export class ListPage implements OnInit {
   async deleteLand(id: string) {
     await this.landService.deleteLand({ land_id: id });
     this.loadLands();
+  }
+
+  // Helper method to format coordinates
+  formatCoordinate(value: number, isLatitude: boolean): string {
+    const direction = isLatitude
+      ? value >= 0
+        ? 'N'
+        : 'S'
+      : value >= 0
+      ? 'E'
+      : 'W';
+    return `${Math.abs(value).toFixed(4)}° ${direction}`;
+  }
+
+  goToSpecificLand(land: Land) {
+    this.router.navigate([`/land/${land.id}`]);
+  }
+
+  goToEdit(land: Land) {
+    this.router.navigate([`/land/edit/${land.id}`]);
+  }
+
+  goToCreate() {
+    this.router.navigate(['/land/create']);
+  }
+
+  goToDashboard() {
+    this.router.navigate(['/dashboard']);
+  }
+
+  reload() {
+    this.landsResource.reload();
+  }
+
+  getImageUrl(imagePath: string | undefined): string {
+    if (!imagePath) return 'assets/images/placeholder-land.jpg';
+
+    // If the path is a full URL, return as is
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+
+    // Otherwise, construct the URL using the backend API URL
+    return `${environment.apiUrl}public/${imagePath}`;
+  }
+
+  onImageError(event: any) {
+    // Replace broken image with placeholder
+    event.target.src = 'assets/images/placeholder-land.jpg';
   }
 }

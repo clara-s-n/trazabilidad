@@ -3,26 +3,101 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/land/list"></ion-back-button>
     </ion-buttons>
-    <ion-title>Detalles Predio</ion-title>
+    <ion-title>Detalles del Predio</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   @if(land()) {
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>{{ land()?.name }}</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <p><strong>Latitud:</strong> {{ land()?.latitude }}</p>
-        <p><strong>Longitud:</strong> {{ land()?.longitude }}</p>
-      </ion-card-content>
-    </ion-card>
+  <!-- Basic Information Card -->
+  <ion-card>
+    @if(land()?.image_path) {
+    <img
+      [src]="getImageUrl(land()?.image_path)"
+      [alt]="land()?.name"
+      class="land-image"
+      (error)="onImageError($event)"
+    />
+    }
+    <ion-card-header>
+      <ion-card-title>{{ land()?.name }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-icon name="location-outline" slot="start"></ion-icon>
+          <ion-label>
+            <h3>Ubicación</h3>
+            <p>Latitud: {{ formatCoordinate(land()!.latitude, true) }}</p>
+            <p>Longitud: {{ formatCoordinate(land()!.longitude, false) }}</p>
+          </ion-label>
+        </ion-item>
 
-    <ion-button expand="block" (click)="goEdit()">Editar</ion-button>
-    <ion-button expand="block" color="danger" (click)="confirmDelete()">Eliminar</ion-button>
-  }
-  @if (!land()) {
-    <p>Cargando detalles...</p>
+        <ion-item>
+          <ion-icon name="resize-outline" slot="start"></ion-icon>
+          <ion-label>
+            <h3>Coordenadas Decimales</h3>
+            <p>{{ land()?.latitude }}, {{ land()?.longitude }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Animals Information Card -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="paw-outline"></ion-icon>
+        Animales en este Predio
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      @if(isLoadingAnimals()) {
+      <div class="ion-text-center">
+        <ion-spinner></ion-spinner>
+        <p>Cargando animales...</p>
+      </div>
+      } @if(!isLoadingAnimals()) { @if(landAnimals().length === 0) {
+      <ion-text color="medium">
+        <p class="ion-text-center">No hay animales asignados a este predio.</p>
+      </ion-text>
+      } @else {
+      <ion-text color="primary">
+        <h4>{{ landAnimals().length }} animal(es) registrado(s)</h4>
+      </ion-text>
+      <ion-list>
+        @for(animal of landAnimals(); track animal.id) {
+        <ion-item button (click)="goToAnimal(animal.id)">
+          <ion-label>
+            <h3>{{ animal.breed }}</h3>
+            <p>Fecha de nacimiento: {{ animal.birth_date }}</p>
+            <p>Estado: {{ animal.status }}</p>
+          </ion-label>
+        </ion-item>
+        }
+      </ion-list>
+      } }
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Action Buttons -->
+  <div class="action-buttons">
+    <ion-button expand="block" (click)="goEdit()"> Editar Predio </ion-button>
+    <ion-button
+      expand="block"
+      color="danger"
+      (click)="confirmDelete()"
+      [disabled]="landAnimals().length > 0"
+    >
+      {{ landAnimals().length > 0 ? 'No se puede eliminar (tiene animales)' :
+      'Eliminar Predio' }}
+    </ion-button>
+  </div>
+  } @if (!land()) {
+  <div class="ion-text-center">
+    <ion-spinner></ion-spinner>
+    <p>Cargando detalles del predio...</p>
+  </div>
   }
 </ion-content>

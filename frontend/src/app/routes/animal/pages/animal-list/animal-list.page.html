@@ -1,34 +1,119 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Animales</ion-title>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" [routerLink]="['/dashboard']">
+        <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Lista de Animales</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="goToMap()">
+        <ion-icon slot="icon-only" name="map-outline"></ion-icon>
+      </ion-button>
+      @if (canCreateAnimals()) {
+      <ion-button [routerLink]="['/animal/create']" fill="clear">
+        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+      </ion-button>
+      } @else {
+      <ion-badge color="medium">Solo lectura</ion-badge>
+      }
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
 <ion-content>
-  @if (animalsResource.status() === 'loading') {
-  <ion-spinner></ion-spinner>
-  <div>Cargando animales...</div>
-  } @if (animalsResource.status() === 'error') {
-  <ion-text color="danger"> Error al cargar animales. </ion-text>
-  <ion-button expand="block" (click)="reload()"> Reintentar </ion-button>
-  } @if (animalsResource.status() === 'resolved') { @if
-  ((animalsResource.value() ?? []).length === 0) {
-  <div class="ion-padding">No hay animales registrados.</div>
-  }
-  <ion-list>
-    @for (animal of animalsResource.value() ?? []; track animal.id) {
-    <ion-row>
-      <ion-col>Raza: {{ animal.breed }}</ion-col>
-      <ion-col>Fecha de Nacimiento: {{ animal.birth_date }}</ion-col>
-      <ion-col>Dueño: {{ animal.owner_id }}</ion-col>
-      <ion-col>Predio: {{ animal.land_id }}</ion-col>
-      <ion-col>Estado: {{ animal.status }}</ion-col>
-      <ion-col>
-        <ion-button (click)="goToSpecificAnimal(animal)">
-          <ion-icon slot="icon-only" name="eye-outline"></ion-icon>
+  <!-- Filters Section -->
+  <app-animal-filters
+    [speciesList]="speciesList()"
+    [regionsList]="regionsList()"
+    [initialSpecies]="speciesFilter()"
+    [initialRegion]="regionFilter()"
+    [initialFromDate]="fromDate()"
+    [initialToDate]="toDate()"
+    (filtersApplied)="onFiltersApplied($event)"
+    (filtersCleared)="onFiltersCleared()">
+  </app-animal-filters>
+
+  <!-- Animal List -->
+  <div class="animals-container ion-padding">
+    @if (loading()) {
+      <div class="loading-state">
+        <ion-spinner></ion-spinner>
+        <p>Cargando animales...</p>
+      </div>
+    } @else if (filteredAnimals().length === 0 && animals().length > 0) {
+      <div class="empty-state ion-padding ion-text-center">
+        <ion-icon name="filter-outline" size="large"></ion-icon>
+        <h3>No se encontraron animales</h3>
+        <p>No hay animales que coincidan con los filtros seleccionados.</p>
+        <ion-button fill="clear" (click)="onFiltersCleared()">
+          Limpiar filtros
         </ion-button>
-      </ion-col>
-    </ion-row>
+      </div>
+    } @else if (animals().length === 0) {
+      <div class="empty-state ion-padding ion-text-center">
+        <ion-icon name="paw-outline" size="large"></ion-icon>
+        <h3>No hay animales registrados</h3>
+        <p>Comienza creando tu primer animal.</p>
+        @if (canCreateAnimals()) {
+        <ion-button expand="block" [routerLink]="['/animal/create']">
+          <ion-icon slot="start" name="add-outline"></ion-icon>
+          Crear Animal
+        </ion-button>
+        } @else {
+        <ion-badge color="warning">Permisos insuficientes para crear animales</ion-badge>
+        }
+      </div>
+    } @else {
+      <ion-grid>
+        @for (animal of filteredAnimals(); track animal.id) {
+        <ion-row>
+          <ion-col size="12" size-md="6" size-lg="4">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>{{ animal.breed }}</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-item lines="none">
+                  <ion-label>
+                    <p>
+                      <strong>Nacimiento:</strong> {{ animal.birth_date | date:'short' }}
+                    </p>
+                    <p><strong>Estado:</strong> {{ animal.status }}</p>
+                  </ion-label>
+                </ion-item>
+
+                <div class="action-buttons">
+                  <ion-button
+                    fill="outline"
+                    size="small"
+                    (click)="goToSpecificAnimal(animal)"
+                  >
+                    <ion-icon slot="start" name="eye-outline"></ion-icon>
+                    Ver
+                  </ion-button>
+                  @if (canEditAnimals()) {
+                  <ion-button fill="clear" size="small" (click)="goToEdit(animal)">
+                    <ion-icon slot="start" name="pencil-outline"></ion-icon>
+                    Editar
+                  </ion-button>
+                  }
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+        }
+      </ion-grid>
     }
-  </ion-list>
+  </div>
+
+  <!-- Floating Action Button -->
+  @if (canCreateAnimals()) {
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button [routerLink]="['/animal/create']">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
   }
 </ion-content>

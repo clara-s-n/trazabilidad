@@ -1,54 +1,252 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Detalle del Animal</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/animal/list"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      @if (animal) { Detalle: {{ animal.breed }} } @else { Detalle Animal }
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" [routerLink]="['/animal/list']">
+        <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+      </ion-button>
+      @if (animal && canEditAnimals()) {
+      <ion-button fill="clear" (click)="goToEdit()">
+        <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
+      </ion-button>
+      }
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ng-container *ngIf="!loading; else loadingTpl">
-    <ng-container *ngIf="animal; else noData">
-      <ion-item>Raza: {{ animal.breed }}</ion-item>
-      <ion-item>Fecha de Nacimiento: {{ animal.birth_date | date }}</ion-item>
-      <ion-item>Dueño: {{ animal.owner_id }}</ion-item>
-      <ion-item>Predio: {{ animal.land_id }}</ion-item>
-      <ion-item>Estado: {{ animal.status }}</ion-item>
-      <ion-item>Agregado: {{ animal.created_at | date:'short' }}</ion-item>
-      <ion-item>Modificado: {{ animal.updated_at | date:'short' }}</ion-item>
+<ion-content class="ion-padding">
+  <ion-grid>
+    @if (loading) {
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <ion-spinner></ion-spinner>
+        <p>Cargando información del animal...</p>
+      </ion-col>
+    </ion-row>
+    } @else if (animal) {
+    <!-- Basic Information Card -->
+    <ion-row>
+      <ion-col size="12" size-md="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Información Básica</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item>
+                <ion-label>
+                  <h3>Raza</h3>
+                  <p>{{ animal.breed }}</p>
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <h3>Fecha de Nacimiento</h3>
+                  <p>{{ animal.birth_date | date:'fullDate' }}</p>
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <h3>Estado</h3>
+                  <p>{{ animal.status }}</p>
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <h3>Propietario</h3>
+                  @if (animal.owner){
+                    <p>{{ animal.owner.email }}</p>
+                  } @else {
+                    <p>{{ animal.owner_id }}</p>
+                  }
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <h3>Predio</h3>
+                  @if (animal.land){
+                    <p>{{ animal.land.name }}</p>
+                  } @else {
+                    <p>{{ animal.land_id }}</p>
+                  }
+                  
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
 
-      @if (!this.currentTag) {
-      <ion-item>No tiene caravana asignada actualmente.</ion-item>
-      <ion-row>
-        <ion-col>
-          <ion-button expand="block" (click)="openTagModal()">Asignar Caravana</ion-button>
-        </ion-col>
-      </ion-row>
-      } @else{
-      <ion-row>
-        <ion-col>
-          <ion-item>
-            Caravana Actual: {{ animal.currentTag?.tag_number || animal.currentTag?.id }}
-          </ion-item>
-        </ion-col>
-        <ion-col>
-          <ion-button expand="block" (click)="openTagModal()">Cambiar Caravana</ion-button>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-button expand="block" (click)="openTagHistoryModal()">Ver historial de caravanas</ion-button>
-        </ion-col>
-      </ion-row>
-      }
+      <!-- Tag Information Card -->
+      <ion-col size="12" size-md="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Información de Caravana</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <!-- Loading state for tag -->
+            @if (isLoadingTag()) {
+              <div class="ion-text-center">
+                <ion-spinner></ion-spinner>
+                <p>Cargando información de caravana...</p>
+              </div>
+            } @else {
+              <!-- Tag exists -->
+              @if (currentTag()) {
+                <ion-item>
+                  <ion-label>
+                    <h3>Caravana Actual</h3>
+                    <p>{{ currentTag()!.tag_number }}</p>
+                  </ion-label>
+                </ion-item>
+              } 
+              <!-- Tag needs assignment -->
+              @else if (needsTagAssignment()) {
+                <ion-item color="light">
+                  <ion-label>
+                    <h3>Sin caravana asignada</h3>
+                    <p>Este animal necesita una caravana</p>
+                  </ion-label>
+                </ion-item>
+                @if (canEditAnimals()) {
+                  <div class="ion-padding-top ion-text-center">
+                    <ion-button color="primary" expand="block" (click)="openTagModal()">
+                      Asignar Caravana
+                    </ion-button>
+                  </div>
+                }
+              } 
+              <!-- No tag but not explicitly needs assignment -->
+              @else {
+                <ion-item>
+                  <ion-label>
+                    <h3>Sin caravana asignada</h3>
+                  </ion-label>
+                </ion-item>
+              }
 
-      <ion-button [routerLink]="['/animal/edit', animal.id]">Editar Animal</ion-button>
-    </ng-container>
-    <ng-template #noData>
-      <p>No se encontró el animal.</p>
-    </ng-template>
-  </ng-container>
+              <!-- Tag actions section -->
+              <div class="tag-actions ion-padding-top">
+                @if (canEditAnimals()) {
+                  <ion-button fill="outline" size="small" (click)="openTagModal()">
+                    {{ currentTag() ? 'Cambiar Caravana' : 'Asignar Caravana' }}
+                  </ion-button>
+                }
+                @if (currentTag()) {
+                  <ion-button
+                    fill="clear"
+                    size="small"
+                    (click)="openTagHistoryModal()"
+                  >
+                    Historial de Caravanas
+                  </ion-button>
+                }
+              </div>
+            }
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
 
-  <ng-template #loadingTpl>
-    <ion-spinner name="crescent"></ion-spinner>
-    <p>Cargando datos…</p>
-  </ng-template>
+    <!-- Quick Actions Card -->
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Acciones Rápidas</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="6" size-md="4">
+                  <ion-button
+                    expand="block"
+                    fill="outline"
+                    (click)="goToWeighings()"
+                  >
+                    <ion-icon slot="start" name="scale-outline"></ion-icon>
+                    Pesajes
+                  </ion-button>
+                </ion-col>
+
+                <ion-col size="6" size-md="4">
+                  <ion-button
+                    expand="block"
+                    fill="outline"
+                    (click)="goToVaccinations()"
+                  >
+                    <ion-icon slot="start" name="medical-outline"></ion-icon>
+                    Vacunaciones
+                  </ion-button>
+                </ion-col>
+
+                <ion-col size="6" size-md="4">
+                  <ion-button
+                    expand="block"
+                    fill="outline"
+                    (click)="goToSales()"
+                  >
+                    <ion-icon slot="start" name="cash-outline"></ion-icon>
+                    Ventas
+                  </ion-button>
+                </ion-col>
+
+                <ion-col size="6" size-md="4">
+                  <ion-button
+                    expand="block"
+                    fill="outline"
+                    (click)="goToMovements()"
+                  >
+                    <ion-icon slot="start" name="move-outline"></ion-icon>
+                    Movimientos
+                  </ion-button>
+                </ion-col>
+
+                <ion-col size="6" size-md="4">
+                  <ion-button
+                    expand="block"
+                    fill="outline"
+                    (click)="goToHistory()"
+                  >
+                    <ion-icon slot="start" name="time-outline"></ion-icon>
+                    Historial
+                  </ion-button>
+                </ion-col>
+
+                @if (canEditAnimals()) {
+                <ion-col size="6" size-md="4">
+                  <ion-button expand="block" fill="solid" (click)="goToEdit()">
+                    <ion-icon slot="start" name="pencil-outline"></ion-icon>
+                    Editar
+                  </ion-button>
+                </ion-col>
+                }
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    } @else {
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <ion-card color="danger">
+          <ion-card-content>
+            <h3>Animal no encontrado</h3>
+            <p>No se pudo cargar la información del animal.</p>
+            <ion-button expand="block" (click)="goBack()">
+              <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+              Volver a la Lista
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    }
+  </ion-grid>
 </ion-content>

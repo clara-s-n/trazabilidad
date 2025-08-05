@@ -1,54 +1,24 @@
-<!-- src/app/app.component.html -->
-<ion-menu side="start" menuId="first" contentId="main-content">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Secciones</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <ion-content>
-    <ion-list>
-      <ion-accordion-group [multiple]="true">
-        <ion-accordion *ngFor="let section of sections" [value]="section.label">
-          <!-- Header del acordeón -->
-          <ion-item slot="header" [color]="section.color">
-            <ion-label>{{ section.label }}</ion-label>
-          </ion-item>
-
-          <!-- Items hijos -->
-          <ng-container *ngFor="let item of section.items">
-            <ion-item
-              slot="content"
-              lines="full"
-              [routerLink]="item.link"
-            >
-              {{ item.label }}
-            </ion-item>
-          </ng-container>
-        </ion-accordion>
-      </ion-accordion-group>
-
-      <!-- Separador y botón de logout -->
-      <ion-item-divider></ion-item-divider>
-      <ion-item button (click)="logout()">
-        Cerrar sesión
-      </ion-item>
-    </ion-list>
-  </ion-content>
-</ion-menu>
+<!-- Main Layout with Split Pane and Accordion Navigation -->
+<app-side-menu></app-side-menu>
 
 <!-- Área principal de la aplicación -->
 <div class="ion-page" id="main-content">
   <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="primary">
       <ion-buttons slot="start">
-        <ion-menu-button></ion-menu-button>
+        <ion-menu-button menuId="main-menu"></ion-menu-button>
       </ion-buttons>
-      <ion-title>Menu</ion-title>
+      <ion-title>Sistema de Trazabilidad</ion-title>
+      <ion-buttons slot="end">
+        @if (roleName()) {
+          <ion-badge color="light">{{ roleName() }}</ion-badge>
+        }
+        <app-logout-button></app-logout-button>
+      </ion-buttons>
     </ion-toolbar>
   </ion-header>
 
   <ion-content class="ion-padding">
-    <ion-router-outlet id="main-content"></ion-router-outlet>
+    <router-outlet></router-outlet>
   </ion-content>
 </div>

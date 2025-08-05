@@ -1,0 +1,89 @@
+.loading-state,
+.error-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  
+  ion-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    color: var(--ion-color-medium);
+  }
+  
+  h3 {
+    margin: 16px 0 8px 0;
+    color: var(--ion-color-dark);
+  }
+  
+  p {
+    margin: 0 0 16px 0;
+    color: var(--ion-color-medium);
+  }
+}
+
+.animals-container {
+  min-height: calc(100vh - 200px);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: flex-end;
+}
+
+.animal-info h3 {
+  margin: 0 0 8px 0;
+  color: var(--ion-color-primary);
+}
+
+.animal-info p {
+  margin: 4px 0;
+  color: var(--ion-color-medium);
+  font-size: 0.9rem;
+}
+
+ion-card {
+  margin: 8px 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+ion-card-header {
+  padding-bottom: 8px;
+}
+
+ion-card-content {
+  padding-top: 8px;
+}
+
+ion-fab-button {
+  --background: var(--ion-color-primary);
+  --color: white;
+}
+
+// Loading spinner in container
+.loading-spinner {
+  display: block;
+  margin: 40px auto;
+}
+
+@media (max-width: 768px) {
+  .action-buttons {
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .animals-container {
+    min-height: calc(100vh - 220px);
+  }
+}

@@ -1,128 +1,155 @@
-<form (ngSubmit)="onSubmit()">
-  <ion-grid class="ion-text-center">
-    <ion-row class="ion-justify-content-center">
-      <ion-col size="12" size-sm="8" size-md="6">
-        <h2>{{ isEditMode() ? "Editar animal" : "Crear nuevo animal" }}</h2>
-      </ion-col>
-    </ion-row>
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>
+      {{ isEditMode ? "Editar Animal" : "Crear Nuevo Animal" }}
+    </ion-card-title>
+  </ion-card-header>
 
-    <!-- Raza -->
-    <ion-row class="ion-justify-content-center">
-      <ion-col size="12" size-sm="8" size-md="6">
-        <ion-input
-          labelPlacement="floating"
-          fill="solid"
-          label="Raza"
-          name="breed"
-          required
-          minlength="3"
-          [value]="breed()"
-          (ionInput)="onBreedChange($event.target.value)"
-        >
-        </ion-input>
-        <!-- <div class="error-msg">
-          {{ "email" | fieldError : email() : allValues() : touched().email }}
-        </div> -->
-      </ion-col>
-    </ion-row>
+  <ion-card-content>
+    <form [formGroup]="animalForm" (ngSubmit)="onSubmit()">
+      <ion-grid>
+        <!-- Basic Information -->
+        <ion-row>
+          <ion-col size="12">
+            <ion-item [class.ion-invalid]="isFieldInvalid('breed')">
+              <ion-label position="stacked">Raza *</ion-label>
+              <ion-select
+                formControlName="breed"
+                placeholder="Selecciona una raza"
+              >
+                @for (breed of breeds; track breed) {
+                <ion-select-option [value]="breed">{{
+                  breed
+                }}</ion-select-option>
+                }
+              </ion-select>
+            </ion-item>
+            @if (isFieldInvalid('breed')) {
+            <div class="error-message">{{ getFieldError("breed") }}</div>
+            }
+          </ion-col>
+        </ion-row>
 
-    <!-- Nacimiento -->
-    <ion-row class="ion-justify-content-center">
-      <ion-col size="12" size-sm="8" size-md="6">
-        <ion-input
-          labelPlacement="floating"
-          fill="solid"
-          label="Fecha de Nacimiento"
-          name="birth_date"
-          required
-          minlength="3"
-          [value]="birth_date()"
-          (ionInput)="onBirthDateChange($event.target.value)"
-        >
-        </ion-input>
-        <!-- <div class="error-msg">
-          {{ "email" | fieldError : email() : allValues() : touched().email }}
-        </div> -->
-      </ion-col>
-    </ion-row>
+        <ion-row>
+          <ion-col size="12" size-md="6">
+            <ion-item [class.ion-invalid]="isFieldInvalid('birth_date')">
+              <ion-label position="stacked">Fecha de Nacimiento *</ion-label>
+              <ion-input
+                type="date"
+                formControlName="birth_date"
+                placeholder="Selecciona la fecha"
+              >
+              </ion-input>
+            </ion-item>
+            @if (isFieldInvalid('birth_date')) {
+            <div class="error-message">{{ getFieldError("birth_date") }}</div>
+            }
+          </ion-col>
 
-    <!-- Dueño -->
-    <ion-row class="ion-justify-content-center">
-      <ion-col size="12" size-sm="8" size-md="6">
-        <ion-input
-          labelPlacement="floating"
-          fill="solid"
-          label="Dueño"
-          name="owner_id"
-          required
-          minlength="3"
-          [value]="owner_id()"
-          (ionInput)="onOwnerIdChange($event.target.value)"
-        >
-        </ion-input>
-        <!-- <div class="error-msg">
-          {{ "email" | fieldError : email() : allValues() : touched().email }}
-        </div> -->
-      </ion-col>
-    </ion-row>
+          <ion-col size="12" size-md="6">
+            <ion-item [class.ion-invalid]="isFieldInvalid('status')">
+              <ion-label position="stacked">Estado *</ion-label>
+              
+              <!-- Status select with options from resource -->
+              @if (statusesResource.status() === 'loading') {
+                <ion-spinner></ion-spinner>
+              } @else if (statusesResource.hasValue()) {
+                <ion-select formControlName="status" placeholder="Selecciona el estado">
+                  @for (statusOption of statusesResource.value(); track statusOption.key) {
+                    <ion-select-option [value]="statusOption.key">
+                      {{ statusOption.label_en }}
+                    </ion-select-option>
+                  }
+                </ion-select>
+              } @else {
+                <ion-select formControlName="status" placeholder="Cargando estados...">
+                  <ion-select-option value="Activo">Activo</ion-select-option>
+                  <ion-select-option value="Vendido">Vendido</ion-select-option>
+                  <ion-select-option value="Muerto">Muerto</ion-select-option>
+                </ion-select>
+              }
+            </ion-item>
+            @if (isFieldInvalid('status')) {
+            <div class="error-message">{{ getFieldError("status") }}</div>
+            }
+          </ion-col>
+        </ion-row>
 
-    <!-- Predio -->
-    <ion-row class="ion-justify-content-center">
-      <ion-col size="12" size-sm="8" size-md="6">
-        <ion-input
-          labelPlacement="floating"
-          fill="solid"
-          label="Predio"
-          name="land_id"
-          required
-          minlength="3"
-          [value]="land_id()"
-          (ionInput)="onLandIdChange($event.target.value)"
-        >
-        </ion-input>
-        <!-- <div class="error-msg">
-          {{ "email" | fieldError : email() : allValues() : touched().email }}
-        </div> -->
-      </ion-col>
-    </ion-row>
+        <!-- Owner and Land Information -->
+        <ion-row>
+          <ion-col size="12" size-md="6">
+            <ion-item [class.ion-invalid]="isFieldInvalid('owner_id')">
+              <ion-label position="stacked">Propietario *</ion-label>
+              
+              <!-- User select with options from resource -->
+              @if (usersResource.status() === 'loading') {
+                <ion-spinner></ion-spinner>
+              } @else if (usersResource.hasValue()) {
+                <ion-select formControlName="owner_id" placeholder="Selecciona el propietario">
+                  @for (user of usersResource.value(); track user.id) {
+                    <ion-select-option [value]="user.id">{{ user.email }}</ion-select-option>
+                  }
+                </ion-select>
+              } @else {
+                <ion-input formControlName="owner_id" placeholder="Error al cargar usuarios"></ion-input>
+              }
+            </ion-item>
+            @if (isFieldInvalid('owner_id')) {
+            <div class="error-message">{{ getFieldError("owner_id") }}</div>
+            }
+          </ion-col>
 
-    <!-- Estado -->
-    <ion-row class="ion-justify-content-center">
-      <ion-col size="12" size-sm="8" size-md="6">
-        <ion-select
-          label="Estado"
-          [(ngModel)]="status"
-          name="status"
-          required
-        >
-          <ion-select-option value="alive">Vivo</ion-select-option>
-          <ion-select-option value="deceased">Muerto</ion-select-option>
-          <ion-select-option value="robbed">Robado</ion-select-option>
-          <ion-select-option value="lost">Perdido</ion-select-option>
-        </ion-select>
-      </ion-col>
-    </ion-row>
+          <ion-col size="12" size-md="6">
+            <ion-item [class.ion-invalid]="isFieldInvalid('land_id')">
+              <ion-label position="stacked">Predio *</ion-label>
+              
+              <!-- Land select with options from resource -->
+              @if (landsResource.status() === 'loading') {
+                <ion-spinner></ion-spinner>
+              } @else if (landsResource.hasValue()) {
+                <ion-select formControlName="land_id" placeholder="Selecciona el predio">
+                  @for (land of landsResource.value(); track land.id) {
+                    <ion-select-option [value]="land.id">{{ land.name }}</ion-select-option>
+                  }
+                </ion-select>
+              } @else {
+                <ion-input formControlName="land_id" placeholder="Error al cargar predios"></ion-input>
+              }
+            </ion-item>
+            @if (isFieldInvalid('land_id')) {
+            <div class="error-message">{{ getFieldError("land_id") }}</div>
+            }
+          </ion-col>
+        </ion-row>
 
-    <!-- Botón -->
-    <ion-row class="ion-justify-content-center ion-padding-top">
-      <ion-col size="12" size-sm="8" size-md="6">
-        <ion-button
-          expand="block"
-          shape="round"
-          type="submit"
-          [disabled]="!formValid() || loading()"
-        >
-          {{ isEditMode() ? "Guardar cambios" : "Registrar" }}
-        </ion-button>
-        <ion-button
-          expand="block"
-          shape="round"
-          type="button"
-          (click)="onCancel()"
-        >
-          Cancelar
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</form>
+        <!-- Form Actions -->
+        <ion-row>
+          <ion-col size="12">
+            <div class="form-actions">
+              <ion-button
+                expand="block"
+                type="submit"
+                [disabled]="loading() || animalForm.invalid"
+                color="primary"
+              >
+                @if (loading()) { Guardando... } @else {
+                {{ isEditMode ? "Actualizar Animal" : "Crear Animal" }}
+                }
+              </ion-button>
+
+              <ion-button
+                expand="block"
+                fill="outline"
+                type="button"
+                (click)="onCancel()"
+                [disabled]="loading()"
+              >
+                Cancelar
+              </ion-button>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </ion-card-content>
+</ion-card>

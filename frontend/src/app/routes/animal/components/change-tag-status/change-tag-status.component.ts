@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, ChangeDetectionStrategy, input, computed, resource } from '@angular/core';
-import { ModalController } from '@ionic/angular';
 import {
   IonHeader, IonToolbar, IonTitle, IonButtons, IonButton,
-  IonContent, IonList, IonItem, IonLabel, IonSpinner, IonText
+  IonContent, IonList, IonItem, IonLabel, IonSpinner, IonText,
+  ModalController
 } from '@ionic/angular/standalone';
 import { TagService } from 'src/app/services/tag.service';
 
@@ -11,6 +11,7 @@ import { TagService } from 'src/app/services/tag.service';
   selector: 'app-change-tag-status',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [],
   imports: [
     CommonModule,
     IonHeader, IonToolbar, IonTitle, IonButtons, IonButton,
@@ -39,6 +40,10 @@ export class ChangeTagStatusComponent {
     return typeof this.isChange === 'function' ? this.isChange() : this.isChange;
   }
 
+  get currentTagId(): string {
+    return typeof this.oldTagId === 'function' ? this.oldTagId() : this.oldTagId;
+  }
+
   /** Recurso que carga todas las caravanas del sistema */
   readonly tagsResource = resource<
     { id: string; tag_number: string; status: string }[],
@@ -58,7 +63,9 @@ export class ChangeTagStatusComponent {
   /** Asigna una caravana al animal */
   async assignTag(tagId: string) {
     try {
-        await this.tagService.assignTagToAnimal(tagId, this.id());
+        console.log('Asignando tag', tagId, 'al animal', this.animalId);
+        const result = await this.tagService.assignTagToAnimal(tagId, this.animalId);
+        console.log('Result of assignTag:', result);
         this.modalController.dismiss({ refresh: true });
     } catch (e: any) {
         if (e?.error?.message) {
@@ -77,12 +84,18 @@ export class ChangeTagStatusComponent {
   }
 
   async changeAnimalTag(newTagId: string) {
-    console.log('Cambiando tag', this.animalId, this.oldTagId, newTagId)
+    console.log('Cambiando tag', this.animalId, this.currentTagId, newTagId)
     try {
-      //await this.tagService.changeAnimalTag(this.animalId, this.oldTagId, newTagId);
+      if (!this.currentTagId) {
+        console.error('No hay tag actual para cambiar');
+        alert('Error: No hay una caravana actual para cambiar');
+        return;
+      }
+      await this.tagService.changeAnimalTag(this.animalId, this.currentTagId, newTagId);
       alert('Tag cambiada correctamente');
-      // Recarga datos si es necesario
+      this.modalController.dismiss({ refresh: true });
     } catch (e: any) {
+      console.error('Error al cambiar tag:', e);
       alert(e?.error?.message || 'Error al cambiar la tag');
     }
   }

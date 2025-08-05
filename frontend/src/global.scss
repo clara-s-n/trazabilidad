@@ -34,4 +34,69 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+@import "@ionic/angular/css/palettes/dark.system.css";
+
+/* Form Layouts */
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.form-actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .form-actions {
+    flex-direction: row-reverse;
+  }
+
+  .form-actions ion-button {
+    flex: 1;
+  }
+}
+
+/* Navigation Styles */
+.loading-state,
+.error-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  min-height: 200px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+/* Card Styles */
+.info-card {
+  margin: 16px 0;
+}
+
+.info-card ion-card-title {
+  color: var(--ion-color-primary);
+  font-weight: 600;
+}
+
+/* Responsive Grid */
+@media (max-width: 576px) {
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .action-buttons ion-button {
+    width: 100%;
+  }
+}

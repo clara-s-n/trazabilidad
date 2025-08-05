@@ -27,7 +27,7 @@
     </ion-row>
 
     <!-- Contraseña -->
-    <ion-row class="ion-justify-content-center">
+    <ion-row class="ion-justify-content-center" *ngIf="!isEditMode()">
       <ion-col size="12" size-sm="8" size-md="6">
         <ion-input
           labelPlacement="floating"

@@ -25,7 +25,7 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { eyeOutline } from 'ionicons/icons';
-import { AnimalMovementSchema } from 'src/app/model/animal';
+import { AnimalMovementSchema, AnimalMovementWithLands } from 'src/app/model/animal';
 
 @Component({
   selector: 'app-animal-movement',
@@ -61,7 +61,7 @@ export class MovementPage {
   private readonly router = inject(Router);
 
   readonly animalMovementsResource = resource<
-    AnimalMovementSchema[],
+    AnimalMovementWithLands[],
     undefined
   >({
     loader: async () =>

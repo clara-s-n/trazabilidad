@@ -1,296 +1,196 @@
--- 1) Roles (estáticos)
+-- 1) Roles (static, only once)
 INSERT INTO roles (id, name, description) VALUES
   (1, 'Operador Autorizado', 'Usuario autorizado por MGAP'),
   (2, 'Usuario Consulta',   'Usuario con permisos de consulta'),
   (3, 'Administrador',      'Administrador del sistema');
 
--- 2) Lands
+-- 2) Lands (replace any previous lands inserts with these realistic ones)
 INSERT INTO lands (id, name, latitude, longitude) VALUES
-  ('43666c09-a0b0-4b6b-9558-e44b50a25d57', 'Campo 1', -31.010000, -57.010000),
-  ('bf52757b-7a5a-4748-b78f-459471979493', 'Campo 2', -31.020000, -57.020000),
-  ('584630da-cc70-40dd-9599-aa539d788894', 'Campo 3', -31.030000, -57.030000),
-  ('362d303b-5994-419c-a884-1656f074db63', 'Campo 4', -31.040000, -57.040000),
-  ('9535a62f-310e-4a39-9a8d-c01f4f53cb07', 'Campo 5', -31.050000, -57.050000),
-  ('f9cf94b3-c8ea-4cc2-9bf1-288442fc7322', 'Campo 6', -31.060000, -57.060000),
-  ('983a18d1-f72f-44c0-b11b-376ff22f74dc', 'Campo 7', -31.070000, -57.070000),
-  ('ba239ce6-a158-4b5c-b0e9-66eb62273805', 'Campo 8', -31.080000, -57.080000),
-  ('5c491f13-e1b2-4862-b8b0-3335de115b06', 'Campo 9', -31.090000, -57.090000),
-  ('f6d85189-85a0-4e55-a54f-e6c4f56c6e43', 'Campo 10', -31.100000, -57.100000),
-  ('112f887d-11db-493c-b897-91e62ed8b7c6', 'Campo 11', -31.110000, -57.110000),
-  ('b6bba35b-e915-4138-85f7-40a9a38c081c', 'Campo 12', -31.120000, -57.120000),
-  ('c3c8944c-803a-4d4f-81b3-2d00d3194061', 'Campo 13', -31.130000, -57.130000),
-  ('a42c16cf-8ae9-41a9-a5c4-17970ab0c9c1', 'Campo 14', -31.140000, -57.140000),
-  ('33c5c051-557c-4372-ab37-a0f04316ed5c', 'Campo 15', -31.150000, -57.150000),
-  ('475acb5e-217b-4374-9fa0-d0aeaaed2b9b', 'Campo 16', -31.160000, -57.160000),
-  ('6c3fdecb-d99d-450f-93a6-2a064b794968', 'Campo 17', -31.170000, -57.170000),
-  ('2f9a2990-ee27-44ea-9d44-cf0b645487de', 'Campo 18', -31.180000, -57.180000),
-  ('e4b8e1c2-641c-4fee-bfb9-cc7c0153594c', 'Campo 19', -31.190000, -57.190000),
-  ('1fd1c9f8-90a5-4ca5-ad1c-cd6a65cdfa45', 'Campo 20', -31.200000, -57.200000);
+  ('43666c09-a0b0-4b6b-9558-e44b50a25d57', 'Estancia San José', -34.478611, -56.892778),
+  ('bf52757b-7a5a-4748-b78f-459471979493', 'Predio La Esperanza', -33.245667, -57.123456),
+  ('584630da-cc70-40dd-9599-aa539d788894', 'Establecimiento El Trébol', -32.876543, -55.987654),
+  ('362d303b-5994-419c-a884-1656f074db63', 'Campo Las Mercedes', -34.123456, -56.456789),
+  ('9535a62f-310e-4a39-9a8d-c01f4f53cb07', 'Estancia Don Carlos', -33.789012, -57.345678),
+  ('a1234567-1234-1234-1234-123456789012', 'Estancia El Ceibo', -34.567890, -56.123456),
+  ('b2345678-2345-2345-2345-234567890123', 'Campo Santa Rosa', -33.678901, -57.234567),
+  ('c3456789-3456-3456-3456-345678901234', 'Establecimiento Los Alamos', -32.789012, -55.345678),
+  ('d4567890-4567-4567-4567-456789012345', 'Predio Las Flores', -34.890123, -56.456789),
+  ('e5678901-5678-5678-5678-567890123456', 'Estancia Bella Vista', -33.901234, -57.567890),
+  ('f6789012-6789-6789-6789-678901234567', 'Campo Los Pinos', -32.012345, -55.678901),
+  ('a7890123-7890-7890-7890-789012345678', 'Establecimiento San Pedro', -34.123456, -56.789012),
+  ('b8901234-8901-8901-8901-890123456789', 'Predio La Paloma', -33.234567, -57.890123),
+  ('f1e2d3c4-b5a6-4789-8c7d-6e5f4a3b2c1d', 'Estancia La Nueva', -33.123456, -56.654321),
+  ('e2f3a4b5-c6d7-4890-9d8e-7f6a5b4c3d2e', 'Campo El Progreso', -32.654321, -55.123456),
+  ('d3a4b5c6-e7f8-4901-8e9d-8a7b6c5d4e3f', 'Predio Los Robles', -34.654321, -57.654321);
 
--- 3) Tags
+-- 3) Tags (a mix of active, retired, inactive; plus additional inactive tags)
 INSERT INTO tags (id, status, tag_number, country_code, country_iso, ministry) VALUES
-  ('6ba0b76d-cc01-4d91-8274-6a558b2b7d7b', 'inactive', 'TAG0001', '00014', '858', 'MGAP UY'),
-  ('0f6d8e7e-6e6e-4c9a-ba3e-df063906d786', 'inactive', 'TAG0002', '00014', '858', 'MGAP UY'),
-  ('54ad4f1a-97b2-474f-b8dc-8829b893771d', 'active', 'TAG0003', '00014', '858', 'MGAP UY'),
-  ('15779937-6da1-41fb-b747-cb44d4b0004c', 'inactive', 'TAG0004', '00014', '858', 'MGAP UY'),
-  ('3188ea06-27af-4817-9c72-863c77b8c377', 'retired', 'TAG0005', '00014', '858', 'MGAP UY'),
-  ('0c4c5ec4-3814-48d4-973c-6feea5fb3406', 'inactive', 'TAG0006', '00014', '858', 'MGAP UY'),
-  ('8d03eac9-b4bb-469d-a5c4-21daeec8fdf5', 'inactive', 'TAG0007', '00014', '858', 'MGAP UY'),
-  ('2170f650-a828-44c8-beb6-4d6a1ba3642e', 'inactive', 'TAG0008', '00014', '858', 'MGAP UY'),
-  ('cee67bf5-3f84-478c-bec3-0c9c0583fa3a', 'inactive', 'TAG0009', '00014', '858', 'MGAP UY'),
-  ('da4b3c74-f4d7-41a5-b772-2a14f1b223bb', 'inactive', 'TAG0010', '00014', '858', 'MGAP UY'),
-  ('f47070c3-2cb7-4cbc-849e-654ad6c990c2', 'retired', 'TAG0011', '00014', '858', 'MGAP UY'),
-  ('95331846-1e67-4bb6-b551-e2d86fbd09cc', 'active', 'TAG0012', '00014', '858', 'MGAP UY'),
-  ('aa8b0c29-393f-47a8-ab3c-5e21c9835ac9', 'retired', 'TAG0013', '00014', '858', 'MGAP UY'),
-  ('da7630c0-3d93-4acc-a995-6becc7d9f08a', 'active', 'TAG0014', '00014', '858', 'MGAP UY'),
-  ('59f570d6-cc59-4518-af95-b45c0e25388f', 'inactive', 'TAG0015', '00014', '858', 'MGAP UY'),
-  ('22e7adeb-229b-4d5f-8c43-a57d67eb722e', 'active', 'TAG0016', '00014', '858', 'MGAP UY'),
-  ('cd88ef4c-4758-4c6b-b238-d52e557a45c5', 'active', 'TAG0017', '00014', '858', 'MGAP UY'),
-  ('b3cc74f0-b5c0-4eeb-af93-b26aa8134704', 'retired', 'TAG0018', '00014', '858', 'MGAP UY'),
-  ('fa1257a7-db6e-439d-9297-442f7c58d624', 'inactive', 'TAG0019', '00014', '858', 'MGAP UY'),
-  ('f8813712-3685-4e24-9dde-0816ccffd8c3', 'retired', 'TAG0020', '00014', '858', 'MGAP UY');
+  -- initial five
+  ('6ba0b76d-cc01-4d91-8274-6a558b2b7d7b', 'active',   'UY00001', '00014', '858', 'MGAP UY'),
+  ('0f6d8e7e-6e6e-4c9a-ba3e-df063906d786', 'active',   'UY00002', '00014', '858', 'MGAP UY'),
+  ('54ad4f1a-97b2-474f-b8dc-8829b893771d', 'active',   'UY00003', '00014', '858', 'MGAP UY'),
+  ('15779937-6da1-41fb-b747-cb44d4b0004c', 'retired',  'UY00004', '00014', '858', 'MGAP UY'),
+  ('3188ea06-27af-4817-9c72-863c77b8c377', 'inactive', 'UY00005', '00014', '858', 'MGAP UY'),
+  -- additional inactive tags (for testing, unassigned)
+  ('e260a815-23f1-4bc7-923d-c841a00952f8', 'inactive', 'UY00006', '00014', '858', 'MGAP UY'),
+  ('4c45ab86-1dd7-4252-81a8-8d12e1b73e7a', 'inactive', 'UY00007', '00014', '858', 'MGAP UY'),
+  ('e063814c-4472-46e9-8b39-13377b2dfcfe', 'inactive', 'UY00008', '00014', '858', 'MGAP UY'),
+  ('dc078b0e-d34c-4c24-a2e4-946f4ed4c202', 'inactive', 'UY00009', '00014', '858', 'MGAP UY'),
+  ('b3b5d992-00f3-4054-92a5-af34b9aac4df', 'inactive', 'UY00010', '00014', '858', 'MGAP UY'),
+  ('a1b2c3d4-e5f6-4789-9a8b-7c6d5e4f3a2b', 'active',   'UY00011', '00014', '858', 'MGAP UY'),
+  ('b2c3d4e5-f6a7-4890-8b9a-6d5e4f3a2b1c', 'inactive', 'UY00012', '00014', '858', 'MGAP UY'),
+  ('c3d4e5f6-a7b8-4901-9a8b-5e4f3a2b1c2d', 'retired',  'UY00013', '00014', '858', 'MGAP UY'),
+  ('d4e5f6a7-b8c9-4012-8b9a-4f3a2b1c2d3e', 'active',   'UY00014', '00014', '858', 'MGAP UY'),
+  ('e5f6a7b8-c9d0-4123-9a8b-3a2b1c2d3e4f', 'inactive', 'UY00015', '00014', '858', 'MGAP UY'),
+  ('f6a7b8c9-d0e1-4234-8b9a-2b1c2d3e4f5a', 'active',   'UY00016', '00014', '858', 'MGAP UY'),
+  ('a7b8c9d0-e1f2-4345-9a8b-1c2d3e4f5a6b', 'inactive', 'UY00017', '00014', '858', 'MGAP UY'),
+  ('b8c9d0e1-f2a3-4456-8b9a-0d3e4f5a6b7c', 'active',   'UY00018', '00014', '858', 'MGAP UY'),
+  ('c9d0e1f2-a3b4-4567-9a8b-9e8d7c6b5a4f', 'retired',  'UY00019', '00014', '858', 'MGAP UY'),
+  ('d0e1f2a3-b4c5-4678-8b9a-8d7c6b5a4f3e', 'active',   'UY00020', '00014', '858', 'MGAP UY');
 
 -- 4) Users
 INSERT INTO users (id, email, password_hash, role_id, created_at) VALUES
-  ('de3d6619-7d68-45a6-80df-2d464b6716d4', 'administrador@example.com', crypt('admin123', gen_salt('bf')), 3, now()),
-  ('100dc01b-7225-4893-b853-0c9bf1804bc4', 'operador@example.com', crypt('opera123', gen_salt('bf')), 1, now()),
-  ('26b12297-942a-451e-95bf-2d98f915c636', 'consulta@example.com', crypt('consu123', gen_salt('bf')), 2, now()),
-  ('0c2bcc02-7a08-47be-9c79-28f17117d8fa', 'user4@example.com', crypt('pass4', gen_salt('bf')), 2, now()),
-  ('f8766922-4928-4144-b8a4-cef1978b4cd7', 'user5@example.com', crypt('pass5', gen_salt('bf')), 3, now()),
-  ('7cef4a50-e74e-4047-827c-33714ef58f3b', 'user6@example.com', crypt('pass6', gen_salt('bf')), 1, now()),
-  ('c8025b58-fa25-49bc-a6a1-95c31b956a81', 'user7@example.com', crypt('pass7', gen_salt('bf')), 2, now()),
-  ('ebfb1a73-0555-455f-b2d1-ec06857d1057', 'user8@example.com', crypt('pass8', gen_salt('bf')), 3, now()),
-  ('0d9f925d-921f-45e3-9ad8-d8cce0e17c04', 'user9@example.com', crypt('pass9', gen_salt('bf')), 1, now()),
-  ('373d79ef-aaf6-4367-89dc-10743bf67f8a', 'user10@example.com', crypt('pass10', gen_salt('bf')), 2, now()),
-  ('3eae2ed2-28c6-451a-88f5-21fa0f8a72dc', 'user11@example.com', crypt('pass11', gen_salt('bf')), 3, now()),
-  ('6277b49e-9f1c-49c5-9997-2aa85891abeb', 'user12@example.com', crypt('pass12', gen_salt('bf')), 1, now()),
-  ('98c57609-4bd3-4b13-8777-3c48ed9a6599', 'user13@example.com', crypt('pass13', gen_salt('bf')), 2, now()),
-  ('cd5a9b37-0a1d-4931-9106-34380455a4bf', 'user14@example.com', crypt('pass14', gen_salt('bf')), 3, now()),
-  ('37c732f4-2b87-43e1-8e7d-343033650ca3', 'user15@example.com', crypt('pass15', gen_salt('bf')), 1, now()),
-  ('2ea7c098-389f-4d08-92ef-60c99d4d8e9c', 'user16@example.com', crypt('pass16', gen_salt('bf')), 2, now()),
-  ('862ccbda-6dd5-4f86-beba-0dfa167c43bf', 'user17@example.com', crypt('pass17', gen_salt('bf')), 3, now()),
-  ('f6ffa740-4c9a-46f6-9804-5c7656f06b9b', 'user18@example.com', crypt('pass18', gen_salt('bf')), 1, now()),
-  ('83af193a-c0df-46a6-b784-addd15d9ec4d', 'user19@example.com', crypt('pass19', gen_salt('bf')), 2, now()),
-  ('3a6b7f6d-a708-4b8a-a006-deaa29f0f6be', 'user20@example.com', crypt('pass20', gen_salt('bf')), 3, now());
+  ('de3d6619-7d68-45a6-80df-2d464b6716d4', 'admin@trazabilidad.uy',    crypt('admin123', gen_salt('bf')), 3, now()),
+  ('100dc01b-7225-4893-b853-0c9bf1804bc4', 'operador@mgap.gub.uy',     crypt('opera123', gen_salt('bf')), 1, now()),
+  ('26b12297-942a-451e-95bf-2d98f915c636', 'ganadero1@outlook.com',    crypt('gana123',  gen_salt('bf')), 2, now()),
+  ('0c2bcc02-7a08-47be-9c79-28f17117d8fa', 'estanciero@hotmail.com',   crypt('estancia123',gen_salt('bf')), 2, now()),
+  ('f8766922-4928-4144-b8a4-cef1978b4cd7', 'supervisor@trazabilidad.uy',crypt('super123', gen_salt('bf')), 3, now()),
+  ('b1a8e1e2-1c2d-4e3f-8a4b-5c6d7e8f9a10', 'marti@mgap.gub.uy', crypt('user123', gen_salt('bf')), 1, now()),
+  ('c2b9f2f3-2d3e-5f4a-9b5c-6d7e8f9a1b20', 'luis@mgap.gub.uy', crypt('user234', gen_salt('bf')), 1, now()),
+  ('d3c0a3a4-3e4f-6a5b-0c6d-7e8f9a1b2c30', 'juana@mgap.gub.uy', crypt('user345', gen_salt('bf')), 1, now()),
+  ('e4d1b4b5-4f5a-7b6c-1d7e-8f9a1b2c3d40', 'juan@mgap.gub.uy', crypt('user456', gen_salt('bf')), 1, now()),
+  ('f5e2c5c6-5a6b-8c7d-2e8f-9a1b2c3d4e50', 'armando@trazabilidad.uy', crypt('user567', gen_salt('bf')), 3, now()),
+  ('a6f3d6d7-6b7c-9d8e-3f9a-1b2c3d4e5f60', 'jmalnik@trazabilidad.uy', crypt('user678', gen_salt('bf')), 3, now());
 
--- 5) Animals
+-- 5) Animals (initial eight + five additional)
 INSERT INTO animals (id, breed, birth_date, owner_id, land_id, created_at, updated_at, status) VALUES
-  ('aaab3d4c-5623-491e-a666-f2e9c1d62cf1', 'Breed1', '2017-09-07', 'de3d6619-7d68-45a6-80df-2d464b6716d4', '43666c09-a0b0-4b6b-9558-e44b50a25d57', now(), now(), 'alive'),
-  ('7eb4d619-6c02-4f02-ab7a-3e302a74eff6', 'Breed2', '2016-07-04', '100dc01b-7225-4893-b853-0c9bf1804bc4', 'bf52757b-7a5a-4748-b78f-459471979493', now(), now(), 'alive'),
-  ('a964bb80-32fc-46d0-b239-e03125535430', 'Breed3', '2018-11-04', '26b12297-942a-451e-95bf-2d98f915c636', '584630da-cc70-40dd-9599-aa539d788894', now(), now(), 'alive'),
-  ('62645b97-955e-49ea-891e-24b6ff9180ae', 'Breed4', '2023-12-12', '0c2bcc02-7a08-47be-9c79-28f17117d8fa', '362d303b-5994-419c-a884-1656f074db63', now(), now(), 'alive'),
-  ('8cfef1a6-77ed-4b17-ab30-176e88b8af37', 'Breed5', '2022-02-11', 'f8766922-4928-4144-b8a4-cef1978b4cd7', '9535a62f-310e-4a39-9a8d-c01f4f53cb07', now(), now(), 'alive'),
-  ('c2716fad-ffce-4517-ad2e-7415cf80178a', 'Breed6', '2024-06-26', '7cef4a50-e74e-4047-827c-33714ef58f3b', 'f9cf94b3-c8ea-4cc2-9bf1-288442fc7322', now(), now(), 'alive'),
-  ('a8d8d11a-dd42-4524-a7c7-4a2063f5ffb1', 'Breed7', '2017-05-29', 'c8025b58-fa25-49bc-a6a1-95c31b956a81', '983a18d1-f72f-44c0-b11b-376ff22f74dc', now(), now(), 'alive'),
-  ('8f31d0be-d956-4b51-b588-8658f64388a1', 'Breed8', '2024-10-06', 'ebfb1a73-0555-455f-b2d1-ec06857d1057', 'ba239ce6-a158-4b5c-b0e9-66eb62273805', now(), now(), 'alive'),
-  ('8d5d4061-bb57-4e12-8ea6-852eaa4f60ad', 'Breed9', '2016-01-21', '0d9f925d-921f-45e3-9ad8-d8cce0e17c04', '5c491f13-e1b2-4862-b8b0-3335de115b06', now(), now(), 'alive'),
-  ('c02565f5-87f1-459f-ada2-63936ac00976', 'Breed10', '2017-12-03', '373d79ef-aaf6-4367-89dc-10743bf67f8a', 'f6d85189-85a0-4e55-a54f-e6c4f56c6e43', now(), now(), 'alive'),
-  ('aa8a79c1-5d3b-4fad-9890-34f6ea3a4c50', 'Breed11', '2021-11-21', '3eae2ed2-28c6-451a-88f5-21fa0f8a72dc', '112f887d-11db-493c-b897-91e62ed8b7c6', now(), now(), 'alive'),
-  ('c76f5a6f-ce7a-438d-bbd0-68837b6556dc', 'Breed12', '2020-04-19', '6277b49e-9f1c-49c5-9997-2aa85891abeb', 'b6bba35b-e915-4138-85f7-40a9a38c081c', now(), now(), 'alive'),
-  ('bccf75bc-49b5-410a-a94f-59a060906c48', 'Breed13', '2019-04-26', '98c57609-4bd3-4b13-8777-3c48ed9a6599', 'c3c8944c-803a-4d4f-81b3-2d00d3194061', now(), now(), 'alive'),
-  ('82f97b67-3dea-4c69-9edb-4dc9758b83e5', 'Breed14', '2024-06-18', 'cd5a9b37-0a1d-4931-9106-34380455a4bf', 'a42c16cf-8ae9-41a9-a5c4-17970ab0c9c1', now(), now(), 'alive'),
-  ('df8accdc-10b8-4654-b409-e35e341dc2f8', 'Breed15', '2021-08-16', '37c732f4-2b87-43e1-8e7d-343033650ca3', '33c5c051-557c-4372-ab37-a0f04316ed5c', now(), now(), 'alive'),
-  ('c5592aab-dca7-4710-bdee-281d83c30ddb', 'Breed16', '2020-09-21', '2ea7c098-389f-4d08-92ef-60c99d4d8e9c', '475acb5e-217b-4374-9fa0-d0aeaaed2b9b', now(), now(), 'alive'),
-  ('adaf9aff-0455-4924-9836-4ccf385f898d', 'Breed17', '2022-01-17', '862ccbda-6dd5-4f86-beba-0dfa167c43bf', '6c3fdecb-d99d-450f-93a6-2a064b794968', now(), now(), 'alive'),
-  ('f37213d5-a857-4557-9b7d-296b11aa5af0', 'Breed18', '2018-09-28', 'f6ffa740-4c9a-46f6-9804-5c7656f06b9b', '2f9a2990-ee27-44ea-9d44-cf0b645487de', now(), now(), 'alive'),
-  ('62742d2e-177e-49aa-8690-a47eb88deee9', 'Breed19', '2018-05-30', '83af193a-c0df-46a6-b784-addd15d9ec4d', 'e4b8e1c2-641c-4fee-bfb9-cc7c0153594c', now(), now(), 'alive'),
-  ('38fe6bc6-4554-4e5f-9425-5cb7c25cb6c5', 'Breed20', '2023-04-20', '3a6b7f6d-a708-4b8a-a006-deaa29f0f6be', '1fd1c9f8-90a5-4ca5-ad1c-cd6a65cdfa45', now(), now(), 'alive');
+  -- initial eight
+  ('aaab3d4c-5623-491e-a666-f2e9c1d62cf1','Hereford',          '2021-03-15','de3d6619-7d68-45a6-80df-2d464b6716d4','43666c09-a0b0-4b6b-9558-e44b50a25d57',now(),now(),'alive'),
+  ('7eb4d619-6c02-4f02-ab7a-3e302a74eff6','Aberdeen Angus',    '2020-08-22','100dc01b-7225-4893-b853-0c9bf1804bc4','43666c09-a0b0-4b6b-9558-e44b50a25d57',now(),now(),'alive'),
+  ('a964bb80-32fc-46d0-b239-e03125535430','Holando',           '2019-11-10','26b12297-942a-451e-95bf-2d98f915c636','bf52757b-7a5a-4748-b78f-459471979493',now(),now(),'alive'),
+  ('62645b97-955e-49ea-891e-24b6ff9180ae','Braford',           '2022-01-05','0c2bcc02-7a08-47be-9c79-28f17117d8fa','bf52757b-7a5a-4748-b78f-459471979493',now(),now(),'alive'),
+  ('8cfef1a6-77ed-4b17-ab30-176e88b8af37','Limousin',          '2021-06-30','f8766922-4928-4144-b8a4-cef1978b4cd7','584630da-cc70-40dd-9599-aa539d788894',now(),now(),'alive'),
+  ('c2716fad-ffce-4517-ad2e-7415cf80178a','Charolais',         '2020-12-18','de3d6619-7d68-45a6-80df-2d464b6716d4','362d303b-5994-419c-a884-1656f074db63',now(),now(),'alive'),
+  ('a8d8d11a-dd42-4524-a7c7-4a2063f5ffb1','Shorthorn',         '2021-09-12','26b12297-942a-451e-95bf-2d98f915c636','9535a62f-310e-4a39-9a8d-c01f4f53cb07',now(),now(),'alive'),
+  ('8f31d0be-d956-4b51-b588-8658f64388a1','Simmental',         '2022-04-25','0c2bcc02-7a08-47be-9c79-28f17117d8fa','9535a62f-310e-4a39-9a8d-c01f4f53cb07',now(),now(),'alive'),
+  -- five additional (no tags assigned)
+  ('d1f81cef-8d4a-451e-9300-9883528c66b3','Holando',  '2022-01-12','de3d6619-7d68-45a6-80df-2d464b6716d4','c3456789-3456-3456-3456-345678901234',now(),now(),'alive'),
+  ('46ab34e7-49df-48f7-acf1-b5685ddae95a','Jersey',   '2022-02-18','100dc01b-7225-4893-b853-0c9bf1804bc4','d4567890-4567-4567-4567-456789012345',now(),now(),'alive'),
+  ('5747aef8-85ba-49dc-8db2-c1cf3cb4879d','Bradford', '2022-03-25','26b12297-942a-451e-95bf-2d98f915c636','e5678901-5678-5678-5678-567890123456',now(),now(),'alive'),
+  ('3a1adf1e-9ed8-4aa1-9fd8-d613ece5c667','Criollo',  '2022-04-10','0c2bcc02-7a08-47be-9c79-28f17117d8fa','f6789012-6789-6789-6789-678901234567',now(),now(),'alive'),
+  ('da7adbdb-fa48-4c6b-95f0-6df4119532d2','Senepol',  '2022-05-16','f8766922-4928-4144-b8a4-cef1978b4cd7','a7890123-7890-7890-7890-789012345678',now(),now(),'alive'),
+  ('e1f2a3b4-c5d6-4789-9a8b-7c6d5e4f3a2b', 'Hereford', '2021-07-01', 'b1a8e1e2-1c2d-4e3f-8a4b-5c6d7e8f9a10', 'f1e2d3c4-b5a6-4789-8c7d-6e5f4a3b2c1d', now(), now(), 'alive'),
+  ('f2a3b4c5-d6e7-4890-8b9a-6d5e4f3a2b1c', 'Angus', '2020-09-15', 'c2b9f2f3-2d3e-5f4a-9b5c-6d7e8f9a1b20', 'e2f3a4b5-c6d7-4890-9d8e-7f6a5b4c3d2e', now(), now(), 'alive'),
+  ('a3b4c5d6-e7f8-4901-9a8b-5e4f3a2b1c2d', 'Holando', '2019-12-10', 'd3c0a3a4-3e4f-6a5b-0c6d-7e8f9a1b2c30', 'd3a4b5c6-e7f8-4901-8e9d-8a7b6c5d4e3f', now(), now(), 'alive'),
+  ('b4c5d6e7-f8a9-4012-8b9a-4f3a2b1c2d3e', 'Jersey', '2022-02-20', 'e4d1b4b5-4f5a-7b6c-1d7e-8f9a1b2c3d40', 'f1e2d3c4-b5a6-4789-8c7d-6e5f4a3b2c1d', now(), now(), 'alive'),
+  ('c5d6e7f8-a9b0-4123-9a8b-3a2b1c2d3e4f', 'Braford', '2022-03-25', 'f5e2c5c6-5a6b-8c7d-2e8f-9a1b2c3d4e50', 'e2f3a4b5-c6d7-4890-9d8e-7f6a5b4c3d2e', now(), now(), 'alive'),
+  ('d6e7f8a9-b0c1-4234-8b9a-2b1c2d3e4f5a', 'Limousin', '2021-08-30', 'a6f3d6d7-6b7c-9d8e-3f9a-1b2c3d4e5f60', 'd3a4b5c6-e7f8-4901-8e9d-8a7b6c5d4e3f', now(), now(), 'alive'),
+  ('e7f8a9b0-c1d2-4345-9a8b-1c2d3e4f5a6b', 'Charolais', '2020-11-18', 'b1a8e1e2-1c2d-4e3f-8a4b-5c6d7e8f9a10', 'f1e2d3c4-b5a6-4789-8c7d-6e5f4a3b2c1d', now(), now(), 'alive'),
+  ('f8a9b0c1-d2e3-4456-8b9a-0d3e4f5a6b7c', 'Shorthorn', '2021-10-12', 'c2b9f2f3-2d3e-5f4a-9b5c-6d7e8f9a1b20', 'e2f3a4b5-c6d7-4890-9d8e-7f6a5b4c3d2e', now(), now(), 'alive'),
+  ('a9b0c1d2-e3f4-4567-9a8b-9e8d7c6b5a4f', 'Simmental', '2022-05-01', 'd3c0a3a4-3e4f-6a5b-0c6d-7e8f9a1b2c30', 'd3a4b5c6-e7f8-4901-8e9d-8a7b6c5d4e3f', now(), now(), 'alive'),
+  ('b0c1d2e3-f4a5-4678-8b9a-8d7c6b5a4f3e', 'Senepol', '2022-06-16', 'e4d1b4b5-4f5a-7b6c-1d7e-8f9a1b2c3d40', 'f1e2d3c4-b5a6-4789-8c7d-6e5f4a3b2c1d', now(), now(), 'alive');
 
--- 6) Animal_Tag
+-- 6) Animal_Tag assignments for first five animals (al asignar, la tag debe estar activa)
 INSERT INTO animal_tag (id, animal_id, tag_id, assignment_date, unassignment_date) VALUES
-  ('c11fedab-8c0a-4343-b342-272198f512cf', 'aaab3d4c-5623-491e-a666-f2e9c1d62cf1', '6ba0b76d-cc01-4d91-8274-6a558b2b7d7b', now(), NULL),
-  ('1d599d97-2a80-4431-b884-62e9a7b117bc', '7eb4d619-6c02-4f02-ab7a-3e302a74eff6', '0f6d8e7e-6e6e-4c9a-ba3e-df063906d786', now(), NULL),
-  ('4598c3ae-c8ec-4bc9-8f94-062b88036473', 'a964bb80-32fc-46d0-b239-e03125535430', '54ad4f1a-97b2-474f-b8dc-8829b893771d', now(), NULL),
-  ('dc2c13d2-7121-4d66-a9e5-afbf5f35c290', '62645b97-955e-49ea-891e-24b6ff9180ae', '15779937-6da1-41fb-b747-cb44d4b0004c', now(), NULL),
-  ('76eb8c02-4e88-422b-92ad-c3a1cc654368', '8cfef1a6-77ed-4b17-ab30-176e88b8af37', '3188ea06-27af-4817-9c72-863c77b8c377', now(), NULL),
-  ('23c65ff6-4c8f-4bb4-8774-696615397aca', 'c2716fad-ffce-4517-ad2e-7415cf80178a', '0c4c5ec4-3814-48d4-973c-6feea5fb3406', now(), NULL),
-  ('84767744-4a1f-4c55-adc6-2bff2b255482', 'a8d8d11a-dd42-4524-a7c7-4a2063f5ffb1', '8d03eac9-b4bb-469d-a5c4-21daeec8fdf5', now(), NULL),
-  ('4233bfd6-5d36-4f05-9c9b-3467918b45e7', '8f31d0be-d956-4b51-b588-8658f64388a1', '2170f650-a828-44c8-beb6-4d6a1ba3642e', now(), NULL),
-  ('d2f3fb12-ce90-4e2e-bd7f-0dc8a67241cc', '8d5d4061-bb57-4e12-8ea6-852eaa4f60ad', 'cee67bf5-3f84-478c-bec3-0c9c0583fa3a', now(), NULL),
-  ('aba691eb-9ddc-48b0-8556-3da371a5fd1a', 'c02565f5-87f1-459f-ada2-63936ac00976', 'da4b3c74-f4d7-41a5-b772-2a14f1b223bb', now(), NULL),
-  ('845c3b6f-9326-41c7-a513-8be1543dfacc', 'aa8a79c1-5d3b-4fad-9890-34f6ea3a4c50', 'f47070c3-2cb7-4cbc-849e-654ad6c990c2', now(), NULL),
-  ('95f8b10e-8f80-487d-b3aa-9793a277bec1', 'c76f5a6f-ce7a-438d-bbd0-68837b6556dc', '95331846-1e67-4bb6-b551-e2d86fbd09cc', now(), NULL),
-  ('5e1b2825-4374-40de-89c0-68a6da8d42dc', 'bccf75bc-49b5-410a-a94f-59a060906c48', 'aa8b0c29-393f-47a8-ab3c-5e21c9835ac9', now(), NULL),
-  ('0a16cd95-f63c-45b9-94e2-85fd77dc2eb8', '82f97b67-3dea-4c69-9edb-4dc9758b83e5', 'da7630c0-3d93-4acc-a995-6becc7d9f08a', now(), NULL),
-  ('0ab9157a-9607-4a8a-a34c-3388c4e08977', 'df8accdc-10b8-4654-b409-e35e341dc2f8', '59f570d6-cc59-4518-af95-b45c0e25388f', now(), NULL),
-  ('ddbe9030-ecef-4e70-a5ac-2bc16974566d', 'c5592aab-dca7-4710-bdee-281d83c30ddb', '22e7adeb-229b-4d5f-8c43-a57d67eb722e', now(), NULL),
-  ('b63564f0-3774-4600-9424-97ac0bdb875a', 'adaf9aff-0455-4924-9836-4ccf385f898d', 'cd88ef4c-4758-4c6b-b238-d52e557a45c5', now(), NULL),
-  ('b68b2d7f-6bd9-4671-a9db-3d35f3f65449', 'f37213d5-a857-4557-9b7d-296b11aa5af0', 'b3cc74f0-b5c0-4eeb-af93-b26aa8134704', now(), NULL),
-  ('a20cb3b7-48a0-4bcc-803c-e782f7509767', '62742d2e-177e-49aa-8690-a47eb88deee9', 'fa1257a7-db6e-439d-9297-442f7c58d624', now(), NULL),
-  ('b7c95d20-1a3b-4591-a8a2-b2e5213976dc', '38fe6bc6-4554-4e5f-9425-5cb7c25cb6c5', 'f8813712-3685-4e24-9dde-0816ccffd8c3', now(), NULL);
+  ('c11fedab-8c0a-4343-b342-272198f512cf', 'aaab3d4c-5623-491e-a666-f2e9c1d62cf1','6ba0b76d-cc01-4d91-8274-6a558b2b7d7b', now(), NULL),
+  ('1d599d97-2a80-4431-b884-62e9a7b117bc','7eb4d619-6c02-4f02-ab7a-3e302a74eff6','0f6d8e7e-6e6e-4c9a-ba3e-df063906d786', now(), NULL),
+  ('4598c3ae-c8ec-4bc9-8f94-062b88036473','a964bb80-32fc-46d0-b239-e03125535430','54ad4f1a-97b2-474f-b8dc-8829b893771d', now(), NULL),
+  ('dc2c13d2-7121-4d66-a9e5-afbf5f35c290','62645b97-955e-49ea-891e-24b6ff9180ae','15779937-6da1-41fb-b747-cb44d4b0004c', now(), NULL),
+  ('76eb8c02-4e88-422b-92ad-c3a1cc654368','8cfef1a6-77ed-4b17-ab30-176e88b8af37','3188ea06-27af-4817-9c72-863c77b8c377', now(), NULL),
+  ('c1d2e3f4-a5b6-4789-9a8b-7c6d5e4f3a2b', 'e1f2a3b4-c5d6-4789-9a8b-7c6d5e4f3a2b', 'a1b2c3d4-e5f6-4789-9a8b-7c6d5e4f3a2b', now(), NULL),
+  ('d2e3f4a5-b6c7-4890-8b9a-6d5e4f3a2b1c', 'f2a3b4c5-d6e7-4890-8b9a-6d5e4f3a2b1c', 'b2c3d4e5-f6a7-4890-8b9a-6d5e4f3a2b1c', now(), NULL),
+  ('e3f4a5b6-c7d8-4901-9a8b-5e4f3a2b1c2d', 'a3b4c5d6-e7f8-4901-9a8b-5e4f3a2b1c2d', 'c3d4e5f6-a7b8-4901-9a8b-5e4f3a2b1c2d', now(), NULL),
+  ('f4a5b6c7-d8e9-4012-8b9a-4f3a2b1c2d3e', 'b4c5d6e7-f8a9-4012-8b9a-4f3a2b1c2d3e', 'd4e5f6a7-b8c9-4012-8b9a-4f3a2b1c2d3e', now(), NULL),
+  ('a5b6c7d8-e9f0-4123-9a8b-3a2b1c2d3e4f', 'c5d6e7f8-a9b0-4123-9a8b-3a2b1c2d3e4f', 'e5f6a7b8-c9d0-4123-9a8b-3a2b1c2d3e4f', now(), NULL),
+  ('b6c7d8e9-f0a1-4234-8b9a-2b1c2d3e4f5a', 'd6e7f8a9-b0c1-4234-8b9a-2b1c2d3e4f5a', 'f6a7b8c9-d0e1-4234-8b9a-2b1c2d3e4f5a', now(), NULL),
+  ('c7d8e9f0-a1b2-4345-9a8b-1c2d3e4f5a6b', 'e7f8a9b0-c1d2-4345-9a8b-1c2d3e4f5a6b', 'a7b8c9d0-e1f2-4345-9a8b-1c2d3e4f5a6b', now(), NULL),
+  ('d8e9f0a1-b2c3-4456-8b9a-0d3e4f5a6b7c', 'f8a9b0c1-d2e3-4456-8b9a-0d3e4f5a6b7c', 'b8c9d0e1-f2a3-4456-8b9a-0d3e4f5a6b7c', now(), NULL),
+  ('e9f0a1b2-c3d4-4567-9a8b-9e8d7c6b5a4f', 'a9b0c1d2-e3f4-4567-9a8b-9e8d7c6b5a4f', 'c9d0e1f2-a3b4-4567-9a8b-9e8d7c6b5a4f', now(), NULL),
+  ('f0a1b2c3-d4e5-4678-8b9a-8d7c6b5a4f3e', 'b0c1d2e3-f4a5-4678-8b9a-8d7c6b5a4f3e', 'd0e1f2a3-b4c5-4678-8b9a-8d7c6b5a4f3e', now(), NULL);
 
--- 7) Transports
-INSERT INTO transports (id, animal_id, origin_land_id, destiny_land_id, date, details) VALUES
-  ('9086e832-2277-4447-aeaf-ad75f1337321', 'aaab3d4c-5623-491e-a666-f2e9c1d62cf1', '43666c09-a0b0-4b6b-9558-e44b50a25d57', 'bf52757b-7a5a-4748-b78f-459471979493', now(), 'Transporte 1'),
-  ('0d5ad686-9046-4468-afdb-b18751e37989', '7eb4d619-6c02-4f02-ab7a-3e302a74eff6', 'bf52757b-7a5a-4748-b78f-459471979493', '584630da-cc70-40dd-9599-aa539d788894', now(), 'Transporte 2'),
-  ('53f01e70-fcfb-4adb-ba91-c973c7f7f224', 'a964bb80-32fc-46d0-b239-e03125535430', '584630da-cc70-40dd-9599-aa539d788894', '362d303b-5994-419c-a884-1656f074db63', now(), 'Transporte 3'),
-  ('6ce45e8a-7ad5-4769-9d9c-d4d896eebb2e', '62645b97-955e-49ea-891e-24b6ff9180ae', '362d303b-5994-419c-a884-1656f074db63', '9535a62f-310e-4a39-9a8d-c01f4f53cb07', now(), 'Transporte 4'),
-  ('bfc730e6-c700-4bd9-a1b3-4c98efa97f19', '8cfef1a6-77ed-4b17-ab30-176e88b8af37', '9535a62f-310e-4a39-9a8d-c01f4f53cb07', 'f9cf94b3-c8ea-4cc2-9bf1-288442fc7322', now(), 'Transporte 5'),
-  ('fb4b7c30-5b26-470b-857e-3ee232a3bd01', 'c2716fad-ffce-4517-ad2e-7415cf80178a', 'f9cf94b3-c8ea-4cc2-9bf1-288442fc7322', '983a18d1-f72f-44c0-b11b-376ff22f74dc', now(), 'Transporte 6'),
-  ('35382ef0-0e66-4288-b6ca-50b3f3417d24', 'a8d8d11a-dd42-4524-a7c7-4a2063f5ffb1', '983a18d1-f72f-44c0-b11b-376ff22f74dc', 'ba239ce6-a158-4b5c-b0e9-66eb62273805', now(), 'Transporte 7'),
-  ('3e0e022b-4f77-49e9-abb8-688ba49f2903', '8f31d0be-d956-4b51-b588-8658f64388a1', 'ba239ce6-a158-4b5c-b0e9-66eb62273805', '5c491f13-e1b2-4862-b8b0-3335de115b06', now(), 'Transporte 8'),
-  ('5917dd64-6944-4599-ae7e-379a55f8223e', '8d5d4061-bb57-4e12-8ea6-852eaa4f60ad', '5c491f13-e1b2-4862-b8b0-3335de115b06', 'f6d85189-85a0-4e55-a54f-e6c4f56c6e43', now(), 'Transporte 9'),
-  ('494af971-ec5c-4262-819d-edf908fba4c3', 'c02565f5-87f1-459f-ada2-63936ac00976', 'f6d85189-85a0-4e55-a54f-e6c4f56c6e43', '112f887d-11db-493c-b897-91e62ed8b7c6', now(), 'Transporte 10'),
-  ('1d801545-a7ef-46a0-b7f1-7d8e848ae045', 'aa8a79c1-5d3b-4fad-9890-34f6ea3a4c50', '112f887d-11db-493c-b897-91e62ed8b7c6', 'b6bba35b-e915-4138-85f7-40a9a38c081c', now(), 'Transporte 11'),
-  ('cb83c2fa-bc9d-4b3a-8f93-0077baa7a025', 'c76f5a6f-ce7a-438d-bbd0-68837b6556dc', 'b6bba35b-e915-4138-85f7-40a9a38c081c', 'c3c8944c-803a-4d4f-81b3-2d00d3194061', now(), 'Transporte 12'),
-  ('33d5d570-87ad-42ee-b562-63e39157a83e', 'bccf75bc-49b5-410a-a94f-59a060906c48', 'c3c8944c-803a-4d4f-81b3-2d00d3194061', 'a42c16cf-8ae9-41a9-a5c4-17970ab0c9c1', now(), 'Transporte 13'),
-  ('cae1a57b-6ae7-4da0-8ff7-ae886d304cfe', '82f97b67-3dea-4c69-9edb-4dc9758b83e5', 'a42c16cf-8ae9-41a9-a5c4-17970ab0c9c1', '33c5c051-557c-4372-ab37-a0f04316ed5c', now(), 'Transporte 14'),
-  ('664c7f3b-9987-4549-b762-ab7882016ad0', 'df8accdc-10b8-4654-b409-e35e341dc2f8', '33c5c051-557c-4372-ab37-a0f04316ed5c', '475acb5e-217b-4374-9fa0-d0aeaaed2b9b', now(), 'Transporte 15'),
-  ('d7b45088-3463-4904-ab67-301dce3ee00f', 'c5592aab-dca7-4710-bdee-281d83c30ddb', '475acb5e-217b-4374-9fa0-d0aeaaed2b9b', '6c3fdecb-d99d-450f-93a6-2a064b794968', now(), 'Transporte 16'),
-  ('b62b7f7e-bd0f-4779-95f9-083f8aff2ebc', 'adaf9aff-0455-4924-9836-4ccf385f898d', '6c3fdecb-d99d-450f-93a6-2a064b794968', '2f9a2990-ee27-44ea-9d44-cf0b645487de', now(), 'Transporte 17'),
-  ('c1a7042f-6262-44a8-aae9-06ad249e4be2', 'f37213d5-a857-4557-9b7d-296b11aa5af0', '2f9a2990-ee27-44ea-9d44-cf0b645487de', 'e4b8e1c2-641c-4fee-bfb9-cc7c0153594c', now(), 'Transporte 18'),
-  ('4fa26916-db30-4bd7-98ff-b12867cb35c0', '62742d2e-177e-49aa-8690-a47eb88deee9', 'e4b8e1c2-641c-4fee-bfb9-cc7c0153594c', '1fd1c9f8-90a5-4ca5-ad1c-cd6a65cdfa45', now(), 'Transporte 19'),
-  ('e0e14e7f-9520-484f-bd1d-f41a3c7e4788', '38fe6bc6-4554-4e5f-9425-5cb7c25cb6c5', '1fd1c9f8-90a5-4ca5-ad1c-cd6a65cdfa45', '43666c09-a0b0-4b6b-9558-e44b50a25d57', now(), 'Transporte 20');
+-- Tipos de evento necesarios para los eventos
+INSERT INTO event_type (id, name, description) VALUES
+  (3, 'Pesaje', 'Evento de pesaje de animales'),
+  (4, 'Vacunación', 'Evento de vacunación de animales'),
+  (7, 'Venta', 'Evento de venta de animales');
 
--- 8) Event Types
-
--- 8) Event Types
-INSERT INTO event_type (name, description) VALUES
-  ('Birth',            'Registro de nacimiento'),
-  ('Sale',             'Venta de animal'),
-  ('Vaccination',      'Aplicación de vacuna'),
-  ('Weighing',         'Registración de peso'),
-  ('Transport',        'Movimiento entre campos'),
-  ('Tag Assignment',   'Asignación de tag'),
-  ('Tag Unassignment', 'Desasignación de tag'),
-  ('Health Check',     'Control sanitario'),
-  ('Inspection',       'Inspección técnica'),
-  ('Retirement',       'Retiro del sistema');
-
--- 9) Events
+-- Events for weighings
 INSERT INTO events (id, event_type, date, comments, created_by) VALUES
-  ('598ce3b2-3510-4b33-a50e-25c519586bff', 2, now(), 'Evento 1', 'de3d6619-7d68-45a6-80df-2d464b6716d4'),
-  ('4c5bed42-747b-45bb-8174-d5af0c3910ea', 3, now(), 'Evento 2', '100dc01b-7225-4893-b853-0c9bf1804bc4'),
-  ('e2438264-047d-4966-85d4-a6f38564491f', 4, now(), 'Evento 3', '26b12297-942a-451e-95bf-2d98f915c636'),
-  ('bd1782f7-bff0-4332-8251-9ef0d219c708', 5, now(), 'Evento 4', '0c2bcc02-7a08-47be-9c79-28f17117d8fa'),
-  ('9130db44-0adc-43ec-9176-34c4d8fa1b5f', 6, now(), 'Evento 5', 'f8766922-4928-4144-b8a4-cef1978b4cd7'),
-  ('32ad133d-a1a3-459b-89c9-614e4f6f69f7', 7, now(), 'Evento 6', '7cef4a50-e74e-4047-827c-33714ef58f3b'),
-  ('2d8c50a0-d9c8-45d7-9ad7-7df0337a0a45', 8, now(), 'Evento 7', 'c8025b58-fa25-49bc-a6a1-95c31b956a81'),
-  ('70bfdf55-a697-4f10-ac60-d91cc9cc06f5', 9, now(), 'Evento 8', 'ebfb1a73-0555-455f-b2d1-ec06857d1057'),
-  ('6d464a1e-05a4-4483-8c3d-7efcc9cc6b8f', 10, now(), 'Evento 9', '0d9f925d-921f-45e3-9ad8-d8cce0e17c04'),
-  ('e2908bda-c5ce-4124-b136-d455df012038', 1, now(), 'Evento 10', '373d79ef-aaf6-4367-89dc-10743bf67f8a'),
-  ('0aaab72f-9f6b-4d0e-9324-a8cb97bcb33c', 2, now(), 'Evento 11', '3eae2ed2-28c6-451a-88f5-21fa0f8a72dc'),
-  ('0d014b78-49b0-4884-a3f7-f616a48462e0', 3, now(), 'Evento 12', '6277b49e-9f1c-49c5-9997-2aa85891abeb'),
-  ('cee957ae-df4a-447c-95e7-7a97e866acf7', 4, now(), 'Evento 13', '98c57609-4bd3-4b13-8777-3c48ed9a6599'),
-  ('a8f4aabd-37c6-45b0-9a67-fe3c302dc5fa', 5, now(), 'Evento 14', 'cd5a9b37-0a1d-4931-9106-34380455a4bf'),
-  ('ae35ce1b-6587-45fd-bc3b-dc56b1b79b8c', 6, now(), 'Evento 15', '37c732f4-2b87-43e1-8e7d-343033650ca3'),
-  ('7d626a9b-7050-424d-9c45-9e755fce0e7b', 7, now(), 'Evento 16', '2ea7c098-389f-4d08-92ef-60c99d4d8e9c'),
-  ('1b349ee9-b180-44a5-9b5f-51837900f983', 8, now(), 'Evento 17', '862ccbda-6dd5-4f86-beba-0dfa167c43bf'),
-  ('6ec196d5-73cf-4015-8ad5-e4ff2b39b990', 9, now(), 'Evento 18', 'f6ffa740-4c9a-46f6-9804-5c7656f06b9b'),
-  ('cb585f07-ebfa-4014-a7fe-8c9617c6b3a8', 10, now(), 'Evento 19', '83af193a-c0df-46a6-b784-addd15d9ec4d'),
-  ('5a936b22-3e30-426b-8906-dd45f0ab6abe', 1, now(), 'Evento 20', '3a6b7f6d-a708-4b8a-a006-deaa29f0f6be');
+  ('b1e2c3d4-5f6a-4b7c-8d9e-0f1a2b3c4d5e', 3, now() - interval '20 days', 'Pesaje rutinario mensual', 'de3d6619-7d68-45a6-80df-2d464b6716d4'),
+  ('c2f3a4b5-6d7e-5c8b-9a0f-1b2c3d4e5f6a', 3, now() - interval '18 days', 'Control de peso post-vacunación', '100dc01b-7225-4893-b853-0c9bf1804bc4'),
+  ('d3a4b5c6-7e8f-6d9c-0a1b-2c3d4e5f6a7b', 3, now() - interval '15 days', 'Pesaje pre-transporte', '26b12297-942a-451e-95bf-2d98f915c636'),
+  ('e4b5c6d7-8f9a-7e0d-1b2c-3d4e5f6a7b8c', 3, now() - interval '12 days', 'Control veterinario mensual', '0c2bcc02-7a08-47be-9c79-28f17117d8fa'),
+  ('f5c6d7e8-9a0b-8f1e-2c3d-4e5f6a7b8c9d', 3, now() - interval '10 days', 'Pesaje control crecimiento', 'f8766922-4928-4144-b8a4-cef1978b4cd7');
 
--- 10) Animal_Event
+-- Events for vaccinations
+INSERT INTO events (id, event_type, date, comments, created_by) VALUES
+  ('a6d7e8f9-0b1c-9a2d-3e4f-5a6b7c8d9e0f', 4, now() - interval '30 days', 'Vacunación antiaftosa', 'de3d6619-7d68-45a6-80df-2d464b6716d4'),
+  ('b7e8f9a0-1c2d-0b3e-4f5a-6b7c8d9e0f1a', 4, now() - interval '28 days', 'Vacuna contra brucelosis', '100dc01b-7225-4893-b853-0c9bf1804bc4'),
+  ('c8f9a0b1-2d3e-1c4f-5a6b-7c8d9e0f1a2b', 4, now() - interval '25 days', 'Vacunación IBR/BVD', '26b12297-942a-451e-95bf-2d98f915c636'),
+  ('d9a0b1c2-3e4f-2d5a-6b7c-8d9e0f1a2b3c', 4, now() - interval '22 days', 'Refuerzo antiaftosa', '0c2bcc02-7a08-47be-9c79-28f17117d8fa'),
+  ('e0b1c2d3-4f5a-3e6b-7c8d-9e0f1a2b3c4d', 4, now() - interval '20 days', 'Vacuna carbunco', 'f8766922-4928-4144-b8a4-cef1978b4cd7');
+
+-- Events for sales
+INSERT INTO events (id, event_type, date, comments, created_by) VALUES
+  ('f1c2d3e4-5a6b-4c7d-8e9f-0a1b2c3d4e5f', 7, now() - interval '5 days', 'Venta a frigorífico', 'de3d6619-7d68-45a6-80df-2d464b6716d4'),
+  ('a2d3e4f5-6b7c-5d8e-9f0a-1b2c3d4e5f6a', 7, now() - interval '3 days', 'Venta directa consumidor', '100dc01b-7225-4893-b853-0c9bf1804bc4');
+
+-- Animal-Event associations
 INSERT INTO animal_event (id, event_id, animal_id) VALUES
-  ('74ac7dab-91a6-4ff2-9af3-1fdb52a8ddd7', '598ce3b2-3510-4b33-a50e-25c519586bff', 'aaab3d4c-5623-491e-a666-f2e9c1d62cf1'),
-  ('a126209a-d4fb-4342-9412-b19350204384', '4c5bed42-747b-45bb-8174-d5af0c3910ea', '7eb4d619-6c02-4f02-ab7a-3e302a74eff6'),
-  ('f4f42f65-fbea-4adf-8922-b7e0f0883559', 'e2438264-047d-4966-85d4-a6f38564491f', 'a964bb80-32fc-46d0-b239-e03125535430'),
-  ('13cdd995-e751-438a-b7bb-ce4c80a8c5f1', 'bd1782f7-bff0-4332-8251-9ef0d219c708', '62645b97-955e-49ea-891e-24b6ff9180ae'),
-  ('fd7d40a4-18a7-45de-a2bc-94346c19a730', '9130db44-0adc-43ec-9176-34c4d8fa1b5f', '8cfef1a6-77ed-4b17-ab30-176e88b8af37'),
-  ('5fe10ae1-efd8-4daa-a601-a825fe0e3d62', '32ad133d-a1a3-459b-89c9-614e4f6f69f7', 'c2716fad-ffce-4517-ad2e-7415cf80178a'),
-  ('2de66832-9de4-4eca-aece-2a6e407387ce', '2d8c50a0-d9c8-45d7-9ad7-7df0337a0a45', 'a8d8d11a-dd42-4524-a7c7-4a2063f5ffb1'),
-  ('25988622-40f0-4314-a964-6837ea922e60', '70bfdf55-a697-4f10-ac60-d91cc9cc06f5', '8f31d0be-d956-4b51-b588-8658f64388a1'),
-  ('2d5415bc-144a-4142-982a-4ddfe31a7821', '6d464a1e-05a4-4483-8c3d-7efcc9cc6b8f', '8d5d4061-bb57-4e12-8ea6-852eaa4f60ad'),
-  ('6d278e1e-77ad-45c2-a0e5-76674e7766e0', 'e2908bda-c5ce-4124-b136-d455df012038', 'c02565f5-87f1-459f-ada2-63936ac00976'),
-  ('c826fd2e-86b2-43a0-b375-2bfb080d6610', '0aaab72f-9f6b-4d0e-9324-a8cb97bcb33c', 'aa8a79c1-5d3b-4fad-9890-34f6ea3a4c50'),
-  ('6dee68c9-fea3-4ae7-85a3-25995ad6e54f', '0d014b78-49b0-4884-a3f7-f616a48462e0', 'c76f5a6f-ce7a-438d-bbd0-68837b6556dc'),
-  ('127d80c5-995c-4eb8-af8f-5004db8d0653', 'cee957ae-df4a-447c-95e7-7a97e866acf7', 'bccf75bc-49b5-410a-a94f-59a060906c48'),
-  ('71066cc6-b91f-40be-a73b-43abfa0aa366', 'a8f4aabd-37c6-45b0-9a67-fe3c302dc5fa', '82f97b67-3dea-4c69-9edb-4dc9758b83e5'),
-  ('caa0acab-06a9-474a-84da-568a011f950d', 'ae35ce1b-6587-45fd-bc3b-dc56b1b79b8c', 'df8accdc-10b8-4654-b409-e35e341dc2f8'),
-  ('5be0149a-cac6-449e-b661-c5693ca0d4ba', '7d626a9b-7050-424d-9c45-9e755fce0e7b', 'c5592aab-dca7-4710-bdee-281d83c30ddb'),
-  ('7c276272-b4e9-4e72-bdbe-d63bb69d723c', '1b349ee9-b180-44a5-9b5f-51837900f983', 'adaf9aff-0455-4924-9836-4ccf385f898d'),
-  ('6ad7e47a-0b42-47ec-adee-98382ed39b8b', '6ec196d5-73cf-4015-8ad5-e4ff2b39b990', 'f37213d5-a857-4557-9b7d-296b11aa5af0'),
-  ('1e10ac3d-1b59-4bf5-93ae-a10880f3152d', 'cb585f07-ebfa-4014-a7fe-8c9617c6b3a8', '62742d2e-177e-49aa-8690-a47eb88deee9'),
-  ('c46656d6-6eec-4a73-8d6e-b36557f529c6', '5a936b22-3e30-426b-8906-dd45f0ab6abe', '38fe6bc6-4554-4e5f-9425-5cb7c25cb6c5');
+  -- Weighing events
+  ('b2e3c4d5-6f7a-5b8c-9d0e-1f2a3b4c5d6e', 'b1e2c3d4-5f6a-4b7c-8d9e-0f1a2b3c4d5e', 'aaab3d4c-5623-491e-a666-f2e9c1d62cf1'),
+  ('c3f4a5b6-7d8e-6c9b-0a1f-2b3c4d5e6f7a', 'c2f3a4b5-6d7e-5c8b-9a0f-1b2c3d4e5f6a', '7eb4d619-6c02-4f02-ab7a-3e302a74eff6'),
+  ('d4a5b6c7-8e9f-7d0c-1a2b-3c4d5e6f7a8b', 'd3a4b5c6-7e8f-6d9c-0a1b-2c3d4e5f6a7b', 'a964bb80-32fc-46d0-b239-e03125535430'),
+  ('e5b6c7d8-9f0a-8e1d-2b3c-4d5e6f7a8b9c', 'e4b5c6d7-8f9a-7e0d-1b2c-3d4e5f6a7b8c', '62645b97-955e-49ea-891e-24b6ff9180ae'),
+  ('f6c7d8e9-0a1b-9f2e-3c4d-5e6f7a8b9c0d', 'f5c6d7e8-9a0b-8f1e-2c3d-4e5f6a7b8c9d', '8cfef1a6-77ed-4b17-ab30-176e88b8af37'),
+  -- Vaccination events
+  ('a7d8e9f0-1b2c-0a3d-4e5f-6a7b8c9d0e1f', 'a6d7e8f9-0b1c-9a2d-3e4f-5a6b7c8d9e0f', 'aaab3d4c-5623-491e-a666-f2e9c1d62cf1'),
+  ('b8e9f0a1-2c3d-1b4e-5f6a-7b8c9d0e1f2a', 'b7e8f9a0-1c2d-0b3e-4f5a-6b7c8d9e0f1a', '7eb4d619-6c02-4f02-ab7a-3e302a74eff6'),
+  ('c9f0a1b2-3d4e-2c5f-6a7b-8c9d0e1f2a3b', 'c8f9a0b1-2d3e-1c4f-5a6b-7c8d9e0f1a2b', 'a964bb80-32fc-46d0-b239-e03125535430'),
+  ('d0a1b2c3-4e5f-3d6a-7b8c-9d0e1f2a3b4c', 'd9a0b1c2-3e4f-2d5a-6b7c-8d9e0f1a2b3c', '62645b97-955e-49ea-891e-24b6ff9180ae'),
+  ('e1b2c3d4-5f6a-4e7b-8c9d-0e1f2a3b4c5d', 'e0b1c2d3-4f5a-3e6b-7c8d-9e0f1a2b3c4d', '8cfef1a6-77ed-4b17-ab30-176e88b8af37'),
+  -- Sale events
+  ('f2c3d4e5-6a7b-5c8d-9e0f-1a2b3c4d5e6f', 'f1c2d3e4-5a6b-4c7d-8e9f-0a1b2c3d4e5f', 'c2716fad-ffce-4517-ad2e-7415cf80178a'),
+  ('a3d4e5f6-7b8c-6d9e-0f1a-2b3c4d5e6f7a', 'a2d3e4f5-6b7c-5d8e-9f0a-1b2c3d4e5f6a', 'a8d8d11a-dd42-4524-a7c7-4a2063f5ffb1');
 
--- 11) Weightings
+-- Weighing details
 INSERT INTO weightings (id, event_id, weight, unit) VALUES
-  ('d6c2065a-cacb-4f65-a581-262f3ef6d2e4', '598ce3b2-3510-4b33-a50e-25c519586bff', 484.97, 'kg'),
-  ('f81b71c4-7ca2-481e-9fbf-ac795f3481fb', '4c5bed42-747b-45bb-8174-d5af0c3910ea', 264.65, 'kg'),
-  ('5888b7c6-964e-44b5-a11b-bc0c8a9a358b', 'e2438264-047d-4966-85d4-a6f38564491f', 439.39, 'kg'),
-  ('679098c8-c5eb-48a1-983c-157d0ee09787', 'bd1782f7-bff0-4332-8251-9ef0d219c708', 167.22, 'kg'),
-  ('1c7504a6-0482-454c-931a-7eb50463890e', '9130db44-0adc-43ec-9176-34c4d8fa1b5f', 412.26, 'kg'),
-  ('a4ef81d8-5e49-4252-badf-a63b5be3956e', '32ad133d-a1a3-459b-89c9-614e4f6f69f7', 296.91, 'kg'),
-  ('5cbc0705-f98c-4476-86a1-eb1a28a762fc', '2d8c50a0-d9c8-45d7-9ad7-7df0337a0a45', 56.32, 'kg'),
-  ('ae629d68-053d-42d2-84a7-a0d60e7f40b6', '70bfdf55-a697-4f10-ac60-d91cc9cc06f5', 373.87, 'kg'),
-  ('91e28944-c39d-4fef-976c-dbc6042b03cc', '6d464a1e-05a4-4483-8c3d-7efcc9cc6b8f', 229.47, 'kg'),
-  ('507b82e6-be7d-4025-9b0e-b370a3ce7de2', 'e2908bda-c5ce-4124-b136-d455df012038', 421.18, 'kg'),
-  ('0d999979-74e9-48f4-aa32-8e5833e0f86e', '0aaab72f-9f6b-4d0e-9324-a8cb97bcb33c', 350.67, 'kg'),
-  ('865b3d98-b1ad-4af5-b201-2b412c1a9f12', '0d014b78-49b0-4884-a3f7-f616a48462e0', 50.51, 'kg'),
-  ('a65f87e2-370f-4c3a-bedb-c77858612159', 'cee957ae-df4a-447c-95e7-7a97e866acf7', 272.11, 'kg'),
-  ('4a9b215c-11f7-441c-9cf7-43471e4824eb', 'a8f4aabd-37c6-45b0-9a67-fe3c302dc5fa', 440.42, 'kg'),
-  ('f68c1c53-76b4-4142-add1-90014aaa9621', 'ae35ce1b-6587-45fd-bc3b-dc56b1b79b8c', 159.76, 'kg'),
-  ('24b7d50b-8e1e-49c6-8917-61711f29724e', '7d626a9b-7050-424d-9c45-9e755fce0e7b', 196.34, 'kg'),
-  ('2bd61309-9557-46af-9ff6-fdb40331b080', '1b349ee9-b180-44a5-9b5f-51837900f983', 441.71, 'kg'),
-  ('b0c8199a-65d9-42e4-ad7e-b8ea055fe74f', '6ec196d5-73cf-4015-8ad5-e4ff2b39b990', 135.98, 'kg'),
-  ('e7f03b40-46e7-42f8-bfa5-b76c7107280f', 'cb585f07-ebfa-4014-a7fe-8c9617c6b3a8', 305.38, 'kg'),
-  ('c6e6595a-074a-4c96-82d8-7b3a2a678207', '5a936b22-3e30-426b-8906-dd45f0ab6abe', 157.38, 'kg');
+  ('da7bb15f-92f6-4739-9420-5685e45c7caa', 'c2f3a4b5-6d7e-5c8b-9a0f-1b2c3d4e5f6a', 380.75, 'kg'),
+  ('215ef315-9cf3-4c4a-be94-57b0752d1444', 'd3a4b5c6-7e8f-6d9c-0a1b-2c3d4e5f6a7b', 520.25, 'kg'),
+  ('03b495b4-fc4b-4293-b1bc-0ecf31ae744d', 'e4b5c6d7-8f9a-7e0d-1b2c-3d4e5f6a7b8c', 395.80, 'kg'),
+  ('5aabdff4-f579-4cfe-9b2d-dc3dff0708d6', 'f5c6d7e8-9a0b-8f1e-2c3d-4e5f6a7b8c9d', 425.60, 'kg');
 
--- 12) Sales
-INSERT INTO sales (id, event_id, buyer, price, currency) VALUES
-  ('15c9a868-70b1-4988-86c9-69076b56a4ad', '598ce3b2-3510-4b33-a50e-25c519586bff', 'Buyer 1', 4840.95, 'USD'),
-  ('51791489-a898-49a3-8bd8-d45ab75fd2d0', '4c5bed42-747b-45bb-8174-d5af0c3910ea', 'Buyer 2', 4035.58, 'USD'),
-  ('9e3d0237-02c8-48e4-bb76-d4b41c7ce985', 'e2438264-047d-4966-85d4-a6f38564491f', 'Buyer 3', 2295.05, 'USD'),
-  ('6cb61b7a-67d7-4044-b0a8-975ac0ee8ecc', 'bd1782f7-bff0-4332-8251-9ef0d219c708', 'Buyer 4', 494.18, 'USD'),
-  ('6a775510-1390-44e4-935c-ed07fea081fc', '9130db44-0adc-43ec-9176-34c4d8fa1b5f', 'Buyer 5', 1668.27, 'USD'),
-  ('da86297d-ab3c-4dd9-924d-a749bb53dbbc', '32ad133d-a1a3-459b-89c9-614e4f6f69f7', 'Buyer 6', 2588.91, 'USD'),
-  ('b1dfa324-e0e4-4f9d-a6db-71746954564b', '2d8c50a0-d9c8-45d7-9ad7-7df0337a0a45', 'Buyer 7', 4670.89, 'USD'),
-  ('1084be10-e3d2-4a50-a0da-ce4e2cfbcd85', '70bfdf55-a697-4f10-ac60-d91cc9cc06f5', 'Buyer 8', 634.38, 'USD'),
-  ('c1f26d4f-1045-442e-81c7-cccd76f7f887', '6d464a1e-05a4-4483-8c3d-7efcc9cc6b8f', 'Buyer 9', 2801.21, 'USD'),
-  ('bcebc8bd-0cd1-43b6-b96b-0a911857d8de', 'e2908bda-c5ce-4124-b136-d455df012038', 'Buyer 10', 3562.15, 'USD'),
-  ('c5984e08-57d0-4e99-aa46-354b3e9bd2e1', '0aaab72f-9f6b-4d0e-9324-a8cb97bcb33c', 'Buyer 11', 2782.46, 'USD'),
-  ('7e91ded5-0913-4a3e-863d-431295204ba7', '0d014b78-49b0-4884-a3f7-f616a48462e0', 'Buyer 12', 4090.89, 'USD'),
-  ('d0146595-d032-40aa-aed8-3d17fa436a9f', 'cee957ae-df4a-447c-95e7-7a97e866acf7', 'Buyer 13', 2747.39, 'USD'),
-  ('499dfbad-02e2-4819-ac7c-b881a3e7d82b', 'a8f4aabd-37c6-45b0-9a67-fe3c302dc5fa', 'Buyer 14', 4822.81, 'USD'),
-  ('90a0cddf-2044-4933-9445-d5b44facb36e', 'ae35ce1b-6587-45fd-bc3b-dc56b1b79b8c', 'Buyer 15', 3055.61, 'USD'),
-  ('6cba1d07-144d-4890-a3da-3861ff9787e2', '7d626a9b-7050-424d-9c45-9e755fce0e7b', 'Buyer 16', 2979.32, 'USD'),
-  ('35408018-7ea1-4928-9bee-7d5e65e5fab7', '1b349ee9-b180-44a5-9b5f-51837900f983', 'Buyer 17', 2280.45, 'USD'),
-  ('cf1dc705-274e-449f-aa15-f684ea8ee2d5', '6ec196d5-73cf-4015-8ad5-e4ff2b39b990', 'Buyer 18', 3021.81, 'USD'),
-  ('0c087b52-fe42-4a06-98dc-35dd24018862', 'cb585f07-ebfa-4014-a7fe-8c9617c6b3a8', 'Buyer 19', 1986.02, 'USD'),
-  ('d2e203e3-6f52-4709-8fc2-5bba9b6b3310', '5a936b22-3e30-426b-8906-dd45f0ab6abe', 'Buyer 20', 2920.69, 'USD');
-
--- 13) Vaccinations
+-- Vaccination details
 INSERT INTO vaccinations (id, event_id, vaccine, dosage, provider) VALUES
-  ('16e0c01a-5b60-481f-88c2-8a20baf8a490', '598ce3b2-3510-4b33-a50e-25c519586bff', 'Vacuna 1', 'Dosis 1', 'Proveedor 1'),
-  ('69c547c2-faf2-4463-829c-a4720fcb4169', '4c5bed42-747b-45bb-8174-d5af0c3910ea', 'Vacuna 2', 'Dosis 2', 'Proveedor 2'),
-  ('2b8de7de-62ed-448c-ad20-7f4d49e8fceb', 'e2438264-047d-4966-85d4-a6f38564491f', 'Vacuna 3', 'Dosis 3', 'Proveedor 3'),
-  ('0d87c410-fee8-482e-9f89-763a2a079011', 'bd1782f7-bff0-4332-8251-9ef0d219c708', 'Vacuna 4', 'Dosis 4', 'Proveedor 4'),
-  ('2e289e1a-19b5-4aaa-8c19-c681588aabe1', '9130db44-0adc-43ec-9176-34c4d8fa1b5f', 'Vacuna 5', 'Dosis 5', 'Proveedor 5'),
-  ('19e59b12-eaee-4deb-923b-42a561e2a86d', '32ad133d-a1a3-459b-89c9-614e4f6f69f7', 'Vacuna 6', 'Dosis 6', 'Proveedor 6'),
-  ('0cc277f7-c383-417c-a537-516a357aad2e', '2d8c50a0-d9c8-45d7-9ad7-7df0337a0a45', 'Vacuna 7', 'Dosis 7', 'Proveedor 7'),
-  ('7a1154c4-a6e2-4387-8d2a-cad235cd56e8', '70bfdf55-a697-4f10-ac60-d91cc9cc06f5', 'Vacuna 8', 'Dosis 8', 'Proveedor 8'),
-  ('eb1dddb9-474b-451c-bd62-facc8307cc2a', '6d464a1e-05a4-4483-8c3d-7efcc9cc6b8f', 'Vacuna 9', 'Dosis 9', 'Proveedor 9'),
-  ('6cde15e3-0369-4868-85bb-f8df67bf21f6', 'e2908bda-c5ce-4124-b136-d455df012038', 'Vacuna 10', 'Dosis 10', 'Proveedor 10'),
-  ('dd4db787-030c-4055-bd8c-5dc35320ae91', '0aaab72f-9f6b-4d0e-9324-a8cb97bcb33c', 'Vacuna 11', 'Dosis 11', 'Proveedor 11'),
-  ('15f35e4f-9ffe-4b86-9ddc-bbd9242f578e', '0d014b78-49b0-4884-a3f7-f616a48462e0', 'Vacuna 12', 'Dosis 12', 'Proveedor 12'),
-  ('64409d8b-4abe-4327-9144-ce54f2899a88', 'cee957ae-df4a-447c-95e7-7a97e866acf7', 'Vacuna 13', 'Dosis 13', 'Proveedor 13'),
-  ('7f0e12b1-45fb-4163-9252-b99ae21f4037', 'a8f4aabd-37c6-45b0-9a67-fe3c302dc5fa', 'Vacuna 14', 'Dosis 14', 'Proveedor 14'),
-  ('2806ce80-eb0b-4492-96a3-a6cacc53a5c1', 'ae35ce1b-6587-45fd-bc3b-dc56b1b79b8c', 'Vacuna 15', 'Dosis 15', 'Proveedor 15'),
-  ('f0ba329e-2d2a-4397-bd5c-6693708f7ee2', '7d626a9b-7050-424d-9c45-9e755fce0e7b', 'Vacuna 16', 'Dosis 16', 'Proveedor 16'),
-  ('64b5211a-d6c7-4cc1-8bdb-50eda685ca59', '1b349ee9-b180-44a5-9b5f-51837900f983', 'Vacuna 17', 'Dosis 17', 'Proveedor 17'),
-  ('69e76969-9657-4d57-8d2b-23297430c7e0', '6ec196d5-73cf-4015-8ad5-e4ff2b39b990', 'Vacuna 18', 'Dosis 18', 'Proveedor 18'),
-  ('6d2aaff0-e28c-4f4d-89ee-9f6e0655e398', 'cb585f07-ebfa-4014-a7fe-8c9617c6b3a8', 'Vacuna 19', 'Dosis 19', 'Proveedor 19'),
-  ('01adfaf4-793f-43dc-a936-99a23d9fb525', '5a936b22-3e30-426b-8906-dd45f0ab6abe', 'Vacuna 20', 'Dosis 20', 'Proveedor 20');
+  ('b8cba824-68a8-4300-bef0-5d37f28d385a', 'a6d7e8f9-0b1c-9a2d-3e4f-5a6b7c8d9e0f', 'Aftosa Oleosa', '2ml', 'Biogénesis Bagó'),
+  ('0b952984-746f-4b87-a7c7-ad9061e99a61', 'b7e8f9a0-1c2d-0b3e-4f5a-6b7c8d9e0f1a', 'Brucelosis RB51', '1ml', 'Zoetis'),
+  ('451fcda5-cdb7-4379-b7c9-b5e041fb52d9', 'c8f9a0b1-2d3e-1c4f-5a6b-7c8d9e0f1a2b', 'Respibov', '2ml', 'Biogénesis Bagó'),
+  ('6250ddc4-779f-4779-8952-ad48761929b0', 'd9a0b1c2-3e4f-2d5a-6b7c-8d9e0f1a2b3c', 'Aftosa Oleosa Refuerzo', '2ml', 'Biogénesis Bagó'),
+  ('247f9d0f-3408-4f1a-8ccb-dc0dbe91a89d', 'e0b1c2d3-4f5a-3e6b-7c8d-9e0f1a2b3c4d', 'Carbunco Bacteridiano', '1ml', 'Colorado'),
+  ('b2c3d4e5-f6a7-4890-8b9a-6d5e4f3a2b1c', 'a6d7e8f9-0b1c-9a2d-3e4f-5a6b7c8d9e0f', 'Aftosa', '2ml', 'Biogénesis'),
+  ('e5f6a7b8-c9d0-4123-9a8b-3a2b1c2d3e4f', 'b7e8f9a0-1c2d-0b3e-4f5a-6b7c8d9e0f1a', 'Brucelosis', '1ml', 'Zoetis');
 
--- 14) Animal_History
+-- Sale details
+INSERT INTO sales (id, event_id, buyer, price, currency) VALUES
+  ('3d968525-2eb4-4daf-a148-956a026645c0', 'f1c2d3e4-5a6b-4c7d-8e9f-0a1b2c3d4e5f', 'Frigorífico Tacuarembó', 3250.00, 'USD'),
+  ('341f316a-f0e7-40c8-8c6e-69fc1cbf30c6', 'a2d3e4f5-6b7c-5d8e-9f0a-1b2c3d4e5f6a', 'Carnicería El Buen Gusto', 2850.00, 'USD');
+
+-- Transport records
+INSERT INTO transports (id, animal_id, origin_land_id, destiny_land_id, date, details) VALUES
+  ('a3028cba-47ba-4ffc-a5cf-0aa620f8c463', 'aaab3d4c-5623-491e-a666-f2e9c1d62cf1', 'a1234567-1234-1234-1234-123456789012', 'b2345678-2345-2345-2345-234567890123', now() - interval '15 days', 'Transporte para cambio de potrero'),
+  ('e1f050fc-7f84-4efa-abd6-468de4cb5e0e', '7eb4d619-6c02-4f02-ab7a-3e302a74eff6', 'b2345678-2345-2345-2345-234567890123', 'c3456789-3456-3456-3456-345678901234', now() - interval '12 days', 'Movimiento por sequía'),
+  ('5511a145-7626-4198-97ea-6689d490b59f', 'a964bb80-32fc-46d0-b239-e03125535430', 'c3456789-3456-3456-3456-345678901234', 'd4567890-4567-4567-4567-456789012345', now() - interval '8 days', 'Cambio de establecimiento'),
+  ('6cba63ea-0c86-4a03-bcdf-2f2a37912cba', '62645b97-955e-49ea-891e-24b6ff9180ae', 'd4567890-4567-4567-4567-456789012345', 'e5678901-5678-5678-5678-567890123456', now() - interval '5 days', 'Rotación de pastoreo'),
+  ('95102f83-494f-459e-ab40-22a152f0c4c2', '8cfef1a6-77ed-4b17-ab30-176e88b8af37', 'e5678901-5678-5678-5678-567890123456', 'f6789012-6789-6789-6789-678901234567', now() - interval '3 days', 'Preparación pre-venta'),
+  ('a4b5c6d7-e8f9-4901-9a8b-5e4f3a2b1c2d', 'e1f2a3b4-c5d6-4789-9a8b-7c6d5e4f3a2b', 'f1e2d3c4-b5a6-4789-8c7d-6e5f4a3b2c1d', 'e2f3a4b5-c6d7-4890-9d8e-7f6a5b4c3d2e', now() - interval '2 days', 'Traslado usuario1'),
+  ('b5c6d7e8-f9a0-4012-8b9a-4f3a2b1c2d3e', 'f2a3b4c5-d6e7-4890-8b9a-6d5e4f3a2b1c', 'e2f3a4b5-c6d7-4890-9d8e-7f6a5b4c3d2e', 'd3a4b5c6-e7f8-4901-8e9d-8a7b6c5d4e3f', now() - interval '1 days', 'Traslado usuario2');
+
+-- Animal history records (audit trail)
 INSERT INTO animal_history (id, animal_id, modified, old_value, new_value, modified_by, modification_date) VALUES
-  ('6bff95e2-6224-44ca-b02e-059e48f81b09', 'aaab3d4c-5623-491e-a666-f2e9c1d62cf1', 'status', 'old1', 'new1', 'de3d6619-7d68-45a6-80df-2d464b6716d4', now()),
-  ('e357dbfe-5132-4d7c-86c7-bb53dbcad4cd', '7eb4d619-6c02-4f02-ab7a-3e302a74eff6', 'status', 'old2', 'new2', '100dc01b-7225-4893-b853-0c9bf1804bc4', now()),
-  ('059cfd62-a94d-477d-91e6-8214013efe80', 'a964bb80-32fc-46d0-b239-e03125535430', 'status', 'old3', 'new3', '26b12297-942a-451e-95bf-2d98f915c636', now()),
-  ('0ef8aa36-0abb-4921-82a6-31d9519d5b9a', '62645b97-955e-49ea-891e-24b6ff9180ae', 'status', 'old4', 'new4', '0c2bcc02-7a08-47be-9c79-28f17117d8fa', now()),
-  ('4507956f-75d2-43cd-8bbe-0eecf056a385', '8cfef1a6-77ed-4b17-ab30-176e88b8af37', 'status', 'old5', 'new5', 'f8766922-4928-4144-b8a4-cef1978b4cd7', now()),
-  ('9752ea60-73b9-43a9-9a60-9ad7319434ee', 'c2716fad-ffce-4517-ad2e-7415cf80178a', 'status', 'old6', 'new6', '7cef4a50-e74e-4047-827c-33714ef58f3b', now()),
-  ('84544606-6a3c-4a09-9579-dd351e8e68af', 'a8d8d11a-dd42-4524-a7c7-4a2063f5ffb1', 'status', 'old7', 'new7', 'c8025b58-fa25-49bc-a6a1-95c31b956a81', now()),
-  ('5b1a864a-312b-4702-a7a5-3a775417de8e', '8f31d0be-d956-4b51-b588-8658f64388a1', 'status', 'old8', 'new8', 'ebfb1a73-0555-455f-b2d1-ec06857d1057', now()),
-  ('85d99eed-1e5c-4440-bc25-cde061d044cc', '8d5d4061-bb57-4e12-8ea6-852eaa4f60ad', 'status', 'old9', 'new9', '0d9f925d-921f-45e3-9ad8-d8cce0e17c04', now()),
-  ('a0539d03-03b7-4b41-adbf-22c46f90825d', 'c02565f5-87f1-459f-ada2-63936ac00976', 'status', 'old10', 'new10', '373d79ef-aaf6-4367-89dc-10743bf67f8a', now()),
-  ('f1ff7822-d041-4135-990a-34872ce5087c', 'aa8a79c1-5d3b-4fad-9890-34f6ea3a4c50', 'status', 'old11', 'new11', '3eae2ed2-28c6-451a-88f5-21fa0f8a72dc', now()),
-  ('15b30853-c224-4b26-9ab8-d53cccefc3f7', 'c76f5a6f-ce7a-438d-bbd0-68837b6556dc', 'status', 'old12', 'new12', '6277b49e-9f1c-49c5-9997-2aa85891abeb', now()),
-  ('3972da9d-a10f-4e10-a056-21f5deb20980', 'bccf75bc-49b5-410a-a94f-59a060906c48', 'status', 'old13', 'new13', '98c57609-4bd3-4b13-8777-3c48ed9a6599', now()),
-  ('2a835832-7751-4b3e-ba54-b59d596ffeeb', '82f97b67-3dea-4c69-9edb-4dc9758b83e5', 'status', 'old14', 'new14', 'cd5a9b37-0a1d-4931-9106-34380455a4bf', now()),
-  ('d3753100-918b-46c8-8c7b-e44a29dbfb80', 'df8accdc-10b8-4654-b409-e35e341dc2f8', 'status', 'old15', 'new15', '37c732f4-2b87-43e1-8e7d-343033650ca3', now()),
-  ('bcfa5121-fd8c-429d-84a6-1f1524e2fbe3', 'c5592aab-dca7-4710-bdee-281d83c30ddb', 'status', 'old16', 'new16', '2ea7c098-389f-4d08-92ef-60c99d4d8e9c', now()),
-  ('808bdfa8-9851-4948-b7ba-a00967f97293', 'adaf9aff-0455-4924-9836-4ccf385f898d', 'status', 'old17', 'new17', '862ccbda-6dd5-4f86-beba-0dfa167c43bf', now()),
-  ('a7e63533-956d-40c1-a383-f64c42cc4c49', 'f37213d5-a857-4557-9b7d-296b11aa5af0', 'status', 'old18', 'new18', 'f6ffa740-4c9a-46f6-9804-5c7656f06b9b', now()),
-  ('4734e2ad-8aca-430f-846b-6976936a2775', '62742d2e-177e-49aa-8690-a47eb88deee9', 'status', 'old19', 'new19', '83af193a-c0df-46a6-b784-addd15d9ec4d', now()),
-  ('1682d40a-247f-4567-a965-4c93dd5c5b87', '38fe6bc6-4554-4e5f-9425-5cb7c25cb6c5', 'status', 'old20', 'new20', '3a6b7f6d-a708-4b8a-a006-deaa29f0f6be', now());
+  ('1bf92745-ffe6-43b8-94ba-57c12dbde3b5', 'aaab3d4c-5623-491e-a666-f2e9c1d62cf1', 'land_id', 'a1234567-1234-1234-1234-123456789012', 'b2345678-2345-2345-2345-234567890123', 'de3d6619-7d68-45a6-80df-2d464b6716d4', now() - interval '15 days'),
+  ('32bebf98-399e-4e59-ba53-ea7fbcf8a49f', '7eb4d619-6c02-4f02-ab7a-3e302a74eff6', 'land_id', 'b2345678-2345-2345-2345-234567890123', 'c3456789-3456-3456-3456-345678901234', '100dc01b-7225-4893-b853-0c9bf1804bc4', now() - interval '12 days'),
+  ('c44a2752-4f07-4e80-9d19-6acff3f0ec05', 'a964bb80-32fc-46d0-b239-e03125535430', 'land_id', 'c3456789-3456-3456-3456-345678901234', 'd4567890-4567-4567-4567-456789012345', '26b12297-942a-451e-95bf-2d98f915c636', now() - interval '8 days'),
+  ('74a37e8c-26a2-4dda-9ba8-14648384093f', 'c2716fad-ffce-4517-ad2e-7415cf80178a', 'status', 'alive', 'deceased', 'de3d6619-7d68-45a6-80df-2d464b6716d4', now() - interval '5 days'),
+  ('5804a890-2be5-49d9-a7eb-3b8ea7c4be12', 'a8d8d11a-dd42-4524-a7c7-4a2063f5ffb1', 'status', 'alive', 'deceased', '100dc01b-7225-4893-b853-0c9bf1804bc4', now() - interval '3 days'),
+  ('a5b6c7d8-e9f0-4123-9a8b-3a2b1c2d3e4f', 'e1f2a3b4-c5d6-4789-9a8b-7c6d5e4f3a2b', 'land_id', 'f1e2d3c4-b5a6-4789-8c7d-6e5f4a3b2c1d', 'e2f3a4b5-c6d7-4890-9d8e-7f6a5b4c3d2e', 'b1a8e1e2-1c2d-4e3f-8a4b-5c6d7e8f9a10', now() - interval '2 days'),
+  ('b6c7d8e9-f0a1-4234-8b9a-2b1c2d3e4f5a', 'f2a3b4c5-d6e7-4890-8b9a-6d5e4f3a2b1c', 'status', 'alive', 'deceased', 'c2b9f2f3-2d3e-5f4a-9b5c-6d7e8f9a1b20', now() - interval '1 days');

@@ -1,40 +1,82 @@
-import { Component, HostListener, inject, input, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  computed,
+  inject,
+  input,
+  resource,
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 import { AnimalFormComponent } from '../../components/animal-form/animal-form.component';
-import { IonSpinner, IonText } from '@ionic/angular/standalone';
+import {
+  IonSpinner,
+  IonText,
+  IonHeader,
+  IonToolbar,
+  IonButtons,
+  IonBackButton,
+  IonTitle,
+  IonContent,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonCard,
+  IonCardContent,
+} from '@ionic/angular/standalone';
 import { AnimalService } from 'src/app/services/animal.service';
+import { Animal } from 'src/app/model/animal';
 
+/**
+ * Página de edición de animal.
+ * Usa `resource()` para cargar el animal automáticamente desde la URL.
+ */
 @Component({
   selector: 'app-animal-edit',
   templateUrl: './animal-edit.page.html',
+  styleUrls: ['./edit.page.scss'],
   standalone: true,
-  imports: [AnimalFormComponent, IonSpinner, IonText],
+  imports: [
+    AnimalFormComponent,
+    IonSpinner,
+    IonText,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonBackButton,
+    IonTitle,
+    IonContent,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonCard,
+    IonCardContent,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'animal-edit-page' },
 })
 export class AnimalEditPage {
-  private animalService = inject(AnimalService);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
+  private readonly animalService = inject(AnimalService);
+  private readonly router = inject(Router);
+  private readonly title = inject(Title);
+  id = input.required<string>();
 
-  public animal_id = input.required<string>();
+  /** Recurso reactivo que carga el animal automáticamente */
+  readonly animalResource = resource<Animal, undefined>({
+    loader: async () => {
+      const id = this.id();
+      console.log(this.id);
+      console.log(id);
+      if (!id) throw new Error('ID no disponible');
+      return await this.animalService.getAnimal(id);
+    },
+  });
 
-  animal = signal<any | null>(null); // Cambia a signal
-  loading = signal<boolean>(false);
+  // Computed for easy access to the animal data
+  readonly animal = computed(() => this.animalResource.value());
 
-  // Se llama cada vez que la vista va a entrar
-  @HostListener('ionViewWillEnter')
-  async ionViewWillEnter() {
-    this.loading.set(true);
-    const animalId = this.animal_id();
-    console.warn(animalId);
-    if (animalId) {
-      try {
-        const animalData = await this.animalService.getAnimal(animalId);
-        this.animal.set(animalData);
-      } catch {
-        this.animal.set(null);
-      }
-    }
-    this.loading.set(false);
+  ngOnInit() {
+    this.title.setTitle('Editar Animal | Sistema de Trazabilidad');
   }
 
   async onSubmit(data: {
@@ -45,14 +87,14 @@ export class AnimalEditPage {
     status?: string;
   }) {
     try {
-      // Usa id en vez de animal_id
-      await this.animalService.updateAnimal(this.animal_id(), data);
-      this.router.navigate(['/animal', this.animal_id()]);
+      await this.animalService.updateAnimal(this.id(), data);
+      this.router.navigate(['/animal', this.id()]);
     } catch (error) {
       console.error('Error al actualizar el animal:', error);
     }
   }
+
   onCancel() {
-    this.router.navigate(['/animal', this.animal_id()?? '']);
+    this.router.navigate(['/animal', this.id()]);
   }
 }

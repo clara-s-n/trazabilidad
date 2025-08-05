@@ -1,39 +1,73 @@
-import { Component, inject, resource } from '@angular/core';
-import { Router } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
-import { User } from 'src/app/model/user';
 import { CommonModule } from '@angular/common';
+import { Component, inject, resource, OnInit } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent, IonList,
-  IonItem, IonSpinner, IonText, IonButton, IonRow, IonIcon, IonCol
+  IonButton,
+  IonButtons,
+  IonCol,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonList,
+  IonRow,
+  IonSpinner,
+  IonText,
+  IonTitle,
+  IonToolbar,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { eyeOutline} from 'ionicons/icons';
+import {
+  addOutline,
+  eyeOutline,
+  pencilOutline,
+  homeOutline,
+} from 'ionicons/icons';
+import { User } from 'src/app/model/user';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.page.html',
   styleUrls: ['./list.page.scss'],
-  imports: [
-    CommonModule, IonHeader, IonToolbar, IonTitle, IonContent,
-    IonList, IonSpinner, IonText, IonButton, IonRow, IonIcon, IonCol
-  ],
   standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
+    IonButton,
+    IonContent,
+    IonList,
+    IonSpinner,
+    IonText,
+    IonRow,
+    IonIcon,
+    IonCol,
+  ],
 })
-
-export class UserListPage {
+export class UserListPage implements OnInit {
   constructor() {
     addIcons({
-      eyeOutline
+      eyeOutline,
+      pencilOutline,
+      addOutline,
+      homeOutline,
     });
   }
 
-
   private userService = inject(UserService);
   private router = inject(Router);
+  private title = inject(Title);
+
+  ngOnInit() {
+    this.title.setTitle('Lista de Usuarios | Sistema de Trazabilidad');
+  }
 
   usersResource = resource<User[], undefined>({
-    loader: async () => await this.userService.getAllUsers()
+    loader: async () => await this.userService.getAllUsers(),
   });
 
   goToUserProfile(user: User) {
@@ -43,11 +77,15 @@ export class UserListPage {
   }
 
   reload() {
-    window.location.reload()
+    window.location.reload();
   }
 
   goToUserEdit(user: User) {
     console.log(`Navigating to user edit with ID: ${user.id}`);
     this.router.navigate([`/user/edit/${user.id}`]);
+  }
+
+  goToDashboard() {
+    this.router.navigate(['/dashboard']);
   }
 }

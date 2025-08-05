@@ -93,7 +93,7 @@ export default class UserFormComponent {
     const v = this.allValues();
     return (
       !!v.email &&
-      !!v.password &&
+      (!!v.password || this.isEditMode()) &&
       (!!v.repeatPassword || this.isEditMode()) &&
       !!v.role_id
     );

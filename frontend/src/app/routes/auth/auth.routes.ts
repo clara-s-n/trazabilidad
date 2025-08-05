@@ -13,7 +13,7 @@ export const routes: Routes = [
         path: 'login',
         data: { menu: true, section: 'Auth', title: 'Login de usuario' },
         loadComponent: () =>
-          import('./login/login.page').then(m => m.LoginPage)
+          import('./login/login.page').then((m) => m.LoginPage),
       },
       // Registro (solo admin)
       {
@@ -21,8 +21,8 @@ export const routes: Routes = [
         canActivate: [adminGuard],
         data: { menu: true, section: 'Auth', title: 'Registro de usuario' },
         loadComponent: () =>
-          import('./register/register.page').then(m => m.RegisterPage)
-      }
-    ]
-  }
+          import('./register/register.page').then((m) => m.RegisterPage),
+      },
+    ],
+  },
 ];

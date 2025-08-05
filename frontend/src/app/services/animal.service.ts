@@ -5,15 +5,19 @@ import { environment } from 'src/environments/environment';
 import {
   Animal,
   AnimalHistorySchema,
+  AnimalHistoryWithUser,
   AnimalMovementSchema,
+  AnimalMovementWithLands,
   CompleteAnimal,
 } from '../model/animal';
 import { AnimalParams, AnimalPost, UpdateAnimal } from '../model/animal';
+import { TagService } from './tag.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AnimalService {
+  private tagService = inject(TagService);
   constructor() {}
 
   public httpCliente = inject(HttpClient);
@@ -56,9 +60,9 @@ export class AnimalService {
 
   async getAllAnimalModification(
     animalId: string
-  ): Promise<AnimalHistorySchema[]> {
+  ): Promise<AnimalHistoryWithUser[]> {
     return await firstValueFrom(
-      this.httpCliente.get<AnimalHistorySchema[]>(
+      this.httpCliente.get<AnimalHistoryWithUser[]>(
         `${this.apiUrl}animals/${animalId}/modifications`
       )
     );
@@ -66,17 +70,164 @@ export class AnimalService {
 
   async getAllAnimalMovments(
     animalId: string
-  ): Promise<AnimalMovementSchema[]> {
-    return await firstValueFrom(
-      this.httpCliente.get<AnimalMovementSchema[]>(
-        `${this.apiUrl}animals/${animalId}/movements`
-      )
-    );
+  ): Promise<AnimalMovementWithLands[]> {
+    try {
+      return await firstValueFrom(
+        this.httpCliente.get<AnimalMovementWithLands[]>(
+          `${this.apiUrl}/animals/${animalId}/movements`
+        )
+      );
+    } catch (error) {
+      console.error('Error fetching animal movements:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Retrieves list of all animal species (breeds)
+   */
+  async getSpeciesList(): Promise<string[]> {
+    try {
+      // Extract unique breeds from all animals
+      const animals = await this.getAllAnimals();
+      const breeds = [...new Set(animals.map(animal => animal.breed))].sort();
+      return breeds;
+    } catch (error) {
+      console.error('Error fetching species list:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Retrieves list of all available regions (based on land locations)
+   */
+  async getRegions(): Promise<string[]> {
+    try {
+      // Import LandsService to get regions from lands
+      const { LandsService } = await import('./lands.service');
+      const landsService = new LandsService();
+      
+      try {
+        const lands = await landsService.getAllLands();
+        
+        // Generate regions based on geographic coordinates
+        const regions = new Set<string>();
+        
+        lands.forEach(land => {
+          const lat = land.latitude;
+          const lng = land.longitude;
+          
+          // Basic regional classification for Uruguay
+          if (lat > -32.5) {
+            regions.add('Norte');
+          } else if (lat < -34.5) {
+            regions.add('Sur');
+          } else {
+            regions.add('Centro');
+          }
+          
+          if (lng > -56) {
+            regions.add('Este');
+          } else {
+            regions.add('Oeste');
+          }
+        });
+        
+        return Array.from(regions).sort();
+      } catch (error) {
+        console.warn('Could not fetch lands for regions, using fallback');
+        // Fallback to static regions if lands service fails
+        return ['Norte', 'Sur', 'Este', 'Oeste', 'Centro'];
+      }
+    } catch (error) {
+      console.error('Error fetching regions:', error);
+      // Ultimate fallback
+      return ['Norte', 'Sur', 'Este', 'Oeste', 'Centro'];
+    }
+  }
+
+  /**
+   * Gets animals with optional filtering
+   */
+  async getAnimalsWithFilters(filters?: {
+    species?: string;
+    region?: string;
+    fromDate?: string;
+    toDate?: string;
+  }): Promise<Animal[]> {
+    try {
+      let animals = await this.getAllAnimals();
+      
+      // Apply client-side filtering
+      if (filters) {
+        if (filters.species) {
+          animals = animals.filter(animal => animal.breed === filters.species);
+        }
+        
+        if (filters.region) {
+          // TODO: Filter by region when land data is available in animal objects
+          // For now, this filter won't apply
+        }
+        
+        if (filters.fromDate && filters.toDate) {
+          const fromDate = new Date(filters.fromDate);
+          const toDate = new Date(filters.toDate);
+          animals = animals.filter(animal => {
+            const animalDate = new Date(animal.birth_date);
+            return animalDate >= fromDate && animalDate <= toDate;
+          });
+        }
+      }
+      
+      return animals;
+    } catch (error) {
+      console.error('Error fetching filtered animals:', error);
+      throw error;
+    }
   }
 
   async getCurrentTag(animalId: string): Promise<any | null> {
+    try {
+      return await firstValueFrom(
+        this.httpCliente.get<any>(`${this.apiUrl}animals/${animalId}/current-tag`)
+      );
+    } catch (error: any) {
+      // If 404, pass it on so component can handle it appropriately
+      if (error.status === 404) {
+        throw error;
+      }
+      console.error('Error fetching current tag:', error);
+      return null;
+    }
+  }
+
+  async createAnimal(animalData: AnimalPost & { tag_id?: string }): Promise<Animal> {
+  // If there's a tag_id, we need to handle it
+  const { tag_id, ...animalPayload } = animalData;
+  
+  // First create the animal
+  const createdAnimal = await firstValueFrom(
+    this.httpCliente.post<Animal>(`${this.apiUrl}animals/`, animalPayload)
+  ); 
+  if (tag_id) {
+    try {
+      // Assign the tag to the newly created animal
+      await this.tagService.assignTagToAnimal(tag_id, createdAnimal.id);
+      return createdAnimal;
+    } catch (error) {
+      console.error('Error assigning tag:', error);
+      // Optionally, you might want to delete the created animal if tag assignment fails
+      // await this.deleteAnimal({ animal_id: createdAnimal.id });
+      throw error; // Rethrow or handle as needed
+    }
+  }
+
+  return createdAnimal;
+}
+
+  async getAnimalStatuses(): Promise<any[]> {
     return await firstValueFrom(
-      this.httpCliente.get<any>(`${this.apiUrl}animals/${animalId}/current-tag`)
+      this.httpCliente.get<any[]>(`${this.apiUrl}animals/statuses`)
     );
   }
 }

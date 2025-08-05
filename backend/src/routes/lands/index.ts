@@ -12,6 +12,7 @@ import {
 import { landRepository } from "../../services/land.repository.js";
 import { UCUErrorBadRequest, UCUErrorNotFound } from "../../utils/index.js";
 import { Animal } from "../../types/schemas/animal.js";
+import { saveFile } from "../../utils/file-upload.js";
 
 const prediosRoute: FastifyPluginAsyncTypebox = async (fastify, opts) => {
   // 1. Listar todos los predios
@@ -174,7 +175,51 @@ const prediosRoute: FastifyPluginAsyncTypebox = async (fastify, opts) => {
     },
   });
 
-  // 6. DELETE /predios/:land_id
+  // 6. POST /predios/:land_id/image - Upload land image
+  fastify.post("/:land_id/image", {
+    schema: {
+      tags: ["Predios"],
+      summary: "Subir imagen de predio",
+      description: "Sube una imagen para un predio específico",
+      params: LandParams,
+      security: [{ bearerAuth: [] }],
+      consumes: ["multipart/form-data"],
+      response: {
+        200: Type.Object({
+          image_path: Type.String(),
+          message: Type.String(),
+        }),
+      },
+    },
+    onRequest: fastify.verifyOperatorOrAdmin,
+    handler: async (request, reply) => {
+      const { land_id } = request.params as LandParamsType;
+
+      // Verificar que el predio exista
+      const land = await landRepository.getLandById(land_id);
+      if (!land) {
+        throw new UCUErrorNotFound(`Predio ${land_id} no encontrado`);
+      }
+
+      // Guardar el archivo
+      const image_path = await saveFile(request, "public", "lands");
+
+      // Actualizar el predio con la ruta de la imagen
+      const updated = await landRepository.updateLand(land_id, { image_path });
+      if (!updated) {
+        throw new UCUErrorNotFound(
+          `No se pudo actualizar: predio ${land_id} no encontrado`
+        );
+      }
+
+      return {
+        image_path,
+        message: "Imagen subida correctamente",
+      };
+    },
+  });
+
+  // 7. DELETE /predios/:land_id
   fastify.delete("/:land_id", {
     schema: {
       tags: ["Predios"],

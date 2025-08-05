@@ -1,32 +1,30 @@
-<form (ngSubmit)="onSubmit()" #loginForm="ngForm">
-  <ion-grid class="ion-text-center">
-    <ion-row class="ion-justify-content-center">
-      <ion-col size="12" size-sm="8" size-md="6">
-        <h2>Bienvenido</h2>
-        <p>Inicia sesión con tu cuenta</p>
-      </ion-col>
-    </ion-row>
+<ion-grid class="ion-padding">
+  <ion-row class="ion-justify-content-center">
+    <ion-col size="12" size-md="8" size-lg="6">
+      <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+        <h1 class="ion-text-center">Iniciar Sesión</h1>
 
-    <ion-row class="ion-justify-content-center">
-      <ion-col size="12" size-sm="8" size-md="6">
-        <ion-input fill="solid" labelPlacement="floating" label="Email" [(ngModel)]="email" type="email" name="email"
-          required></ion-input>
-      </ion-col>
-    </ion-row>
+        <!-- Error message -->
+        @if (error()) {
+        <div class="error-message ion-text-center">{{ error() }}</div>
+        }
 
-    <ion-row class="ion-justify-content-center">
-      <ion-col size="12" size-sm="8" size-md="6">
-        <ion-input fill="solid" labelPlacement="floating" label="Contraseña" [(ngModel)]="password" type="password"
-          name="password" required></ion-input>
-      </ion-col>
-    </ion-row>
+        <ion-item>
+          <ion-input type="email" [ngModel]="email()" (ngModelChange)="email.set($event)" placeholder="Email"
+            name="email" required>
+          </ion-input>
+        </ion-item>
 
-    <ion-row class="ion-justify-content-center ion-padding-top">
-      <ion-col size="12" size-sm="8" size-md="6">
-        <ion-button expand="block" shape="round" type="submit" [disabled]="!loginForm.valid">
-          Iniciar Sesión
+        <ion-item>
+          <ion-input type="password" [ngModel]="password()" (ngModelChange)="password.set($event)"
+            placeholder="Contraseña" name="password" required>
+          </ion-input>
+        </ion-item>
+
+        <ion-button expand="block" type="submit" [disabled]="loading()" class="ion-margin-top">
+          @if (loading()) { Iniciando sesión... } @else { Iniciar Sesión }
         </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</form>
+      </form>
+    </ion-col>
+  </ion-row>
+</ion-grid>

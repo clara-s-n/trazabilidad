@@ -15,22 +15,30 @@ export const routes: Routes = [
         canActivate: [adminGuard],
         data: { menu: true, section: 'Usuarios', title: 'Lista de usuarios' },
         loadComponent: () =>
-          import('./pages/user-list/user-list.page').then(m => m.UserListPage)
+          import('./pages/user-list/user-list.page').then(
+            (m) => m.UserListPage
+          ),
       },
-      // Profile
+      // Edit user
       {
         path: 'edit/:id',
         canActivate: [adminOrSelfGuard],
+        data: { title: 'Editar Usuario' },
         loadComponent: () =>
-          import('./pages/user-edit/user-edit.page').then(m => m.UserEditPage)
+          import('./pages/user-edit/user-edit.page').then(
+            (m) => m.UserEditPage
+          ),
       },
-      // Profile
+      // User profile
       {
         path: 'profile/:id',
         canActivate: [adminOrSelfGuard],
+        data: { title: 'Perfil de Usuario' },
         loadComponent: () =>
-          import('./pages/user-profile/user-profile.page').then(m => m.UserProfilePage)
-      }
-    ]
-  }
+          import('./pages/user-profile/user-profile.page').then(
+            (m) => m.UserProfilePage
+          ),
+      },
+    ],
+  },
 ];

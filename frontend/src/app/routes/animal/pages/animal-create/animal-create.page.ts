@@ -1,15 +1,20 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 import {
   IonBackButton,
   IonButtons,
+  IonContent,
   IonHeader,
   IonTitle,
   IonToolbar,
+  IonGrid,
+  IonRow,
+  IonCol,
 } from '@ionic/angular/standalone';
 import { AnimalFormComponent } from '../../components/animal-form/animal-form.component';
 import { AnimalService } from 'src/app/services/animal.service';
-import { AnimalPost, UpdateAnimal } from 'src/app/model/animal';
+import { AnimalPost } from 'src/app/model/animal';
 
 @Component({
   selector: 'app-animal-create',
@@ -21,18 +26,34 @@ import { AnimalPost, UpdateAnimal } from 'src/app/model/animal';
     IonButtons,
     IonToolbar,
     IonHeader,
+    IonContent,
+    IonGrid,
+    IonRow,
+    IonCol,
   ],
   templateUrl: './animal-create.page.html',
   styleUrls: ['./create.page.scss'],
 })
-export class AnimalCreatePage {
+export class AnimalCreatePage implements OnInit {
   private animalService = inject(AnimalService);
   private router = inject(Router);
+  private title = inject(Title);
 
-  /** Acepta payload de creación o edición, pero crea sólo CreateLandParams */
-  async handleSave(payload: AnimalPost | UpdateAnimal) {
-    // Para creación, payload incluirá todos los campos obligatorios
-    await this.animalService.postAnimal(payload as AnimalPost);
-    this.router.navigate(['/animals/list']);
+  ngOnInit() {
+    this.title.setTitle('Crear Nuevo Animal | Sistema de Trazabilidad');
+  }
+
+  async handleSave(payload: AnimalPost) {
+    try {
+      const createdAnimal = await this.animalService.postAnimal(payload);
+      // Redirect to the created animal's detail page
+      this.router.navigate(['/animal', createdAnimal.id]);
+    } catch (error) {
+      console.error('Error creating animal:', error);
+    }
+  }
+
+  onCancel() {
+    this.router.navigate(['/animal/list']);
   }
 }

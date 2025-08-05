@@ -16,7 +16,7 @@ const usuariosRoute: FastifyPluginAsync = async (fastify) => {
         200: Type.Array(UserResponseSchema)
       }
     },
-    onRequest: fastify.verifyAdmin,
+    onRequest: fastify.verifyOperatorOrAdmin,
     handler: async (request, reply) => {
       const users = await userRepository.getAllUsers();
       const safeUsers = users.map(({ password_hash, ...u }) => ({

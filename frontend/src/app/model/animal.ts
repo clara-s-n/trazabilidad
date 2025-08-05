@@ -1,4 +1,6 @@
+import { Land } from "./land";
 import { Tag } from "./tag";
+import { User } from "./user";
 
 export interface AnimalParams {
   animal_id: string; // UUID del predio
@@ -23,6 +25,8 @@ export interface CompleteAnimal {
   created_at: string;
   updated_at: string;
   currentTag?: Tag | null; // Número de la caravana actual
+  owner?: User,
+  land?: Land,
 }
 
 export interface AnimalPost {
@@ -58,4 +62,18 @@ export interface AnimalMovementSchema {
   destiny_land_id: string;
   date: string;
   details: string;
+}
+
+export interface AnimalHistoryWithUser extends AnimalHistorySchema {
+  modified_by_id?: string;
+  modified_by_email?: string;
+}
+
+export interface AnimalMovementWithLands extends AnimalMovementSchema {
+  origin_land_name: string;
+  origin_latitude: string;
+  origin_longitude: string;
+  destiny_land_name: string;
+  destiny_latitude: string;
+  destiny_longitude: string;
 }
