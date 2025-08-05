@@ -35,7 +35,7 @@ export class TagService {
   async changeAnimalTag(animalId: string, oldTagId: string, newTagId: string): Promise<any> {
     return await firstValueFrom(
       this.http.put(
-        `${this.apiUrl}tags/${oldTagId}/${animalId}/change`,
+        `${this.specificTagsUrl}${oldTagId}/${animalId}/change`,
         { tag_id: newTagId }
       )
     );

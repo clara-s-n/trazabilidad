@@ -227,7 +227,14 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       security: [{ bearerAuth: [] }],
       response: {
         200: Type.Object({
-          tag: Type.String(),
+          currentTag: Type.Object({
+            id: Type.String(),
+            tag_number: Type.String(),
+            status: Type.String(),
+            country_code: Type.String(),
+            country_iso: Type.String(),
+            ministry: Type.String(),
+          }),
         }),
       },
     },
@@ -238,7 +245,7 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       if (!currentTag) {
         return reply.status(404).send({ message: "Caravana no encontrada" });
       }
-      return reply.code(200).send({ tag: currentTag });
+      return reply.code(200).send({ currentTag });
     },
   });
 

@@ -141,11 +141,11 @@ export class DetailPage implements OnInit {
     this.isLoadingTag.set(true);
     try {
       const response = await this.animalService.getCurrentTag(animalId);
-      if (response && response.tag) {
+      if (response && response.currentTag) {
         // Store the tag in signal and in animal object
-        this.currentTag.set(response.tag);
+        this.currentTag.set(response.currentTag);
         if (this.animal) {
-          this.animal.currentTag = response.tag;
+          this.animal.currentTag = response.currentTag;
         }
         // Reset assignment flag since we have a tag
         this.needsTagAssignment.set(false);
