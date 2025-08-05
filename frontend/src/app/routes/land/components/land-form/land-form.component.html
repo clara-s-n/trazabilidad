@@ -1,7 +1,9 @@
 <div class="land-form-container">
   <div class="form-header">
     <ion-icon name="location-outline" class="header-icon"></ion-icon>
-    <h3 class="header-title">{{ land() ? 'Editar Predio' : 'Nuevo Predio' }}</h3>
+    <h3 class="header-title">
+      {{ land() ? "Editar Predio" : "Nuevo Predio" }}
+    </h3>
     <div class="header-line"></div>
   </div>
 
@@ -15,7 +17,11 @@
               <ion-icon name="business-outline" class="label-icon"></ion-icon>
               <span>Nombre del Predio *</span>
             </div>
-            <ion-item lines="none" class="custom-input" [class.error]="!!nameError()">
+            <ion-item
+              lines="none"
+              class="custom-input"
+              [class.error]="!!nameError()"
+            >
               <ion-input
                 fill="solid"
                 [value]="name()"
@@ -48,16 +54,23 @@
               <ion-icon name="navigate-outline" class="title-icon"></ion-icon>
               <span>Coordenadas Geográficas *</span>
             </div>
-            
+
             <ion-row class="coordinates-row">
               <!-- Latitud -->
               <ion-col size="12" size-md="6">
                 <div class="form-field">
                   <div class="field-label">
-                    <ion-icon name="compass-outline" class="label-icon"></ion-icon>
+                    <ion-icon
+                      name="compass-outline"
+                      class="label-icon"
+                    ></ion-icon>
                     <span>Latitud</span>
                   </div>
-                  <ion-item lines="none" class="custom-input" [class.error]="!!latitudeError()">
+                  <ion-item
+                    lines="none"
+                    class="custom-input"
+                    [class.error]="!!latitudeError()"
+                  >
                     <ion-input
                       fill="solid"
                       type="number"
@@ -65,7 +78,9 @@
                       [value]="latitude()"
                       (ionInput)="
                         latitude.set(
-                          $event.detail.value ? parseFloat($event.detail.value) : null
+                          $event.detail.value
+                            ? parseFloat($event.detail.value)
+                            : null
                         )
                       "
                       (ionBlur)="validateLatitude()"
@@ -97,10 +112,17 @@
               <ion-col size="12" size-md="6">
                 <div class="form-field">
                   <div class="field-label">
-                    <ion-icon name="location-outline" class="label-icon"></ion-icon>
+                    <ion-icon
+                      name="location-outline"
+                      class="label-icon"
+                    ></ion-icon>
                     <span>Longitud</span>
                   </div>
-                  <ion-item lines="none" class="custom-input" [class.error]="!!longitudeError()">
+                  <ion-item
+                    lines="none"
+                    class="custom-input"
+                    [class.error]="!!longitudeError()"
+                  >
                     <ion-input
                       fill="solid"
                       type="number"
@@ -108,7 +130,9 @@
                       [value]="longitude()"
                       (ionInput)="
                         longitude.set(
-                          $event.detail.value ? parseFloat($event.detail.value) : null
+                          $event.detail.value
+                            ? parseFloat($event.detail.value)
+                            : null
                         )
                       "
                       (ionBlur)="validateLongitude()"
@@ -153,7 +177,10 @@
             <div class="image-upload-section">
               @if(!previewUrl()) {
               <div class="upload-area" (click)="fileInput.click()">
-                <ion-icon name="cloud-upload-outline" class="upload-icon"></ion-icon>
+                <ion-icon
+                  name="cloud-upload-outline"
+                  class="upload-icon"
+                ></ion-icon>
                 <h4>Seleccionar Imagen</h4>
                 <p>Haz clic aquí para subir una imagen del predio</p>
                 <ion-button
@@ -181,7 +208,10 @@
                       (click)="fileInput.click()"
                       class="overlay-button"
                     >
-                      <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
+                      <ion-icon
+                        name="pencil-outline"
+                        slot="icon-only"
+                      ></ion-icon>
                     </ion-button>
                     <ion-button
                       fill="clear"
@@ -190,22 +220,30 @@
                       (click)="removeImage()"
                       class="overlay-button"
                     >
-                      <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+                      <ion-icon
+                        name="trash-outline"
+                        slot="icon-only"
+                      ></ion-icon>
                     </ion-button>
                   </div>
                 </div>
                 @if(selectedFile) {
                 <div class="file-info-card">
-                  <ion-icon name="document-outline" class="file-icon"></ion-icon>
+                  <ion-icon
+                    name="document-outline"
+                    class="file-icon"
+                  ></ion-icon>
                   <div class="file-details">
                     <span class="file-name">{{ selectedFile.name }}</span>
-                    <span class="file-size">{{ (selectedFile.size / 1024).toFixed(1) }} KB</span>
+                    <span class="file-size"
+                      >{{ (selectedFile.size / 1024).toFixed(1) }} KB</span
+                    >
                   </div>
                 </div>
                 }
               </div>
               }
-              
+
               <input
                 #fileInput
                 type="file"
@@ -229,12 +267,11 @@
               class="submit-button"
               [disabled]="!isFormValid() || isSubmitting()"
             >
-              @if(isSubmitting()) { 
-                <ion-spinner name="crescent" slot="start"></ion-spinner>
-                Guardando... 
-              } @else {
-                <ion-icon name="save-outline" slot="start"></ion-icon>
-                {{ land() ? "Actualizar Predio" : "Crear Predio" }}
+              @if(isSubmitting()) {
+              <ion-spinner name="crescent" slot="start"></ion-spinner>
+              Guardando... } @else {
+              <ion-icon name="save-outline" slot="start"></ion-icon>
+              {{ land() ? "Actualizar Predio" : "Crear Predio" }}
               }
             </ion-button>
           </div>
