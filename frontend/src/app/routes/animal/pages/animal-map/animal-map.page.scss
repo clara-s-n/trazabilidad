@@ -1,0 +1,102 @@
+.map-container {
+  height: calc(100vh - 140px); // Adjust based on header and filter heights
+  position: relative;
+}
+
+.loading-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--ion-color-medium);
+  
+  ion-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+  
+  h3 {
+    margin: 16px 0 8px 0;
+    color: var(--ion-color-dark);
+  }
+  
+  p {
+    margin: 0 0 16px 0;
+    text-align: center;
+    max-width: 300px;
+  }
+}
+
+.map-placeholder {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 40px;
+  
+  ion-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+  }
+  
+  h3 {
+    margin: 16px 0 8px 0;
+    color: var(--ion-color-primary);
+  }
+  
+  p {
+    margin: 0 0 24px 0;
+    color: var(--ion-color-medium);
+  }
+}
+
+.animals-summary {
+  width: 100%;
+  max-width: 600px;
+  margin-top: 20px;
+  
+  h4 {
+    text-align: left;
+    margin-bottom: 16px;
+    color: var(--ion-color-dark);
+  }
+}
+
+.animal-item {
+  .animal-info {
+    text-align: left;
+    line-height: 1.4;
+    
+    strong {
+      font-size: 1.1rem;
+      color: var(--ion-color-primary);
+    }
+    
+    small {
+      color: var(--ion-color-medium);
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .map-container {
+    height: calc(100vh - 160px);
+  }
+  
+  .map-placeholder {
+    padding-top: 20px;
+    
+    ion-icon {
+      font-size: 48px;
+    }
+  }
+  
+  .animals-summary {
+    max-width: 100%;
+  }
+}

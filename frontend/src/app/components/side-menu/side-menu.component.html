@@ -1,35 +1,74 @@
-<ion-menu side="start" menuId="main-menu" contentId="main-content">
+<ion-menu menuId="main-menu" side="start" contentId="main-content">
   <ion-header>
     <ion-toolbar color="primary">
-      <ion-title>Sistema de Trazabilidad</ion-title>
+      <ion-title>Menú de Navegación</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <ion-content>
-    <!-- User info section -->
-    <div class="user-info-section">
-      <ion-item lines="none">
-        <ion-icon slot="start" name="person-outline" color="primary"></ion-icon>
-        <ion-label>
-          <h3>{{ userEmail() }}</h3>
-          <div class="role-badge">
-            <span class="role-text">{{ getRoleDisplayName() }}</span>
-          </div>
-        </ion-label>
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Navegación Principal</ion-label>
+      </ion-list-header>
+
+      <!-- Dashboard -->
+      <ion-item [routerLink]="['/dashboard']" routerLinkActive="selected">
+        <ion-icon slot="start" name="home-outline"></ion-icon>
+        <ion-label>Dashboard</ion-label>
       </ion-item>
-    </div>
 
-    <!-- Accordion navigation menu -->
-    <app-accordion-menu [items]="menuItems()"></app-accordion-menu>
+      <!-- Animals Section -->
+      @if (permissions().canViewAnimals) {
+        <ion-item [routerLink]="['/animal/list']" routerLinkActive="selected">
+          <ion-icon slot="start" name="paw-outline"></ion-icon>
+          <ion-label>Lista de Animales</ion-label>
+        </ion-item>
+      }
+
+      @if (permissions().canCreateAnimals) {
+        <ion-item [routerLink]="['/animal/create']" routerLinkActive="selected">
+          <ion-icon slot="start" name="paw-outline"></ion-icon>
+          <ion-label>Crear Animal</ion-label>
+        </ion-item>
+      }
+
+      <!-- Lands Section -->
+      @if (permissions().canViewLands) {
+        <ion-item [routerLink]="['/land/list']" routerLinkActive="selected">
+          <ion-icon slot="start" name="business-outline"></ion-icon>
+          <ion-label>Lista de Predios</ion-label>
+        </ion-item>
+      }
+
+      @if (permissions().canCreateLands) {
+        <ion-item [routerLink]="['/land/create']" routerLinkActive="selected">
+          <ion-icon slot="start" name="business-outline"></ion-icon>
+          <ion-label>Crear Predio</ion-label>
+        </ion-item>
+      }
+
+      <!-- Users Section -->
+      @if (permissions().canViewUsers) {
+        <ion-item [routerLink]="['/user/list']" routerLinkActive="selected">
+          <ion-icon slot="start" name="people-outline"></ion-icon>
+          <ion-label>Lista de Usuarios</ion-label>
+        </ion-item>
+      }
+
+      @if (permissions().canCreateUsers) {
+        <ion-item [routerLink]="['/user/create']" routerLinkActive="selected">
+          <ion-icon slot="start" name="people-outline"></ion-icon>
+          <ion-label>Crear Usuario</ion-label>
+        </ion-item>
+      }
+
+      <!-- Tags Section -->
+      @if (permissions().canViewTags) {
+        <ion-item [routerLink]="['/tag/list']" routerLinkActive="selected">
+          <ion-icon slot="start" name="pricetag-outline"></ion-icon>
+          <ion-label>Lista de Caravanas</ion-label>
+        </ion-item>
+      }
+    </ion-list>
   </ion-content>
-
-  <!-- Menu footer with logout -->
-  <div class="menu-footer">
-    <ion-menu-toggle>
-      <ion-button expand="block" color="danger" fill="clear" (click)="logout()">
-        <ion-icon slot="start" name="log-out-outline"></ion-icon>
-        Cerrar Sesión
-      </ion-button>
-    </ion-menu-toggle>
-  </div>
 </ion-menu>

@@ -10,9 +10,9 @@ import {
   IonMenuButton,
   IonSplitPane,
 } from '@ionic/angular/standalone';
-import { LogoutButtonComponent } from 'src/app/components/logout-button/logout-button.component';
-import { SideMenuComponent } from 'src/app/components/side-menu/side-menu.component';
-import { RolePermissionService } from 'src/app/services/role-permission.service';
+import { LogoutButtonComponent } from '../../components/logout-button/logout-button.component';
+import { SideMenuComponent } from '../../components/side-menu/side-menu.component';
+import { RolePermissionService } from '../../services/role-permission.service';
 
 @Component({
   selector: 'app-main-layout',
