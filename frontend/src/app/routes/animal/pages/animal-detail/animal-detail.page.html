@@ -59,13 +59,22 @@
               <ion-item>
                 <ion-label>
                   <h3>Propietario</h3>
-                  <p>{{ animal.owner_id }}</p>
+                  @if (animal.owner){
+                    <p>{{ animal.owner.email }}</p>
+                  } @else {
+                    <p>{{ animal.owner_id }}</p>
+                  }
                 </ion-label>
               </ion-item>
               <ion-item>
                 <ion-label>
                   <h3>Predio</h3>
-                  <p>{{ animal.land_id }}</p>
+                  @if (animal.land){
+                    <p>{{ animal.land.name }}</p>
+                  } @else {
+                    <p>{{ animal.land_id }}</p>
+                  }
+                  
                 </ion-label>
               </ion-item>
             </ion-list>
