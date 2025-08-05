@@ -1,4 +1,6 @@
 import { Static, Type } from "@sinclair/typebox";
+import { UserResponseSchema } from "./user.js";
+import { LandSchema } from "./land.js";
 
 export const AnimalParams = Type.Object({
   animal_id: Type.String({
@@ -231,6 +233,41 @@ export const AnimalWithTag = Type.Object({
   //current_tag: Type.Object(AnimalTagInfo),
 });
 
+export const AnimalWithRelationsSchema = Type.Intersect([
+  Animal,
+  Type.Object({
+    owner: Type.Optional(Type.Partial(UserResponseSchema)),
+    land: Type.Optional(Type.Partial(LandSchema)),
+  }),
+]);
+
+export const AnimalHistoryWithUserSchema = Type.Intersect([
+  AnimalHistorySchema,
+  Type.Object({
+    modified_by_id: Type.Optional(
+      Type.String({ format: 'uuid', description: 'User ID that made the change' })
+    ),
+    modified_by_email: Type.Optional(
+      Type.String({ format: 'email', description: 'User email' })
+    ),
+  }),
+]);
+
+export const AnimalMovementWithLandsSchema = Type.Intersect([
+  AnimalMovementSchema,
+  Type.Object({
+    origin_land_name: Type.String({ description: 'Name of origin land' }),
+    origin_latitude: Type.String({ description: 'Latitude of origin land' }),
+    origin_longitude: Type.String({ description: 'Longitude of origin land' }),
+    destiny_land_name: Type.String({ description: 'Name of destination land' }),
+    destiny_latitude: Type.String({ description: 'Latitude of destination land' }),
+    destiny_longitude: Type.String({ description: 'Longitude of destination land' }),
+  }),
+]);
+
+export type AnimalMovementWithLands = Static<typeof AnimalMovementWithLandsSchema>;
+export type AnimalHistoryWithUser = Static<typeof AnimalHistoryWithUserSchema>;
+export type AnimalWithRelations = Static<typeof AnimalWithRelationsSchema>;
 export type AnimalWithTag = Static<typeof AnimalWithTag>;
 export type AnimalHistory = Static<typeof AnimalHistorySchema>;
 export type UpdateAnimalType = Static<typeof UpdateAnimalSchema>;

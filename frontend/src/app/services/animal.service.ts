@@ -5,7 +5,9 @@ import { environment } from 'src/environments/environment';
 import {
   Animal,
   AnimalHistorySchema,
+  AnimalHistoryWithUser,
   AnimalMovementSchema,
+  AnimalMovementWithLands,
   CompleteAnimal,
 } from '../model/animal';
 import { AnimalParams, AnimalPost, UpdateAnimal } from '../model/animal';
@@ -56,9 +58,9 @@ export class AnimalService {
 
   async getAllAnimalModification(
     animalId: string
-  ): Promise<AnimalHistorySchema[]> {
+  ): Promise<AnimalHistoryWithUser[]> {
     return await firstValueFrom(
-      this.httpCliente.get<AnimalHistorySchema[]>(
+      this.httpCliente.get<AnimalHistoryWithUser[]>(
         `${this.apiUrl}animals/${animalId}/modifications`
       )
     );
@@ -66,9 +68,9 @@ export class AnimalService {
 
   async getAllAnimalMovments(
     animalId: string
-  ): Promise<AnimalMovementSchema[]> {
+  ): Promise<AnimalMovementWithLands[]> {
     return await firstValueFrom(
-      this.httpCliente.get<AnimalMovementSchema[]>(
+      this.httpCliente.get<AnimalMovementWithLands[]>(
         `${this.apiUrl}animals/${animalId}/movements`
       )
     );

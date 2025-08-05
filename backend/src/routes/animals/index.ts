@@ -2,11 +2,13 @@ import { FastifyPluginAsync } from "fastify";
 import {
   Animal,
   AnimalEventSchema,
-  AnimalHistorySchema,
-  AnimalMovementSchema,
+  //AnimalHistorySchema,
+  AnimalHistoryWithUserSchema,
+  //AnimalMovementSchema,
+  AnimalMovementWithLandsSchema,
   AnimalParams,
   AnimalPost,
-  AnimalWithTag,
+  AnimalWithRelationsSchema,
   UpdateAnimalSchema,
   UpdateAnimalType,
 } from "../../types/schemas/animal.js";
@@ -68,29 +70,25 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
   });
 
   fastify.get("/:animal_id", {
-    schema: {
-      tags: ["Animales"],
-      params: AnimalParams,
-      description: "Listar un animal en específico",
-      summary: "Obtener un animal en específico.",
-      security: [
-        {
-          bearerAuth: [],
-        },
-      ],
-      response: {
-        200: AnimalWithTag,
-      },
+  schema: {
+    tags: ["Animales"],
+    params: AnimalParams,
+    description: "Obtener un animal con relaciones",
+    summary: "Detalle de animal con propietario y predio",
+    security: [{ bearerAuth: [] }],
+    response: {
+      200: AnimalWithRelationsSchema,
     },
-    onRequest: fastify.authenticate,
-    handler: async (request, reply) => {
-      const params = request.params as AnimalParams;
-      const animal = await animalRepository.getByIdWithTag(params.animal_id);
-      if (!animal) {
-        return reply.status(404).send({ message: "Animal no encontrado" });
-      }
-      reply.send(animal);
-    },
+  },
+  onRequest: fastify.authenticate,
+  handler: async (request, reply) => {
+    const params = request.params as AnimalParams;
+    const animal = await animalRepository.getByIdWithRelations(params.animal_id);
+    if (!animal) {
+      return reply.status(404).send({ message: "Animal no encontrado" });
+    }
+    reply.send(animal);
+  },
   });
 
   fastify.put("/:animal_id", {
@@ -161,13 +159,13 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
         },
       ],
       response: {
-        200: Type.Array(AnimalHistorySchema),
+        200: Type.Array(AnimalHistoryWithUserSchema),
       },
     },
     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
       const { animal_id } = request.params as AnimalParams;
-      const modificationList = await animalRepository.getAnimalHistory(
+      const modificationList = await animalRepository.getHistoryByAnimalId(
         animal_id
       );
       reply.send(modificationList);
@@ -207,14 +205,14 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
           "Recupera todos los movimientos (traslados) asociados a un animal ordenados por fecha descendente.",
         security: [{ bearerAuth: [] }],
         response: {
-          200: Type.Array(AnimalMovementSchema),
+          200: Type.Array(AnimalMovementWithLandsSchema),
         },
       },
       onRequest: fastify.authenticate,
     },
     async (request, reply) => {
       const { animal_id } = request.params as AnimalParams;
-      const movements = await animalRepository.getAnimalMovements(animal_id);
+      const movements = await animalRepository.getTransportHistoryByAnimalId(animal_id);
       return reply.code(200).send(movements);
     }
   );

@@ -25,7 +25,7 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { eyeOutline } from 'ionicons/icons';
-import { AnimalHistorySchema } from 'src/app/model/animal';
+import { AnimalHistorySchema, AnimalHistoryWithUser } from 'src/app/model/animal';
 @Component({
   selector: 'app-animal-history',
   templateUrl: './animal-history.page.html',
@@ -60,7 +60,7 @@ export class HistoryPage {
   private readonly router = inject(Router);
 
   readonly animalModificationsResource = resource<
-    AnimalHistorySchema[],
+    AnimalHistoryWithUser[],
     undefined
   >({
     loader: async () =>

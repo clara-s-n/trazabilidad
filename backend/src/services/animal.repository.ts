@@ -227,6 +227,83 @@ export class AnimalRepository {
     return rows[0] ?? null;
   }
 
+  async getByIdWithRelations(animal_id: string): Promise<any | null> {
+    const { rows } = await query(`
+      SELECT 
+        a.*,
+        u.id as owner_id, u.email as owner_email,
+        l.id as land_id, l.name as land_name, l.latitude, l.longitude
+      FROM animals a
+      LEFT JOIN users u ON a.owner_id = u.id
+      LEFT JOIN lands l ON a.land_id = l.id
+      WHERE a.id = $1
+      LIMIT 1
+    `, [animal_id]);
+
+    const row = rows[0];
+    if (!row) return null;
+    return {
+      ...row,
+      owner: row.owner_id ? {
+        id: row.owner_id,
+        email: row.owner_email,
+      } : undefined,
+      land: row.land_id ? {
+        id: row.land_id,
+        name: row.land_name,
+        latitude: row.latitude,
+        longitude: row.longitude,
+      } : undefined,
+    };
+  }
+
+  async getHistoryByAnimalId(animal_id: string): Promise<any[]> {
+  const { rows } = await query(`
+    SELECT 
+      ah.id,
+      ah.animal_id,
+      ah.modified,
+      ah.modified_by,
+      ah.old_value,
+      ah.new_value,
+      ah.modification_date,
+      u.id AS modified_by_id,
+      u.email AS modified_by_email
+    FROM animal_history ah
+    LEFT JOIN users u ON ah.modified_by = u.id
+    WHERE ah.animal_id = $1
+    ORDER BY ah.modification_date DESC
+  `, [animal_id]);
+
+  return rows;
 }
+
+async getTransportHistoryByAnimalId(animal_id: string): Promise<any[]> {
+  const { rows } = await query(`
+    SELECT 
+      t.id,
+      t.animal_id,
+      t.date,
+      t.details,
+      origin.id AS origin_land_id,
+      origin.name AS origin_land_name,
+      origin.latitude AS origin_latitude,
+      origin.longitude AS origin_longitude,
+      dest.id AS destiny_land_id,
+      dest.name AS destiny_land_name,
+      dest.latitude AS destiny_latitude,
+      dest.longitude AS destiny_longitude
+    FROM transports t
+    JOIN lands origin ON t.origin_land_id = origin.id
+    JOIN lands dest ON t.destiny_land_id = dest.id
+    WHERE t.animal_id = $1
+    ORDER BY t.date DESC
+  `, [animal_id]);
+
+  return rows;
+}
+
+}
+
 
 export const animalRepository = new AnimalRepository();
