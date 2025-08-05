@@ -37,9 +37,9 @@ export class UserService {
     );
   }
 
-  async getUserById(userId: string): Promise<User> {
+  async getUserById(userId: string): Promise<UserPost> {
     return await firstValueFrom(
-      this.httpClient.get<User>(`${this.apiUrl}users/user_id/${userId}`)
+      this.httpClient.get<UserPost>(`${this.apiUrl}users/user_id/${userId}`)
     );
   }
 
