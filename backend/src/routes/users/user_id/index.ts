@@ -92,6 +92,14 @@ const usuariosIdRoute: FastifyPluginAsync = async (fastify) => {
           `No se pudo actualizar el usuario ${user_id}`
         );
       }
+      
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("users");
+        }
+      });
+      
       const { password_hash, ...safeUser } = updatedUser;
       return safeUser;
     },
@@ -117,6 +125,14 @@ const usuariosIdRoute: FastifyPluginAsync = async (fastify) => {
         throw new UCUErrorNotFound(`Usuario ${user_id} no encontrado`);
       }
       await userRepository.deleteUser(user_id);
+      
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("users");
+        }
+      });
+      
       reply.code(204).send();
     },
   });

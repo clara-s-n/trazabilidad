@@ -52,6 +52,14 @@ const transportesRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
 
       const updated = await transportRepository.updateTransport(transport_id, updates);
       if (!updated) throw new UCUErrorNotFound(`No se pudo modificar el transporte ${transport_id}`);
+      
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("transports");
+        }
+      });
+      
       return updated;
     }
   });
@@ -76,6 +84,14 @@ const transportesRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
       if (!exists) throw new UCUErrorNotFound(`Transporte ${transport_id} no encontrado`);
 
       await transportRepository.deleteTransport(transport_id);
+      
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("transports");
+        }
+      });
+      
       reply.code(204).send();
     }
   });

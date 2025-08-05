@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, resource, signal } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, resource, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Land } from '../../../../model/land';
 import { LandsService } from '../../../../services/lands.service';
+import { WebSocketService } from '../../../../services/websocket.service';
 import { environment } from '../../../../../environments/environment';
 import {
   IonButton,
@@ -68,15 +69,15 @@ import {
     IonLabel,
   ],
 })
-export class ListPage implements OnInit {
-  socket = new WebSocket('ws://localhost/backend/');
-
+export class ListPage implements OnInit, OnDestroy {
   public lands = signal<Land[]>([]);
 
   private landService: LandsService = inject(LandsService);
   private modalController: ModalController = inject(ModalController);
   private router = inject(Router);
   private title = inject(Title);
+  private wsService = inject(WebSocketService);
+  private unsubscribe: (() => void) | null = null;
 
   public landsResource = resource({
     loader: async () => await this.landService.getAllLands(),
@@ -98,17 +99,18 @@ export class ListPage implements OnInit {
     this.title.setTitle('Lista de Predios | Sistema de Trazabilidad');
     this.loadLands();
 
-    this.socket.addEventListener('open', (event) => {
-      // Si quiero hacer algo al establecer la conexión.
+    // Registrar handler para mensajes de lands
+    this.unsubscribe = this.wsService.onMessage('lands', () => {
+      console.log('Actualizando lista de predios por WebSocket');
+      this.loadLands();
     });
+  }
 
-    this.socket.addEventListener('message', (event) => {
-      console.log('Mensaje del servidor: ', event.data);
-      if (event.data === 'newLand') {
-        this.loadLands();
-      }
-      // window.location.reload();
-    });
+  ngOnDestroy() {
+    // Desregistrar el handler cuando se destruye el componente
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
   }
   async loadLands() {
     const data = await this.landService.getAllLands();

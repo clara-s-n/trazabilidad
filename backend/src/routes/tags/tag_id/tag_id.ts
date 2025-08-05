@@ -79,6 +79,14 @@ const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
               });
           }
           await tagRepository.deactivateTag(tag_id);
+          
+          // Broadcast WebSocket message to all connected clients
+          fastify.websocketServer.clients.forEach((cliente) => {
+            if (cliente.readyState === WebSocket.OPEN) {
+              cliente.send("tags");
+            }
+          });
+          
           return reply.status(204).send();
         }
 
@@ -136,6 +144,14 @@ const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
         // Asigna la tag al animal (implementa este método en tu repositorio)
         try {
             await tagRepository.assignTagToAnimal(animal_id, tag_id);
+            
+            // Broadcast WebSocket message to all connected clients
+            fastify.websocketServer.clients.forEach((cliente) => {
+              if (cliente.readyState === WebSocket.OPEN) {
+                cliente.send("tags");
+              }
+            });
+            
             return reply.status(200).send();
         } catch (e: any) {
             if (e.message === 'El animal ya tiene una caravana activa') {
@@ -168,7 +184,15 @@ const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
       handler: async (request, reply) => {
         const { animal_id, tag_id } = request.params as { animal_id: string; tag_id: string };
         const ok = await tagRepository.unassignTagFromAnimal(animal_id, tag_id);
+        
         if (ok) {
+          // Broadcast WebSocket message to all connected clients
+          fastify.websocketServer.clients.forEach((cliente) => {
+            if (cliente.readyState === WebSocket.OPEN) {
+              cliente.send("tags");
+            }
+          });
+          
           return { success: true, message: 'Tag desasignada correctamente.' };
         } else {
           reply.code(404);
@@ -204,6 +228,13 @@ const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
         const ok = await tagRepository.changeAnimalTag(animal_id, tag_id, new_tag_id);
 
         if (ok) {
+          // Broadcast WebSocket message to all connected clients
+          fastify.websocketServer.clients.forEach((cliente) => {
+            if (cliente.readyState === WebSocket.OPEN) {
+              cliente.send("tags");
+            }
+          });
+          
           return { success: true, message: 'Tag cambiada correctamente.' };
         } else {
           reply.code(404);
@@ -236,6 +267,13 @@ const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
         const ok = await tagRepository.unassignTagFromAnimal(animalId, tagId);
 
         if (ok) {
+          // Broadcast WebSocket message to all connected clients
+          fastify.websocketServer.clients.forEach((cliente) => {
+            if (cliente.readyState === WebSocket.OPEN) {
+              cliente.send("tags");
+            }
+          });
+          
           return { success: true, message: 'Tag desasignada correctamente.' };
         } else {
           reply.code(404);

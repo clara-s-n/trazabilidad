@@ -65,6 +65,14 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
     handler: async (request, reply) => {
       const animalData = request.body as AnimalPost;
       const newAnimal = await animalRepository.createAnimal(animalData);
+      
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("animals");
+        }
+      });
+      
       reply.status(201).send(newAnimal);
     },
   });
@@ -121,6 +129,15 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
           `No se pudo actualizar el animal ${animal_id}`
         );
       }
+      
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("animals");
+        }
+      });
+      
+      reply.send(updatedAnimal);
     },
   });
 

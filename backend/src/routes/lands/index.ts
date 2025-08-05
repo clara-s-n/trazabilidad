@@ -75,7 +75,7 @@ const prediosRoute: FastifyPluginAsyncTypebox = async (fastify, opts) => {
         // Broadcast a TODOS los clientes WS conectados
         fastify.websocketServer.clients.forEach((cliente) => {
           if (cliente.readyState === WebSocket.OPEN) {
-            cliente.send("newLand");
+            cliente.send("lands");
           }
         });
 
@@ -142,6 +142,14 @@ const prediosRoute: FastifyPluginAsyncTypebox = async (fastify, opts) => {
           `No se pudo actualizar: predio ${land_id} no encontrado`
         );
       }
+      
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("lands");
+        }
+      });
+      
       return updated;
     },
   });
@@ -259,6 +267,13 @@ const prediosRoute: FastifyPluginAsyncTypebox = async (fastify, opts) => {
 
       // 4) Responder sin contenido
       reply.code(204).send();
+      
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("lands");
+        }
+      });
     },
   });
 };

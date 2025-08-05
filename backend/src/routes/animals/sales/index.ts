@@ -75,6 +75,13 @@ const ventasRoute: FastifyPluginAsyncTypebox = async (fastify) => {
                 throw new UCUErrorBadRequest(`No se pudo crear la venta para el animal ${animal_id}`);
             }
 
+            // Broadcast WebSocket message to all connected clients
+            fastify.websocketServer.clients.forEach((cliente) => {
+                if (cliente.readyState === WebSocket.OPEN) {
+                    cliente.send("animals");
+                }
+            });
+
             reply.code(201);
             return sale;
         }

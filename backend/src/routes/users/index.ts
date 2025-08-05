@@ -64,6 +64,13 @@ const usuariosRoute: FastifyPluginAsync = async (fastify) => {
       const user = await userRepository.createUser(userToInsert);
       const { password_hash, ...safeUser } = user;
 
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("users");
+        }
+      });
+
       reply.status(201).send(safeUser);
     }
   });

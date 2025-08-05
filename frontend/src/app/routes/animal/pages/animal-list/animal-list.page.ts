@@ -71,6 +71,7 @@ import { AnimalFiltersComponent, FilterValues } from '../../components/animal-fi
   ],
 })
 export class ListPage implements OnInit {
+  socket = new WebSocket('ws://localhost/backend/');
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private animalService = inject(AnimalService);
