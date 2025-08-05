@@ -1,0 +1,59 @@
+// Main Layout Styles
+ion-split-pane {
+  --side-min-width: 280px;
+  --side-max-width: 320px;
+}
+
+#main-content {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+ion-header {
+  ion-toolbar {
+    --padding-start: 16px;
+    --padding-end: 16px;
+    
+    ion-title {
+      font-weight: 600;
+      font-size: 18px;
+    }
+    
+    ion-badge {
+      margin-right: 8px;
+      font-size: 11px;
+      padding: 4px 8px;
+    }
+  }
+}
+
+ion-content {
+  flex: 1;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+// Responsive behavior
+@media (max-width: 767px) {
+  ion-header {
+    ion-toolbar {
+      --padding-start: 12px;
+      --padding-end: 12px;
+      
+      ion-title {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+// Ensure proper layout on larger screens
+@media (min-width: 768px) {
+  ion-split-pane {
+    --side-min-width: 300px;
+    --side-max-width: 350px;
+  }
+}

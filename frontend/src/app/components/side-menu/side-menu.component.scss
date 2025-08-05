@@ -1,0 +1,153 @@
+// Side Menu Styles
+ion-menu {
+  --width: 280px;
+  --max-width: 280px;
+}
+
+// User info section
+.user-info-section {
+  border-bottom: 1px solid var(--ion-color-light-shade);
+  
+  ion-item {
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --background: var(--ion-color-light);
+    
+    ion-label h3 {
+      font-weight: 600;
+      margin: 0;
+      color: var(--ion-color-dark);
+    }
+  }
+  
+  .role-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    margin-top: 4px;
+    border-radius: 12px;
+    background: var(--ion-color-primary);
+    color: var(--ion-color-primary-contrast);
+    font-size: 12px;
+    font-weight: 600;
+    
+    .role-text {
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+}
+
+// Menu content area
+ion-content {
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
+
+// Logout item
+ion-item[color="danger"] {
+  --color: var(--ion-color-danger);
+  font-weight: 600;
+  
+  ion-icon {
+    color: var(--ion-color-danger);
+  }
+}
+
+// Accordion menu container
+app-accordion-menu {
+  display: block;
+  flex: 1;
+  overflow-y: auto;
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .user-info-section {
+    border-bottom-color: var(--ion-color-dark-shade);
+    
+    ion-item {
+      --background: var(--ion-color-dark);
+      
+      ion-label h3 {
+        color: var(--ion-color-light);
+      }
+    }
+    
+    .role-badge {
+      background: var(--ion-color-primary-shade);
+    }
+  }
+}
+
+// Mobile responsive
+@media (max-width: 768px) {
+  ion-menu {
+    --width: 260px;
+    --max-width: 260px;
+  }
+  
+  .user-info-section {
+    ion-item {
+      --padding-start: 12px;
+      --padding-end: 12px;
+    }
+  }
+}
+
+// Menu content area
+ion-content {
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
+
+// Menu footer with logout
+.menu-footer {
+  position: sticky;
+  bottom: 0;
+  padding: 16px;
+  background: var(--ion-background-color);
+  border-top: 1px solid var(--ion-color-light-shade);
+  
+  ion-button {
+    --padding-start: 16px;
+    --padding-end: 16px;
+    
+    ion-icon {
+      margin-right: 8px;
+    }
+  }
+}
+
+// Ensure content doesn't overlap footer
+ion-content::part(scroll) {
+  padding-bottom: 80px;
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .user-info-section {
+    background: var(--ion-color-dark-tint);
+    border-bottom-color: var(--ion-color-dark-shade);
+  }
+  
+  .menu-footer {
+    border-top-color: var(--ion-color-dark-shade);
+  }
+}
+
+// Mobile responsive
+@media (max-width: 768px) {
+  ion-menu {
+    --width: 260px;
+  }
+  
+  .user-info-section {
+    padding: 12px;
+  }
+  
+  .menu-footer {
+    padding: 12px;
+  }
+}

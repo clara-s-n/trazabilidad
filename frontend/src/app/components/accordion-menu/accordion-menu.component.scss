@@ -1,0 +1,122 @@
+// Accordion Menu Styles
+ion-list {
+  padding: 0;
+}
+
+ion-accordion-group {
+  border-radius: 0;
+  overflow: hidden;
+  background: transparent;
+}
+
+ion-accordion {
+  margin-bottom: 0;
+  border-radius: 0;
+  overflow: hidden;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Header styling
+ion-item[slot="header"] {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --min-height: 48px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--ion-color-light-shade);
+  
+  ion-label {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  
+  ion-icon[slot="start"] {
+    margin-right: 12px;
+    font-size: 20px;
+  }
+}
+
+// Content items styling
+ion-item[slot="content"] {
+  --background: transparent;
+  --padding-start: 40px;
+  --padding-end: 16px;
+  --min-height: 44px;
+  border-bottom: 1px solid var(--ion-color-light-tint);
+  transition: all 0.2s ease;
+  
+  &:hover {
+    --background: var(--ion-color-primary-tint);
+  }
+  
+  &.selected {
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
+    
+    ion-icon {
+      color: var(--ion-color-primary-contrast) !important;
+    }
+    
+    ion-label {
+      font-weight: 600;
+      color: var(--ion-color-primary-contrast);
+    }
+  }
+  
+  ion-icon[slot="start"] {
+    margin-right: 12px;
+    font-size: 16px;
+  }
+  
+  ion-label {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  ion-item[slot="header"] {
+    border-bottom-color: var(--ion-color-dark-shade);
+    
+    ion-label {
+      color: var(--ion-color-light);
+    }
+  }
+  
+  ion-item[slot="content"] {
+    border-bottom-color: var(--ion-color-dark-tint);
+    
+    ion-label {
+      color: var(--ion-color-light);
+    }
+    
+    &:hover {
+      --background: var(--ion-color-primary-shade);
+    }
+  }
+}
+
+// Mobile responsive adjustments
+@media (max-width: 768px) {
+  ion-item[slot="header"] {
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --min-height: 44px;
+    
+    ion-label {
+      font-size: 15px;
+    }
+  }
+  
+  ion-item[slot="content"] {
+    --padding-start: 32px;
+    --min-height: 40px;
+    
+    ion-label {
+      font-size: 13px;
+    }
+  }
+}

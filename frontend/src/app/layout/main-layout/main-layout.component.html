@@ -1,18 +1,24 @@
-<!-- src/app/app.component.html -->
-<ion-app>
+<!-- Main Layout with Split Pane and Accordion Navigation -->
+<app-side-menu></app-side-menu>
+
+<!-- Área principal de la aplicación -->
+<div class="ion-page" id="main-content">
   <ion-header>
-    <ion-toolbar>
-      <ion-title>
-        Sistema de Trazabilidad Animal
-        <ion-badge color="primary" style="margin-left: 10px;">{{ roleName() }}</ion-badge>
-      </ion-title>
+    <ion-toolbar color="primary">
+      <ion-buttons slot="start">
+        <ion-menu-button menuId="main-menu"></ion-menu-button>
+      </ion-buttons>
+      <ion-title>Sistema de Trazabilidad</ion-title>
       <ion-buttons slot="end">
+        @if (roleName()) {
+          <ion-badge color="light">{{ roleName() }}</ion-badge>
+        }
         <app-logout-button></app-logout-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
 
-  <ion-content>
+  <ion-content class="ion-padding">
     <router-outlet></router-outlet>
   </ion-content>
-</ion-app>
+</div>

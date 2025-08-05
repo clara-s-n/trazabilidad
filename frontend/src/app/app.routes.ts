@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { userGuard } from './guards/user.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
@@ -14,13 +15,14 @@ export const routes: Routes = [
   },
   {
     path: '',
-    canActivate: [authGuard],
-    data: { title: 'Sistema de Trazabilidad' },
-    loadComponent: () =>
-      import('./layout/main-layout/main-layout.component').then(
-        (m) => m.MainLayoutComponent
-      ),
+    loadComponent: () => import('./layout/main-layout/main-layout.component').then(m => m.MainLayoutComponent),
+    canActivate: [userGuard],
     children: [
+      {
+        path: '',
+        redirectTo: '/dashboard',
+        pathMatch: 'full'
+      },
       {
         path: 'dashboard',
         data: { title: 'Panel de Control' },
@@ -30,25 +32,28 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'user',
+        path: 'animal',
         loadChildren: () =>
-          import('./routes/user/user.routes').then((m) => m.routes),
+          import('./routes/animal/animal.routes').then((m) => m.routes)
       },
       {
         path: 'land',
         loadChildren: () =>
-          import('./routes/land/land.routes').then((m) => m.routes),
+          import('./routes/land/land.routes').then((m) => m.routes)
       },
       {
-        path: 'animal',
+        path: 'user',
         loadChildren: () =>
-          import('./routes/animal/animal.routes').then((m) => m.routes),
+          import('./routes/user/user.routes').then((m) => m.routes)
       },
       {
-        path: 'tags',
-        loadChildren: () =>
-          import('./routes/tags/tag.routes').then((m) => m.routes),
-      },
-    ],
+        path: 'unauthorized',
+        loadComponent: () => import('./pages/unauthorized/unauthorized.page').then(m => m.UnauthorizedPage)
+      }
+    ]
   },
+  {
+    path: '**',
+    redirectTo: '/auth/login'
+  }
 ];

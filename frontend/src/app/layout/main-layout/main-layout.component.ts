@@ -1,15 +1,17 @@
 import { Component, inject, computed } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {
-  IonApp,
   IonContent,
   IonHeader,
   IonTitle,
   IonToolbar,
   IonButtons,
   IonBadge,
+  IonMenuButton,
+  IonSplitPane,
 } from '@ionic/angular/standalone';
 import { LogoutButtonComponent } from 'src/app/components/logout-button/logout-button.component';
+import { SideMenuComponent } from 'src/app/components/side-menu/side-menu.component';
 import { RolePermissionService } from 'src/app/services/role-permission.service';
 
 @Component({
@@ -19,14 +21,15 @@ import { RolePermissionService } from 'src/app/services/role-permission.service'
   standalone: true,
   imports: [
     RouterOutlet,
-    IonApp,
     IonContent,
     IonHeader,
     IonTitle,
     IonToolbar,
     IonButtons,
     IonBadge,
+    IonMenuButton,
     LogoutButtonComponent,
+    SideMenuComponent,
   ],
 })
 export class MainLayoutComponent {
