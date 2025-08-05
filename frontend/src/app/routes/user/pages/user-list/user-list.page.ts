@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, resource } from '@angular/core';
+import { Component, inject, resource, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 import {
   IonButton,
   IonButtons,
   IonCol,
   IonContent,
-  IonFab,
-  IonFabButton,
   IonHeader,
   IonIcon,
   IonList,
@@ -49,7 +48,7 @@ import { UserService } from 'src/app/services/user.service';
     IonCol,
   ],
 })
-export class UserListPage {
+export class UserListPage implements OnInit {
   constructor() {
     addIcons({
       eyeOutline,
@@ -61,6 +60,11 @@ export class UserListPage {
 
   private userService = inject(UserService);
   private router = inject(Router);
+  private title = inject(Title);
+
+  ngOnInit() {
+    this.title.setTitle('Lista de Usuarios | Sistema de Trazabilidad');
+  }
 
   usersResource = resource<User[], undefined>({
     loader: async () => await this.userService.getAllUsers(),

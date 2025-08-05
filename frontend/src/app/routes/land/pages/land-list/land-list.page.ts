@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, resource, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Land } from '../../../../model/land';
 import { LandsService } from '../../../../services/lands.service';
 import {
@@ -74,6 +75,7 @@ export class ListPage implements OnInit {
   private landService: LandsService = inject(LandsService);
   private modalController: ModalController = inject(ModalController);
   private router = inject(Router);
+  private title = inject(Title);
 
   public landsResource = resource({
     loader: async () => await this.landService.getAllLands(),
@@ -92,6 +94,7 @@ export class ListPage implements OnInit {
   }
 
   ngOnInit() {
+    this.title.setTitle('Lista de Predios | Sistema de Trazabilidad');
     this.loadLands();
 
     this.socket.addEventListener('open', (event) => {

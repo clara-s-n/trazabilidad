@@ -4,7 +4,8 @@
       <ion-back-button [defaultHref]="'/animal/' + id()"></ion-back-button>
     </ion-buttons>
     <ion-title>
-      Editar Animal
+      @if (animal()) { Editar: {{ animal()?.breed || 'Animal' }} } @else {
+      Editar Animal }
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -13,7 +14,6 @@
   <ion-grid>
     <ion-row>
       <ion-col size="12" size-md="8" offset-md="2" size-lg="6" offset-lg="3">
-
         @if (animalResource.isLoading()) {
           <ion-card>
             <ion-card-content class="ion-text-center">

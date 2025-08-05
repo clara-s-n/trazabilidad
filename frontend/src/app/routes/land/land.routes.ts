@@ -36,12 +36,14 @@ export const routes: Routes = [
       {
         path: 'edit/:id',
         canActivate: [adminOrOperatorGuard],
+        data: { title: 'Editar Predio' },
         loadComponent: () =>
           import('./pages/land-edit/land-edit.page').then((m) => m.EditPage),
       },
       {
         path: ':id',
         canActivate: [userGuard],
+        data: { title: 'Detalle del Predio' },
         loadComponent: () =>
           import('./pages/land-detail/land-detail.page').then(
             (m) => m.DetailPage

@@ -1,6 +1,7 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, inject, input, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 import {
   IonHeader,
   IonToolbar,
@@ -91,11 +92,13 @@ export class DetailPage implements OnInit {
   private readonly animalService = inject(AnimalService);
   private readonly tagService = inject(TagService);
   private readonly modalController = inject(ModalController);
+  private readonly title = inject(Title);
 
   animal: CompleteAnimal | null = null;
   loading = false;
 
   async ngOnInit() {
+    this.title.setTitle('Detalle del Animal | Sistema de Trazabilidad');
     this.loading = true;
     const id = this.animal_id();
     if (id) {

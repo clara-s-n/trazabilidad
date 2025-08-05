@@ -35,6 +35,7 @@ export const routes: Routes = [
       {
         path: 'edit/:id',
         canActivate: [adminOrOperatorGuard],
+        data: { title: 'Editar Animal' },
         loadComponent: () =>
           import('./pages/animal-edit/animal-edit.page').then(
             (m) => m.AnimalEditPage
@@ -43,6 +44,7 @@ export const routes: Routes = [
       {
         path: 'events/:id/sale',
         canActivate: [adminOrSelfGuard],
+        data: { title: 'Ventas del Animal' },
         loadComponent: () =>
           import(
             './pages/animal-event/sale/pages/sale-list/sale-list.page'
@@ -51,6 +53,7 @@ export const routes: Routes = [
       {
         path: 'events/:id/sale/create',
         canActivate: [adminOrSelfGuard],
+        data: { title: 'Registrar Venta' },
         loadComponent: () =>
           import(
             './pages/animal-event/sale/pages/sale-create/sale-create.page'
@@ -59,6 +62,7 @@ export const routes: Routes = [
       {
         path: 'events/:id/vaccination',
         canActivate: [adminOrSelfGuard],
+        data: { title: 'Vacunaciones del Animal' },
         loadComponent: () =>
           import(
             './pages/animal-event/vaccination/pages/vaccination-list/vaccination-list.page'
@@ -67,6 +71,7 @@ export const routes: Routes = [
       {
         path: 'events/:id/vaccination/create',
         canActivate: [adminOrSelfGuard],
+        data: { title: 'Registrar Vacunación' },
         loadComponent: () =>
           import(
             './pages/animal-event/vaccination/pages/vaccination-create/vaccination-create.page'
@@ -75,6 +80,7 @@ export const routes: Routes = [
       {
         path: 'events/:id/weighing',
         canActivate: [adminOrSelfGuard],
+        data: { title: 'Pesajes del Animal' },
         loadComponent: () =>
           import(
             './pages/animal-event/weighing/pages/weighing-list/weighing-list.page'
@@ -83,6 +89,7 @@ export const routes: Routes = [
       {
         path: 'events/:id/weighing/create',
         canActivate: [adminOrOperatorGuard],
+        data: { title: 'Registrar Pesaje' },
         loadComponent: () =>
           import(
             './pages/animal-event/weighing/pages/weighing-create/weighing-create.page'
@@ -91,6 +98,7 @@ export const routes: Routes = [
       {
         path: 'history/:id',
         canActivate: [userGuard],
+        data: { title: 'Historial del Animal' },
         loadComponent: () =>
           import('./pages/animal-history/animal-history.page').then(
             (m) => m.HistoryPage
@@ -99,6 +107,7 @@ export const routes: Routes = [
       {
         path: 'movements/:id',
         canActivate: [userGuard],
+        data: { title: 'Movimientos del Animal' },
         loadComponent: () =>
           import('./pages/animal-movement/animal-movement.page').then(
             (m) => m.MovementPage
@@ -110,6 +119,7 @@ export const routes: Routes = [
         path: ':userId/list',
         pathMatch: 'full',
         canActivate: [adminOrSelfGuard],
+        data: { title: 'Mis Animales' },
         loadComponent: () =>
           import('./pages/animal-user-list/animal-user-list.page').then(
             (m) => m.AnimalUserListPage
@@ -120,6 +130,7 @@ export const routes: Routes = [
       {
         path: ':animal_id',
         canActivate: [userGuard],
+        data: { title: 'Detalle del Animal' },
         loadComponent: () =>
           import('./pages/animal-detail/animal-detail.page').then(
             (m) => m.DetailPage

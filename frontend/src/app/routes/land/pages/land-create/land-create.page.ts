@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 import { LandsService } from '../../../../services/lands.service';
 import { CreateLand, UpdateLand } from '../../../../model/land';
 import { LandFormComponent } from '../../components/land-form/land-form.component';
@@ -27,9 +28,14 @@ import {
   templateUrl: './land-create.page.html',
   styleUrls: ['./create.page.scss'],
 })
-export class LandCreatePage {
+export class LandCreatePage implements OnInit {
   private landsService = inject(LandsService);
   private router = inject(Router);
+  private title = inject(Title);
+
+  ngOnInit() {
+    this.title.setTitle('Crear Predio | Sistema de Trazabilidad');
+  }
 
   /** Acepta payload de creación o edición, pero crea sólo CreateLandParams */
   async handleSave(payload: CreateLand | UpdateLand) {

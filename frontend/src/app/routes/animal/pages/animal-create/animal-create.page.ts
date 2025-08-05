@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 import {
   IonBackButton,
   IonButtons,
@@ -33,9 +34,14 @@ import { AnimalPost } from 'src/app/model/animal';
   templateUrl: './animal-create.page.html',
   styleUrls: ['./create.page.scss'],
 })
-export class AnimalCreatePage {
+export class AnimalCreatePage implements OnInit {
   private animalService = inject(AnimalService);
   private router = inject(Router);
+  private title = inject(Title);
+
+  ngOnInit() {
+    this.title.setTitle('Crear Nuevo Animal | Sistema de Trazabilidad');
+  }
 
   async handleSave(payload: AnimalPost) {
     try {
