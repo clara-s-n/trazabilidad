@@ -1,30 +1,76 @@
-<ion-grid class="ion-padding">
-  <ion-row class="ion-justify-content-center">
-    <ion-col size="12" size-md="8" size-lg="6">
-      <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
-        <h1 class="ion-text-center">Iniciar Sesión</h1>
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="logo-section">
+        <ion-icon name="shield-checkmark" color="primary"></ion-icon>
+        <h1>Sistema de Trazabilidad</h1>
+      </div>
+      <h2>Iniciar Sesión</h2>
+      <p>Ingresa tus credenciales para acceder al sistema</p>
+    </div>
 
-        <!-- Error message -->
-        @if (error()) {
-        <div class="error-message ion-text-center">{{ error() }}</div>
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="login-form">
+      <!-- Error message -->
+      @if (error()) {
+      <div class="error-message">
+        <ion-icon name="alert-circle" color="danger"></ion-icon>
+        <span>{{ error() }}</span>
+      </div>
+      }
+
+      <div class="form-group">
+        <ion-item lines="none" class="form-item">
+          <ion-label position="stacked" color="medium">Correo Electrónico</ion-label>
+          <ion-input 
+            type="email" 
+            [ngModel]="email()" 
+            (ngModelChange)="email.set($event)" 
+            placeholder="usuario@ejemplo.com"
+            name="email" 
+            required
+            fill="outline"
+            class="custom-input">
+            <ion-icon name="mail-outline" slot="start" color="medium"></ion-icon>
+          </ion-input>
+        </ion-item>
+      </div>
+
+      <div class="form-group">
+        <ion-item lines="none" class="form-item">
+          <ion-label position="stacked" color="medium">Contraseña</ion-label>
+          <ion-input 
+            type="password" 
+            [ngModel]="password()" 
+            (ngModelChange)="password.set($event)"
+            placeholder="Ingresa tu contraseña" 
+            name="password" 
+            required
+            fill="outline"
+            class="custom-input">
+            <ion-icon name="lock-closed-outline" slot="start" color="medium"></ion-icon>
+          </ion-input>
+        </ion-item>
+      </div>
+
+      <ion-button 
+        expand="block" 
+        type="submit" 
+        [disabled]="loading()" 
+        class="login-button"
+        shape="round"
+        size="large">
+        @if (loading()) { 
+          <ion-spinner name="crescent" slot="start"></ion-spinner>
+          Iniciando sesión... 
+        } @else { 
+          <ion-icon name="log-in-outline" slot="start"></ion-icon>
+          Iniciar Sesión 
         }
+      </ion-button>
+    </form>
 
-        <ion-item>
-          <ion-input type="email" [ngModel]="email()" (ngModelChange)="email.set($event)" placeholder="Email"
-            name="email" required>
-          </ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-input type="password" [ngModel]="password()" (ngModelChange)="password.set($event)"
-            placeholder="Contraseña" name="password" required>
-          </ion-input>
-        </ion-item>
-
-        <ion-button expand="block" type="submit" [disabled]="loading()" class="ion-margin-top">
-          @if (loading()) { Iniciando sesión... } @else { Iniciar Sesión }
-        </ion-button>
-      </form>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+    <div class="login-footer">
+      <p>© 2025 Sistema de Trazabilidad Animal</p>
+    </div>
+  </div>
+</div>

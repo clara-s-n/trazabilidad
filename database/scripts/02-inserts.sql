@@ -110,9 +110,9 @@ INSERT INTO animal_tag (id, animal_id, tag_id, assignment_date, unassignment_dat
 
 -- Tipos de evento necesarios para los eventos
 INSERT INTO event_type (id, name, description) VALUES
-  (3, 'Pesaje', 'Evento de pesaje de animales'),
-  (4, 'Vacunación', 'Evento de vacunación de animales'),
-  (7, 'Venta', 'Evento de venta de animales');
+  (3, 'Weighing', 'Evento de pesaje de animales'),
+  (4, 'Vaccination', 'Evento de vacunación de animales'),
+  (7, 'Sale', 'Evento de venta de animales');
 
 -- Events for weighings
 INSERT INTO events (id, event_type, date, comments, created_by) VALUES

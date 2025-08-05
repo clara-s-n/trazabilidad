@@ -7,10 +7,21 @@ import {
   IonGrid,
   IonInput,
   IonItem,
+  IonIcon,
+  IonLabel,
+  IonSpinner,
 } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
+import { addIcons } from 'ionicons';
+import {
+  shieldCheckmark,
+  alertCircle,
+  mailOutline,
+  lockClosedOutline,
+  logInOutline,
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-login',
@@ -26,6 +37,9 @@ import { AuthService } from 'src/app/services/auth.service';
     IonGrid,
     IonInput,
     IonItem,
+    IonIcon,
+    IonLabel,
+    IonSpinner,
   ],
 })
 export class LoginPage {
@@ -36,6 +50,17 @@ export class LoginPage {
 
   private router = inject(Router);
   private authService = inject(AuthService);
+
+  constructor() {
+    // Add the icons we need
+    addIcons({
+      shieldCheckmark,
+      alertCircle,
+      mailOutline,
+      lockClosedOutline,
+      logInOutline,
+    });
+  }
 
   async onSubmit() {
     if (!this.email() || !this.password()) {
