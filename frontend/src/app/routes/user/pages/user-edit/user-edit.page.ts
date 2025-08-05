@@ -1,55 +1,47 @@
-import {Component, HostListener, inject, OnInit, signal} from '@angular/core';
+// user-edit.ts
+
+import { Component, ChangeDetectionStrategy, inject, signal, resource, computed, input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
-import UserFormComponent from "../../components/user-form/user-form.component";
-import {IonSpinner, IonText} from "@ionic/angular/standalone";
+import { User, UserPost } from 'src/app/model/user';
+import UserFormComponent from '../../components/user-form/user-form.component';
+import { IonSpinner, IonText } from '@ionic/angular/standalone';
 
+/**
+ * Página para editar un usuario existente.
+ * Carga los datos usando `resource` al entrar y rellena el formulario automáticamente.
+ */
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.page.html',
   styleUrls: ['./user-edit.page.scss'],
-  standalone: true,
-  imports: [
-    UserFormComponent,
-    IonSpinner,
-    IonText
-  ]
+  imports: [UserFormComponent, IonSpinner, IonText],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'user-edit-page' }
 })
-export class UserEditPage {
 
+export class UserEditPage {
   private userService = inject(UserService);
   private router = inject(Router);
-  private route = inject(ActivatedRoute);
 
-  user: any = null;
-  loading = signal<boolean>(false);
+  public id = input.required<string>();
 
-  // Se llama cada vez que la vista va a entrar
-  @HostListener('ionViewWillEnter')
-  async ionViewWillEnter() {
-    this.loading.set(true);
-    const userId = this.route.snapshot.paramMap.get('userId');
-    console.log(userId)
-    if (userId) {
-      try {
-        const userData = await this.userService.getUserById(userId);
-        this.user.set(userData);
-      } catch {
-        this.user.set(null);
-      }
-    }
-    this.loading.set(false);
-  }
+  userResource = resource<UserPost,undefined>({loader: async () => {
+    const id = this.id();
+    if (!id) throw new Error('ID aún no disponible');
+    return await this.userService.getUserById(id)
+  }});
 
-  async onSubmit(data: { email: string; password: string; repeatPassword?: string; role_id: number }) {
+  async onSubmit(data: { email: string; role_id: number }) {
     try {
-      await this.userService.updateUser(this.user.user_id, data);
-      this.router.navigate(['/users', this.user.user_id]);
+      await this.userService.updateUser(this.id(), data);
+      this.router.navigate(['/user/profile', this.id()]);
     } catch (error) {
       console.error('Error al actualizar el usuario:', error);
     }
   }
+
   onCancel() {
-    this.router.navigate(['/users', this.user?.user_id ?? '']);
+    this.router.navigate(['/users', this.id()]);
   }
 }
