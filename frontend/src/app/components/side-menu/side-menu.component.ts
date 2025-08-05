@@ -13,7 +13,8 @@ import {
   IonButtons,
   IonItem,
   IonLabel,
-  IonItemDivider
+  IonItemDivider,
+  IonMenuToggle,
 } from '@ionic/angular/standalone';
 import { AccordionMenuComponent } from '../accordion-menu/accordion-menu.component';
 import { MenuItem } from '../../model/components/menuItem';
@@ -27,19 +28,16 @@ import { logOutOutline, personOutline } from 'ionicons/icons';
   standalone: true,
   imports: [
     IonMenu,
+    IonMenuToggle,
     IonHeader,
     IonToolbar,
     IonTitle,
     IonContent,
-    IonList,
     IonButton,
     IonIcon,
-    IonMenuButton,
-    IonButtons,
     IonItem,
     IonLabel,
-    IonItemDivider,
-    AccordionMenuComponent
+    AccordionMenuComponent,
   ],
   template: `
     <ion-menu side="start" menuId="main-menu" contentId="main-content">
@@ -48,12 +46,16 @@ import { logOutOutline, personOutline } from 'ionicons/icons';
           <ion-title>Sistema de Trazabilidad</ion-title>
         </ion-toolbar>
       </ion-header>
-      
+
       <ion-content>
         <!-- User info section -->
         <div class="user-info-section">
           <ion-item lines="none">
-            <ion-icon slot="start" name="person-outline" color="primary"></ion-icon>
+            <ion-icon
+              slot="start"
+              name="person-outline"
+              color="primary"
+            ></ion-icon>
             <ion-label>
               <h3>{{ userEmail() }}</h3>
               <div class="role-badge">
@@ -66,15 +68,16 @@ import { logOutOutline, personOutline } from 'ionicons/icons';
         <!-- Accordion navigation menu -->
         <app-accordion-menu [items]="menuItems()"></app-accordion-menu>
       </ion-content>
-      
+
       <!-- Menu footer with logout -->
       <div class="menu-footer">
         <ion-menu-toggle>
-          <ion-button 
-            expand="block" 
-            color="danger" 
+          <ion-button
+            expand="block"
+            color="danger"
             fill="clear"
-            (click)="logout()">
+            (click)="logout()"
+          >
             <ion-icon slot="start" name="log-out-outline"></ion-icon>
             Cerrar Sesión
           </ion-button>
@@ -82,7 +85,7 @@ import { logOutOutline, personOutline } from 'ionicons/icons';
       </div>
     </ion-menu>
   `,
-  styleUrls: ['./side-menu.component.scss']
+  styleUrls: ['./side-menu.component.scss'],
 })
 export class SideMenuComponent {
   private authService = inject(AuthService);
@@ -95,13 +98,11 @@ export class SideMenuComponent {
 
   // Role-based menu items using MainStoreService computed properties
   readonly menuItems = computed<MenuItem[]>(() => {
-    const baseItems: MenuItem[] = [
-      { label: 'Dashboard', link: '/dashboard' }
-    ];
+    const baseItems: MenuItem[] = [{ label: 'Dashboard', link: '/dashboard' }];
 
     // Animal section - all users can view
     baseItems.push({ label: 'Lista de animales', link: '/animal/list' });
-    
+
     // Admin and Operator can create/edit animals
     if (this.mainStore.isOperatorOrAdmin()) {
       baseItems.push({ label: 'Crear animal', link: '/animal/create' });
@@ -109,7 +110,7 @@ export class SideMenuComponent {
 
     // Land section - all users can view
     baseItems.push({ label: 'Lista de predios', link: '/land/list' });
-    
+
     // Admin and Operator can create/edit lands
     if (this.mainStore.isOperatorOrAdmin()) {
       baseItems.push({ label: 'Crear predio', link: '/land/create' });
@@ -138,17 +139,21 @@ export class SideMenuComponent {
   constructor() {
     addIcons({
       logOutOutline,
-      personOutline
+      personOutline,
     });
   }
 
   getRoleDisplayName(): string {
     const roleId = this.userRoleId();
     switch (roleId) {
-      case 1: return 'Operador';
-      case 2: return 'Consulta';
-      case 3: return 'Administrador';
-      default: return 'Usuario';
+      case 1:
+        return 'Operador';
+      case 2:
+        return 'Consulta';
+      case 3:
+        return 'Administrador';
+      default:
+        return 'Usuario';
     }
   }
 

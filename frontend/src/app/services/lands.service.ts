@@ -48,6 +48,26 @@ export class LandsService {
     );
   }
 
+  /** POST /predios/:id/image → sube una imagen para un predio */
+  async uploadLandImage(
+    landId: string,
+    file: File
+  ): Promise<{ image_path: string; message: string }> {
+    if (!file) {
+      throw new Error('No file provided');
+    }
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    return firstValueFrom(
+      this.http.post<{ image_path: string; message: string }>(
+        `${this.baseUrl}/${landId}/image`,
+        formData
+      )
+    );
+  }
+
   /** Check if a land name already exists */
   async checkLandNameExists(
     name: string,

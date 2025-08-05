@@ -25,7 +25,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LandsService } from '../../../../services/lands.service';
 import { DeleteLandModalComponent } from '../../components/delete-land-modal/delete-land-modal.component';
 import { addIcons } from 'ionicons';
-import { locationOutline, resizeOutline, pawOutline } from 'ionicons/icons';
+import {
+  locationOutline,
+  resizeOutline,
+  pawOutline,
+  imageOutline,
+} from 'ionicons/icons';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-land-detail',
@@ -67,6 +73,7 @@ export class DetailPage implements OnInit {
       locationOutline,
       resizeOutline,
       pawOutline,
+      imageOutline,
     });
   }
 
@@ -147,5 +154,22 @@ export class DetailPage implements OnInit {
       ? 'E'
       : 'W';
     return `${Math.abs(value).toFixed(6)}° ${direction}`;
+  }
+
+  getImageUrl(imagePath: string | undefined): string {
+    if (!imagePath) return 'assets/images/placeholder-land.jpg';
+
+    // If the path is a full URL, return as is
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+
+    // Otherwise, construct the URL using the backend API URL
+    return `${environment.apiUrl}public/${imagePath}`;
+  }
+
+  onImageError(event: any) {
+    // Replace broken image with placeholder
+    event.target.src = 'assets/images/placeholder-land.jpg';
   }
 }

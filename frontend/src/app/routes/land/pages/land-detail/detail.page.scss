@@ -10,6 +10,14 @@ ion-card {
   margin-bottom: 16px;
 }
 
+.land-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-top-left-radius: var(--ion-card-border-radius);
+  border-top-right-radius: var(--ion-card-border-radius);
+}
+
 .ion-text-center {
   margin: 20px 0;
 }

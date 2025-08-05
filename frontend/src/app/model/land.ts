@@ -25,4 +25,6 @@ export interface Land {
   longitude: number;
   area?: number; // Área en hectáreas (opcional)
   location?: string; // Ubicación/descripción (opcional)
+  image_path?: string; // Ruta relativa de la imagen del predio (opcional)
+  imageUrl?: string; // URL completa de la imagen del predio (opcional, calculada en frontend)
 }

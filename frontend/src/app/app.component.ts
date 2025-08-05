@@ -1,4 +1,3 @@
-
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
@@ -8,8 +7,6 @@ import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
   standalone: true,
-  imports: [IonApp, IonRouterOutlet, RouterOutlet],
+  imports: [IonApp, IonRouterOutlet],
 })
-export class AppComponent {
-  
-}
+export class AppComponent {}

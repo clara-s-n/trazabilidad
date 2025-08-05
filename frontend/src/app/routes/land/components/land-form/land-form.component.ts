@@ -17,9 +17,12 @@ import {
   IonLabel,
   IonRow,
   IonText,
+  IonImg,
+  IonIcon,
 } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
 import { LandsService } from '../../../../services/lands.service';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-land-form',
@@ -35,6 +38,9 @@ import { LandsService } from '../../../../services/lands.service';
     IonItem,
     IonLabel,
     IonText,
+    IonImg,
+    NgIf,
+    IonIcon,
   ],
 })
 export class LandFormComponent {
@@ -48,6 +54,8 @@ export class LandFormComponent {
   public name = signal<string>('');
   public latitude = signal<number | null>(null);
   public longitude = signal<number | null>(null);
+  public previewUrl = signal<string | null>(null);
+  public selectedFile: File | null = null;
 
   // Validation signals
   public nameError = signal<string>('');
@@ -68,6 +76,10 @@ export class LandFormComponent {
         this.name.set(currentLand.name);
         this.latitude.set(currentLand.latitude);
         this.longitude.set(currentLand.longitude);
+        // If land has an image URL, set it as preview
+        if (currentLand.imageUrl) {
+          this.previewUrl.set(currentLand.imageUrl);
+        }
       } else {
         // Reset form for creation
         this.name.set('');
@@ -76,6 +88,9 @@ export class LandFormComponent {
       }
       // Clear errors when land changes
       this.clearErrors();
+      // Reset image preview when land changes
+      this.previewUrl.set(null);
+      this.selectedFile = null;
     });
   }
 
@@ -146,6 +161,28 @@ export class LandFormComponent {
     return true;
   }
 
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      const reader = new FileReader();
+      reader.onload = () => this.previewUrl.set(reader.result as string);
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
+  removeImage() {
+    this.selectedFile = null;
+    this.previewUrl.set(null);
+    // Reset the file input to allow selecting the same file again
+    const fileInput = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  }
+
   async onSubmit() {
     if (this.isSubmitting()) return;
 
@@ -164,7 +201,8 @@ export class LandFormComponent {
         name: this.name().trim(),
         latitude: this.latitude()!,
         longitude: this.longitude()!,
-      } as CreateLand & UpdateLand;
+        file: this.selectedFile,
+      } as CreateLand & UpdateLand & { file: File | null };
 
       this.submitted.emit(payload);
     } finally {
