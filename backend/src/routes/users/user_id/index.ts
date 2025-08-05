@@ -57,7 +57,8 @@ const usuariosIdRoute: FastifyPluginAsync = async (fastify) => {
         404: { description: "Animales no encontrados" },
       },
     },
-    onRequest: fastify.verifySelfOrAdmin,
+    onRequest: fastify.authenticate,
+    preHandler: fastify.verifySelfOrAdmin,
     handler: async (request, reply) => {
       const { user_id } = request.params as UserParamsType;
       const userAnimalList = await animalRepository.getByOwner(user_id);

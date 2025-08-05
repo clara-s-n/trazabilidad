@@ -56,6 +56,10 @@ export class DashboardComponent implements OnInit {
   readonly isConsulta = computed(() => this.mainStore.userRoleId() === 2);
   readonly permissions = computed(() => this.rolePermissionService.permissions());
   readonly roleName = computed(() => this.rolePermissionService.getRoleName());
+  readonly userId = computed(() => this.mainStore.userId());
+  userIdValue = this.userId();
+
+  
 
   constructor() {
     addIcons({
@@ -70,6 +74,13 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.title.setTitle('Panel de Control | Sistema de Trazabilidad');
+    const userIdValue = this.userId();
+    if (typeof userIdValue === 'string' && userIdValue.includes('[Computed:')) {
+      const match = userIdValue.match(/\[Computed: ([^]+)\]/);
+      if (match && match[1]) {
+        this.userIdValue = match[1].trim();
+      }
+    }
   }
 
   navigateTo(route: string) {

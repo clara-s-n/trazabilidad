@@ -37,54 +37,10 @@ import { logOutOutline, personOutline } from 'ionicons/icons';
     IonIcon,
     IonItem,
     IonLabel,
+    IonMenuToggle,
     AccordionMenuComponent,
   ],
-  template: `
-    <ion-menu side="start" menuId="main-menu" contentId="main-content">
-      <ion-header>
-        <ion-toolbar color="primary">
-          <ion-title>Sistema de Trazabilidad</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <ion-content>
-        <!-- User info section -->
-        <div class="user-info-section">
-          <ion-item lines="none">
-            <ion-icon
-              slot="start"
-              name="person-outline"
-              color="primary"
-            ></ion-icon>
-            <ion-label>
-              <h3>{{ userEmail() }}</h3>
-              <div class="role-badge">
-                <span class="role-text">{{ getRoleDisplayName() }}</span>
-              </div>
-            </ion-label>
-          </ion-item>
-        </div>
-
-        <!-- Accordion navigation menu -->
-        <app-accordion-menu [items]="menuItems()"></app-accordion-menu>
-      </ion-content>
-
-      <!-- Menu footer with logout -->
-      <div class="menu-footer">
-        <ion-menu-toggle>
-          <ion-button
-            expand="block"
-            color="danger"
-            fill="clear"
-            (click)="logout()"
-          >
-            <ion-icon slot="start" name="log-out-outline"></ion-icon>
-            Cerrar Sesión
-          </ion-button>
-        </ion-menu-toggle>
-      </div>
-    </ion-menu>
-  `,
+  templateUrl: './side-menu.component.html',
   styleUrls: ['./side-menu.component.scss'],
 })
 export class SideMenuComponent {
