@@ -14,7 +14,7 @@ import {
   IonItem,
   IonLabel,
   IonItemDivider,
-  IonMenuToggle
+  IonMenuToggle,
 } from '@ionic/angular/standalone';
 import { AccordionMenuComponent } from '../accordion-menu/accordion-menu.component';
 import { MenuItem } from '../../model/components/menuItem';
@@ -28,6 +28,7 @@ import { logOutOutline, personOutline } from 'ionicons/icons';
   standalone: true,
   imports: [
     IonMenu,
+    IonMenuToggle,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -37,10 +38,10 @@ import { logOutOutline, personOutline } from 'ionicons/icons';
     IonItem,
     IonLabel,
     IonMenuToggle,
-    AccordionMenuComponent
+    AccordionMenuComponent,
   ],
   templateUrl: './side-menu.component.html',
-  styleUrls: ['./side-menu.component.scss']
+  styleUrls: ['./side-menu.component.scss'],
 })
 export class SideMenuComponent {
   private authService = inject(AuthService);
@@ -53,13 +54,11 @@ export class SideMenuComponent {
 
   // Role-based menu items using MainStoreService computed properties
   readonly menuItems = computed<MenuItem[]>(() => {
-    const baseItems: MenuItem[] = [
-      { label: 'Dashboard', link: '/dashboard' }
-    ];
+    const baseItems: MenuItem[] = [{ label: 'Dashboard', link: '/dashboard' }];
 
     // Animal section - all users can view
     baseItems.push({ label: 'Lista de animales', link: '/animal/list' });
-    
+
     // Admin and Operator can create/edit animals
     if (this.mainStore.isOperatorOrAdmin()) {
       baseItems.push({ label: 'Crear animal', link: '/animal/create' });
@@ -67,7 +66,7 @@ export class SideMenuComponent {
 
     // Land section - all users can view
     baseItems.push({ label: 'Lista de predios', link: '/land/list' });
-    
+
     // Admin and Operator can create/edit lands
     if (this.mainStore.isOperatorOrAdmin()) {
       baseItems.push({ label: 'Crear predio', link: '/land/create' });
@@ -96,17 +95,21 @@ export class SideMenuComponent {
   constructor() {
     addIcons({
       logOutOutline,
-      personOutline
+      personOutline,
     });
   }
 
   getRoleDisplayName(): string {
     const roleId = this.userRoleId();
     switch (roleId) {
-      case 1: return 'Operador';
-      case 2: return 'Consulta';
-      case 3: return 'Administrador';
-      default: return 'Usuario';
+      case 1:
+        return 'Operador';
+      case 2:
+        return 'Consulta';
+      case 3:
+        return 'Administrador';
+      default:
+        return 'Usuario';
     }
   }
 

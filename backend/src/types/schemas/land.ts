@@ -20,13 +20,11 @@ export const CreateLandParams = Type.Object({
     minimum: -90,
     maximum: 90,
     description: "Latitud (–90 a 90)",
-    examples: [-34.478611, -33.245667, -32.876543]
   }),
   longitude: Type.Number({
     minimum: -180,
     maximum: 180,
     description: "Longitud (–180 a 180)",
-    examples: [-56.892778, -57.123456, -55.987654]
   })
 }, {
   examples: [
@@ -51,16 +49,14 @@ export const UpdateLandParams = Type.Partial(
       examples: ["Estancia San José (actualizado)", "Nueva Esperanza"] 
     }),
     latitude: Type.Number({
-      minimum: -90, 
-      maximum: 90, 
+      minimum: -90,
+      maximum: 90,
       description: "Latitud (–90 a 90)",
-      examples: [-34.479000, -33.246000]
     }),
     longitude: Type.Number({
-      minimum: -180, 
-      maximum: 180, 
+      minimum: -180,
+      maximum: 180,
       description: "Longitud (–180 a 180)",
-      examples: [-56.893000, -57.124000]
     }),
   })
 , {
@@ -83,7 +79,8 @@ export const LandSchema = Type.Object({
   id: Type.String({ format: "uuid" }),
   name: Type.String(),
   latitude: Type.Number(),
-  longitude: Type.Number()
+  longitude: Type.Number(),
+  image_path: Type.Optional(Type.String()),
 }, {
   examples: [
     {

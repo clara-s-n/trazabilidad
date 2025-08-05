@@ -100,6 +100,67 @@
       </ion-col>
     </ion-row>
 
+    <!-- Imagen del predio -->
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" size-sm="8" size-md="6">
+        <ion-item lines="none">
+          <ion-label position="stacked">Imagen del predio</ion-label>
+        </ion-item>
+
+        <div class="file-upload-container">
+          @if(!previewUrl()) {
+          <ion-button
+            expand="block"
+            color="medium"
+            class="upload-button"
+            (click)="fileInput.click()"
+          >
+            <ion-icon name="image-outline" slot="start"></ion-icon>
+            Seleccionar imagen
+          </ion-button>
+          } @else {
+          <div class="image-preview-container">
+            <img
+              [src]="previewUrl()"
+              alt="Vista previa del predio"
+              class="image-preview"
+            />
+            <div class="image-actions">
+              <ion-button
+                fill="clear"
+                color="medium"
+                (click)="fileInput.click()"
+              >
+                <ion-icon name="reload-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+              <ion-button fill="clear" color="danger" (click)="removeImage()">
+                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+          }
+          <input
+            #fileInput
+            type="file"
+            class="file-input-hidden"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+          />
+        </div>
+
+        @if(selectedFile) {
+        <ion-text color="medium" class="file-info">
+          <small
+            >{{ selectedFile.name }} ({{
+              (selectedFile.size / 1024).toFixed(1)
+            }}
+            KB)</small
+          >
+        </ion-text>
+        }
+      </ion-col>
+    </ion-row>
+
     <!-- Botón Guardar -->
     <ion-row class="ion-justify-content-center">
       <ion-col size="12" size-sm="8" size-md="6">

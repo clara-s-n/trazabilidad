@@ -50,12 +50,32 @@ export class EditPage {
     }
   }
 
-  async handleSave(payload: UpdateLand | CreateLand) {
+  async handleSave(payload: UpdateLand | (CreateLand & { file?: File })) {
     const currentLand = this.land();
     if (!currentLand) return;
 
     try {
+      // Extract file from payload if present
+      const file = (payload as any).file;
+      delete (payload as any).file;
+
+      // Update land data
       await this.landsService.updateLand(currentLand.id, payload as UpdateLand);
+
+      // If we have a file, upload it after land update
+      if (file) {
+        try {
+          const imageUploadResult = await this.landsService.uploadLandImage(
+            currentLand.id,
+            file
+          );
+          console.log('Image uploaded successfully:', imageUploadResult);
+        } catch (imageError) {
+          console.error('Error uploading image:', imageError);
+          // Land was still updated, continue to detail page
+        }
+      }
+
       this.router.navigate(['/land', currentLand.id]);
     } catch (error) {
       console.error('Error updating land:', error);

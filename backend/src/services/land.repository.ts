@@ -46,7 +46,12 @@ export class LandRepository {
 
   async updateLand(
     id: string,
-    data: { name?: string; latitude?: number; longitude?: number }
+    data: {
+      name?: string;
+      latitude?: number;
+      longitude?: number;
+      image_path?: string;
+    }
   ): Promise<Land | null> {
     try {
       const sets: string[] = [];
@@ -62,6 +67,10 @@ export class LandRepository {
       if (data.longitude) {
         params.push(data.longitude);
         sets.push(`longitude=$${params.length}`);
+      }
+      if (data.image_path !== undefined) {
+        params.push(data.image_path);
+        sets.push(`image_path=$${params.length}`);
       }
       const { rows } = await query(
         `UPDATE lands SET ${sets.join(",")}

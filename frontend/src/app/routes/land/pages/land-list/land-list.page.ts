@@ -3,6 +3,7 @@ import { Component, inject, OnInit, resource, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Land } from '../../../../model/land';
 import { LandsService } from '../../../../services/lands.service';
+import { environment } from '../../../../../environments/environment';
 import {
   IonButton,
   IonButtons,
@@ -161,5 +162,22 @@ export class ListPage implements OnInit {
 
   reload() {
     this.landsResource.reload();
+  }
+
+  getImageUrl(imagePath: string | undefined): string {
+    if (!imagePath) return 'assets/images/placeholder-land.jpg';
+
+    // If the path is a full URL, return as is
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+
+    // Otherwise, construct the URL using the backend API URL
+    return `${environment.apiUrl}public/${imagePath}`;
+  }
+
+  onImageError(event: any) {
+    // Replace broken image with placeholder
+    event.target.src = 'assets/images/placeholder-land.jpg';
   }
 }

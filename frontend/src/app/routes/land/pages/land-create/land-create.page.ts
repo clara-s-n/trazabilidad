@@ -38,9 +38,32 @@ export class LandCreatePage implements OnInit {
   }
 
   /** Acepta payload de creación o edición, pero crea sólo CreateLandParams */
-  async handleSave(payload: CreateLand | UpdateLand) {
-    // Para creación, payload incluirá todos los campos obligatorios
-    await this.landsService.createLand(payload as CreateLand);
-    this.router.navigate(['/land/list']);
+  async handleSave(payload: CreateLand | (UpdateLand & { file?: File })) {
+    try {
+      // Extract file from payload if present
+      const file = (payload as any).file;
+      delete (payload as any).file;
+
+      // Para creación, payload incluirá todos los campos obligatorios
+      const newLand = await this.landsService.createLand(payload as CreateLand);
+
+      // If we have a file, upload it after land creation
+      if (file) {
+        try {
+          const imageUploadResult = await this.landsService.uploadLandImage(
+            newLand.id,
+            file
+          );
+          console.log('Image uploaded successfully:', imageUploadResult);
+        } catch (imageError) {
+          console.error('Error uploading image:', imageError);
+          // Land was still created, continue to list page
+        }
+      }
+
+      this.router.navigate(['/land/list']);
+    } catch (error) {
+      console.error('Error creating land:', error);
+    }
   }
 }
