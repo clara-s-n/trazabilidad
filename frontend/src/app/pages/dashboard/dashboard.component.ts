@@ -59,8 +59,6 @@ export class DashboardComponent implements OnInit {
   readonly userId = computed(() => this.mainStore.userId());
   userIdValue = this.userId();
 
-  
-
   constructor() {
     addIcons({
       pawOutline,

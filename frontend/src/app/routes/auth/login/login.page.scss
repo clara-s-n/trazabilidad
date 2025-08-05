@@ -25,13 +25,6 @@ ion-button {
 }
 
 form {
-  max-width: 400px;
   margin: 0 auto;
   padding: 24px;
-}
-
-@media (max-width: 768px) {
-  form {
-    padding: 16px;
-  }
 }
