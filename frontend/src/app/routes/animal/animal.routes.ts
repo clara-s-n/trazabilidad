@@ -30,6 +30,15 @@ export const routes: Routes = [
             (m) => m.AnimalCreatePage
           ),
       },
+      {
+        path: 'map',
+        canActivate: [userGuard], // All authenticated users can view map
+        data: { menu: true, section: 'Animales', title: 'Mapa de animales' },
+        loadComponent: () =>
+          import('./pages/animal-map/animal-map.page').then(
+            (m) => m.AnimalMapPage
+          ),
+      },
 
       // 3. Rutas con sub-segmentos dinámicos
       {

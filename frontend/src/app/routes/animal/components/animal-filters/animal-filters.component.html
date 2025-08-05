@@ -1,0 +1,88 @@
+<div class="filters-container ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-md="3">
+        <ion-item>
+          <ion-label position="stacked">Especie</ion-label>
+          <ion-select 
+            [value]="speciesFilter()" 
+            (ionChange)="onSpeciesChange($event)"
+            placeholder="Todas las especies">
+            <ion-select-option [value]="null">Todas</ion-select-option>
+            @for (species of speciesList; track species) {
+              <ion-select-option [value]="species">{{ species }}</ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      
+      <ion-col size="12" size-md="3">
+        <ion-item>
+          <ion-label position="stacked">Región</ion-label>
+          <ion-select 
+            [value]="regionFilter()" 
+            (ionChange)="onRegionChange($event)"
+            placeholder="Todas las regiones">
+            <ion-select-option [value]="null">Todas</ion-select-option>
+            @for (region of regionsList; track region) {
+              <ion-select-option [value]="region">{{ region }}</ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      
+      <ion-col size="12" size-md="6">
+        <ion-item>
+          <ion-label position="stacked">Periodo</ion-label>
+          <div class="date-range-container">
+            <ion-datetime-button datetime="from-date" class="date-picker"></ion-datetime-button>
+            <span class="date-separator">hasta</span>
+            <ion-datetime-button datetime="to-date" class="date-picker"></ion-datetime-button>
+          </div>
+        </ion-item>
+        
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime 
+              id="from-date"
+              presentation="date" 
+              [value]="fromDate()" 
+              (ionChange)="onFromDateChange($event)"
+              [max]="toDate() || undefined">
+            </ion-datetime>
+          </ng-template>
+        </ion-modal>
+        
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime 
+              id="to-date" 
+              presentation="date" 
+              [value]="toDate()" 
+              (ionChange)="onToDateChange($event)"
+              [min]="fromDate() || undefined">
+            </ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-col>
+    </ion-row>
+    
+    <ion-row>
+      <ion-col class="ion-text-end">
+        <ion-button 
+          fill="clear" 
+          color="medium"
+          (click)="clearFilters()">
+          <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+          Limpiar
+        </ion-button>
+        <ion-button 
+          color="primary" 
+          (click)="applyFilters()">
+          <ion-icon name="filter-outline" slot="start"></ion-icon>
+          Filtrar
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>
