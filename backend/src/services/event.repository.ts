@@ -8,6 +8,16 @@ export class EventRepository {
     comments?: string;
     created_by: string;
   }): Promise<{ id: string }> {
+    // First check if the event type exists
+    const { rows: eventTypeRows } = await query(
+      `SELECT id FROM event_type WHERE name = $1`,
+      [data.event_type]
+    );
+
+    if (eventTypeRows.length === 0) {
+      throw new Error(`Event type '${data.event_type}' not found. Available types: Weighing, Vaccination, Sale`);
+    }
+
     const { rows } = await query(
       `INSERT INTO events(id, event_type, date, comments, created_by)
        VALUES (
