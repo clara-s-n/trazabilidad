@@ -37,7 +37,7 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
         },
       },
     },
-    onRequest: fastify.authenticate,
+    onRequest: fastify.verifyAdmin,
     handler: async (request, reply) => {
       // Si la query viene vacía, se retornan todos los animales
       //const filters = request.query as AnimalFilter;
@@ -59,7 +59,7 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       ],
       body: AnimalPost,
     },
-    onRequest: fastify.verifyOperator,
+    onRequest: fastify.verifyOperatorOrAdmin,
     handler: async (request, reply) => {
       const animalData = request.body as AnimalPost;
       const newAnimal = await animalRepository.createAnimal(animalData);

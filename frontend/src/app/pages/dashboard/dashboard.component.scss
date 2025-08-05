@@ -1,0 +1,46 @@
+h1 {
+  color: var(--ion-color-primary);
+  margin-bottom: 8px;
+}
+
+p {
+  color: var(--ion-color-medium);
+  margin-bottom: 24px;
+}
+
+ion-card {
+  height: 100%;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+ion-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+ion-card-header {
+  text-align: center;
+  padding-bottom: 8px;
+}
+
+ion-card-title {
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+ion-card-content {
+  text-align: center;
+  color: var(--ion-color-medium);
+  font-size: 0.9rem;
+}
+
+ion-icon {
+  margin-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+  ion-card {
+    margin-bottom: 16px;
+  }
+}

@@ -9,7 +9,7 @@ export const adminGuard: CanActivateFn = (route, state) => {
   // Verifica si el usuario tiene el rol de administrador
   if (!mainStoreService.isAdmin()) {
     console.warn('Acceso denegado: el usuario no es administrador');
-    router.navigate(['/']); // Redirige a la página de inicio si no es administrador
+    router.navigate(['/dashboard']); // Redirige al dashboard si no es administrador
     return false; // Bloquea el acceso si no es administrador
   }
   return true; // Permite el acceso si es administrador

@@ -1,27 +1,40 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, resource, signal } from '@angular/core';
 import { Land } from '../../../../model/land';
 import { LandsService } from '../../../../services/lands.service';
 import {
   IonButton,
   IonButtons,
+  IonCol,
   IonContent,
+  IonFab,
+  IonFabButton,
   IonHeader,
   IonIcon,
-  IonItem,
-  IonList,
-  IonText,
+  IonRow,
+  IonSpinner,
   IonTitle,
   IonToolbar,
+  IonGrid,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonItem,
+  IonLabel,
   ModalController,
 } from '@ionic/angular/standalone';
 import { DeleteLandModalComponent } from '../../components/delete-land-modal/delete-land-modal.component';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { addIcons } from 'ionicons';
 import {
   locationOutline,
   eyeOutline,
   createOutline,
   trashOutline,
+  addOutline,
+  pencilOutline,
+  homeOutline,
 } from 'ionicons/icons';
 
 @Component({
@@ -30,17 +43,27 @@ import {
   styleUrls: ['./list.page.scss'],
   standalone: true,
   imports: [
+    CommonModule,
+    RouterLink,
     IonHeader,
     IonToolbar,
     IonTitle,
     IonButtons,
     IonButton,
     IonContent,
-    IonList,
-    IonItem,
+    IonSpinner,
+    IonRow,
     IonIcon,
-    IonText,
-    RouterLink,
+    IonCol,
+    IonFab,
+    IonFabButton,
+    IonGrid,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardTitle,
+    IonItem,
+    IonLabel,
   ],
 })
 export class ListPage implements OnInit {
@@ -50,6 +73,11 @@ export class ListPage implements OnInit {
 
   private landService: LandsService = inject(LandsService);
   private modalController: ModalController = inject(ModalController);
+  private router = inject(Router);
+
+  public landsResource = resource({
+    loader: async () => await this.landService.getAllLands(),
+  });
 
   constructor() {
     addIcons({
@@ -57,6 +85,9 @@ export class ListPage implements OnInit {
       eyeOutline,
       createOutline,
       trashOutline,
+      addOutline,
+      pencilOutline,
+      homeOutline,
     });
   }
 
@@ -107,5 +138,25 @@ export class ListPage implements OnInit {
       ? 'E'
       : 'W';
     return `${Math.abs(value).toFixed(4)}° ${direction}`;
+  }
+
+  goToSpecificLand(land: Land) {
+    this.router.navigate([`/land/${land.id}`]);
+  }
+
+  goToEdit(land: Land) {
+    this.router.navigate([`/land/edit/${land.id}`]);
+  }
+
+  goToCreate() {
+    this.router.navigate(['/land/create']);
+  }
+
+  goToDashboard() {
+    this.router.navigate(['/dashboard']);
+  }
+
+  reload() {
+    this.landsResource.reload();
   }
 }

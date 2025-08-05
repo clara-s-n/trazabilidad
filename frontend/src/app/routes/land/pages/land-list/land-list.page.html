@@ -1,62 +1,100 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Predios</ion-title>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" [routerLink]="['/dashboard']">
+        <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Lista de Predios</ion-title>
     <ion-buttons slot="end">
-      <ion-button [routerLink]="['/land/create']">Nuevo Predio</ion-button>
+      <ion-button [routerLink]="['/land/create']" fill="clear">
+        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
 <ion-content class="ion-padding">
-  @if(lands().length === 0) {
-  <div class="empty-state">
-    <ion-text color="medium">
-      <h2>No hay predios registrados</h2>
-      <p>Comience creando su primer predio para gestionar los animales.</p>
-    </ion-text>
-    <ion-button expand="block" [routerLink]="['/land/create']">
-      Crear Primer Predio
-    </ion-button>
-  </div>
-  } @else {
-  <ion-list>
-    @for(land of lands(); track land.id) {
-    <ion-item class="land-item">
-      <div class="land-info">
-        <h2>{{ land.name }}</h2>
-        <p class="coordinates">
-          <ion-icon name="location-outline"></ion-icon>
-          {{ formatCoordinate(land.latitude, true) }}, {{
-          formatCoordinate(land.longitude, false) }}
-        </p>
-        <p class="coordinates-decimal">
-          {{ land.latitude }}, {{ land.longitude }}
-        </p>
-      </div>
-      <div class="land-actions" slot="end">
-        <ion-button size="small" fill="clear" [routerLink]="['/land', land.id]">
-          <ion-icon name="eye-outline"></ion-icon>
-          Ver
-        </ion-button>
-        <ion-button
-          size="small"
-          fill="clear"
-          [routerLink]="['/land/edit', land.id]"
-        >
-          <ion-icon name="create-outline"></ion-icon>
-          Editar
-        </ion-button>
-        <ion-button
-          size="small"
-          color="danger"
-          fill="clear"
-          (click)="confirmDelete(land)"
-        >
-          <ion-icon name="trash-outline"></ion-icon>
-          Eliminar
-        </ion-button>
-      </div>
-    </ion-item>
-    }
-  </ion-list>
-  }
+  <ion-grid>
+    @if (landsResource.status() === 'loading') {
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <ion-spinner></ion-spinner>
+        <p>Cargando predios...</p>
+      </ion-col>
+    </ion-row>
+    } @else if (landsResource.status() === 'error') {
+    <ion-row>
+      <ion-col size="12">
+        <ion-card color="danger">
+          <ion-card-header>
+            <ion-card-title>Error al cargar predios</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>Hubo un problema al cargar la lista de predios.</p>
+            <ion-button expand="block" (click)="reload()"
+              >Reintentar</ion-button
+            >
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    } @else if (landsResource.status() === 'resolved') { @if
+    ((landsResource.value() ?? []).length === 0) {
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <ion-card>
+          <ion-card-content>
+            <h3>No hay predios registrados</h3>
+            <p>Comienza creando tu primer predio.</p>
+            <ion-button expand="block" [routerLink]="['/land/create']">
+              <ion-icon slot="start" name="add-outline"></ion-icon>
+              Crear Predio
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    } @else { @for (land of landsResource.value() ?? []; track land.id) {
+    <ion-row>
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>{{ land.name }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item lines="none">
+              <ion-label>
+                <p><strong>Superficie:</strong> {{ land.area }} ha</p>
+                <p><strong>Ubicación:</strong> {{ land.location }}</p>
+              </ion-label>
+            </ion-item>
+
+            <div class="action-buttons">
+              <ion-button
+                fill="outline"
+                size="small"
+                (click)="goToSpecificLand(land)"
+              >
+                <ion-icon slot="start" name="eye-outline"></ion-icon>
+                Ver
+              </ion-button>
+              <ion-button fill="clear" size="small" (click)="goToEdit(land)">
+                <ion-icon slot="start" name="pencil-outline"></ion-icon>
+                Editar
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    } } }
+  </ion-grid>
+
+  <!-- Floating Action Button -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button [routerLink]="['/land/create']">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

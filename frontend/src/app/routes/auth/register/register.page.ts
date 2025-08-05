@@ -1,36 +1,85 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import UserForm from '../../user/components/user-form/user-form.component';
-import { UserService } from 'src/app/services/user.service';
+import { FormsModule } from '@angular/forms';
+import {
+  IonButton,
+  IonCol,
+  IonRow,
+  IonGrid,
+  IonInput,
+  IonItem,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonButtons,
+  IonBackButton,
+} from '@ionic/angular/standalone';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-register',
-  standalone: true,
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
-  imports: [UserForm],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonButton,
+    IonCol,
+    IonRow,
+    IonGrid,
+    IonInput,
+    IonItem,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButtons,
+    IonBackButton,
+  ],
 })
 export class RegisterPage {
-  private userService = inject(UserService);
-  private router = inject(Router);
+  email = signal<string>('');
+  password = signal<string>('');
+  confirmPassword = signal<string>('');
+  loading = signal<boolean>(false);
+  error = signal<string>('');
 
-  async onSubmit(data: { email: string; password: string; repeatPassword?: string; role_id: number }) {
-    const user: any = {
-      email: data.email,
-      password: data.password,
-      role_id: data.role_id
-    };
-    if (data.repeatPassword) {
-      user.repeatPassword = data.repeatPassword;
+  private router = inject(Router);
+  private authService = inject(AuthService);
+
+  async onSubmit() {
+    if (!this.email() || !this.password() || !this.confirmPassword()) {
+      this.error.set('Todos los campos son requeridos');
+      return;
     }
+
+    if (this.password() !== this.confirmPassword()) {
+      this.error.set('Las contraseñas no coinciden');
+      return;
+    }
+
+    this.loading.set(true);
+    this.error.set('');
+
     try {
-      const usuarioCreado = await this.userService.postUser(user);
+      await this.authService.register(this.email(), this.password());
+
+      // Redirect to login after successful registration
       this.router.navigate(['/auth/login']);
     } catch (error) {
-      console.error('Error al crear el usuario:', error);
+      console.error('Register failed:', error);
+      this.error.set(
+        'Error al registrar usuario. Por favor, inténtalo de nuevo.'
+      );
+    } finally {
+      this.loading.set(false);
     }
   }
-  onCancel() {
+
+  goToLogin() {
     this.router.navigate(['/auth/login']);
   }
 }
