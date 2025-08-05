@@ -17,6 +17,11 @@ export class AuthService {
   private store = inject(MainStoreService);
   private api = environment.apiUrl;
 
+  // Role IDs as constants
+  readonly ROLE_OPERATOR = 1;
+  readonly ROLE_CONSULTA = 2;
+  readonly ROLE_ADMIN = 3;
+
   async login(email: string, password: string): Promise<boolean> {
     try {
       const loginData: Login = { email, password };
@@ -95,6 +100,32 @@ export class AuthService {
     // Check if token exists and is not empty
     const token = this.store.token();
     return !!(token && token.trim().length > 0);
+  }
+
+  // Check if user is admin (role_id 3)
+  isAdmin(): boolean {
+    return this.store.userRoleId() === this.ROLE_ADMIN;
+  }
+  
+  // Check if user is operator (role_id 1)
+  isOperator(): boolean {
+    return this.store.userRoleId() === this.ROLE_OPERATOR;
+  }
+  
+  // Check if user is consulta (role_id 2)
+  isConsulta(): boolean {
+    return this.store.userRoleId() === this.ROLE_CONSULTA;
+  }
+  
+  // Check if user is operator or admin
+  isOperatorOrAdmin(): boolean {
+    const roleId = this.store.userRoleId();
+    return roleId === this.ROLE_OPERATOR || roleId === this.ROLE_ADMIN;
+  }
+  
+  // Check if user can manage users (admin only)
+  canManageUsers(): boolean {
+    return this.isAdmin();
   }
 
   getToken(): string | null {

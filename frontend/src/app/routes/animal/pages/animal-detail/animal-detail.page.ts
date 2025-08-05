@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, computed } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import {
@@ -37,6 +37,8 @@ import {
 } from 'ionicons/icons';
 import { AnimalService } from 'src/app/services/animal.service';
 import { TagService } from 'src/app/services/tag.service';
+import { MainStoreService } from 'src/app/services/main-store.service';
+import { RolePermissionService } from 'src/app/services/role-permission.service';
 import { ChangeTagStatusComponent } from '../../components/change-tag-status/change-tag-status.component';
 import { TagHistoryComponent } from '../../components/tag-history/tag-history.component';
 import { CompleteAnimal } from 'src/app/model/animal';
@@ -93,9 +95,18 @@ export class DetailPage implements OnInit {
   private readonly tagService = inject(TagService);
   private readonly modalController = inject(ModalController);
   private readonly title = inject(Title);
+  private readonly mainStore = inject(MainStoreService);
+  private readonly rolePermissionService = inject(RolePermissionService);
 
   animal: CompleteAnimal | null = null;
   loading = false;
+
+  // Role-based computed properties using the permission service
+  readonly permissions = computed(() => this.rolePermissionService.permissions());
+  readonly canEditAnimals = computed(() => this.permissions().canEditAnimals);
+  readonly canManageEvents = computed(() => this.permissions().canManageEvents);
+  readonly isAdmin = computed(() => this.mainStore.isAdmin());
+  readonly isConsulta = computed(() => this.mainStore.userRoleId() === 2);
 
   async ngOnInit() {
     this.title.setTitle('Detalle del Animal | Sistema de Trazabilidad');
@@ -149,7 +160,7 @@ export class DetailPage implements OnInit {
   }
 
   goToEdit() {
-    if (this.animal) {
+    if (this.animal && this.canEditAnimals()) {
       this.router.navigate(['/animal/edit', this.animal.id]);
     }
   }

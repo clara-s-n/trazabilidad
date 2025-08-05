@@ -8,7 +8,7 @@ export const adminOrOperatorGuard: CanActivateFn = (route, state) => {
 
   if (!store.isOperatorOrAdmin()) {
     console.warn('Acceso denegado: el usuario no es administrador ni operador');
-    router.navigate(['/dashboard']); // Redirige al dashboard si no es admin/operador
+    router.navigate(['/unauthorized']); // Redirige a página de acceso denegado
     return false; // Bloquea el acceso si no es administrador ni operador
   }
 

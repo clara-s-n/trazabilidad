@@ -21,6 +21,7 @@ import {
   withInterceptors,
 } from '@angular/common/http';
 import { authInterceptor } from './app/interceptors/auth.interceptor';
+import { authorizationInterceptor } from './app/interceptors/authorization.interceptor';
 import { IonicModule } from '@ionic/angular';
 import { AppTitleStrategy } from './app/services/title-strategy.service';
 
@@ -34,7 +35,7 @@ bootstrapApplication(AppComponent, {
       withPreloading(PreloadAllModules),
       withComponentInputBinding()
     ),
-    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([authInterceptor, authorizationInterceptor])),
     importProvidersFrom(BrowserAnimationsModule, IonicModule.forRoot()),
   ],
 });

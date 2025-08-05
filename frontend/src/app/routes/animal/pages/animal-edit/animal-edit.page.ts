@@ -4,7 +4,8 @@ import {
   computed,
   inject,
   input,
-  resource} from '@angular/core';
+  resource,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { AnimalFormComponent } from '../../components/animal-form/animal-form.component';
@@ -57,17 +58,22 @@ import { Animal } from 'src/app/model/animal';
 export class AnimalEditPage {
   private readonly animalService = inject(AnimalService);
   private readonly router = inject(Router);
+  private readonly title = inject(Title);
   id = input.required<string>();
 
   /** Recurso reactivo que carga el animal automáticamente */
   readonly animalResource = resource<Animal, undefined>({
     loader: async () => {
-    const id = this.id();
-    console.log(this.id)
-    console.log(id)
-    if (!id) throw new Error('ID no disponible');
-    return await this.animalService.getAnimal(id);
-  }});
+      const id = this.id();
+      console.log(this.id);
+      console.log(id);
+      if (!id) throw new Error('ID no disponible');
+      return await this.animalService.getAnimal(id);
+    },
+  });
+
+  // Computed for easy access to the animal data
+  readonly animal = computed(() => this.animalResource.value());
 
   ngOnInit() {
     this.title.setTitle('Editar Animal | Sistema de Trazabilidad');

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {
   IonApp,
@@ -7,8 +7,10 @@ import {
   IonTitle,
   IonToolbar,
   IonButtons,
+  IonBadge,
 } from '@ionic/angular/standalone';
 import { LogoutButtonComponent } from 'src/app/components/logout-button/logout-button.component';
+import { RolePermissionService } from 'src/app/services/role-permission.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -23,9 +25,14 @@ import { LogoutButtonComponent } from 'src/app/components/logout-button/logout-b
     IonTitle,
     IonToolbar,
     IonButtons,
+    IonBadge,
     LogoutButtonComponent,
   ],
 })
 export class MainLayoutComponent {
+  private rolePermissionService = inject(RolePermissionService);
+  
+  readonly roleName = computed(() => this.rolePermissionService.getRoleName());
+  
   constructor() {}
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, resource, OnInit } from '@angular/core';
+import { Component, inject, resource, OnInit, computed } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import {
@@ -22,6 +22,7 @@ import {
   IonCardTitle,
   IonItem,
   IonLabel,
+  IonBadge,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -32,6 +33,7 @@ import {
 } from 'ionicons/icons';
 import { Animal } from 'src/app/model/animal';
 import { AnimalService } from 'src/app/services/animal.service';
+import { RolePermissionService } from 'src/app/services/role-permission.service';
 
 @Component({
   selector: 'app-animal-list',
@@ -60,12 +62,19 @@ import { AnimalService } from 'src/app/services/animal.service';
     IonCardTitle,
     IonItem,
     IonLabel,
+    IonBadge,
   ],
 })
 export class ListPage implements OnInit {
   private router = inject(Router);
   private animalService = inject(AnimalService);
   private title = inject(Title);
+  private rolePermissionService = inject(RolePermissionService);
+
+  // Role-based computed properties
+  readonly permissions = computed(() => this.rolePermissionService.permissions());
+  readonly canCreateAnimals = computed(() => this.permissions().canCreateAnimals);
+  readonly canEditAnimals = computed(() => this.permissions().canEditAnimals);
 
   constructor() {
     addIcons({

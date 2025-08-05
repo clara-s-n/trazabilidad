@@ -28,6 +28,9 @@ export class MainStoreService {
   // Computed signal para verificar si el usuario es un operador (role_id = 1)
   public isOperator = computed(() => this.userRoleId() === 1);
 
+  // Computed signal para verificar si el usuario es consulta (role_id = 2)
+  public isConsulta = computed(() => this.userRoleId() === 2);
+
   // Computed signal para verificar si el usuario es operador o administrador
   public isOperatorOrAdmin = computed(() => {
     if (this.isOperator()) {

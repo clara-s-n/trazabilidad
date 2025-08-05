@@ -67,18 +67,22 @@ const jwtPlugin = fp<FastifyJWTOptions>(async (fastify) => {
   const verifySelfOrAdmin: authenticateFunction = async (request, reply) => {
     await request.jwtVerify();
     const { user_id: targetId } = request.params as { user_id: string };
-    const { id} = request.user as { id: string };
+    const { id, role_id } = request.user as { id: string, role_id: number };
 
+    // Si es el mismo usuario, permitir acceso
     if (id === targetId) {
-      return; // es el mismo usuario
+      return; 
     }
-    try {
-      fastify.verifyAdmin(request, reply);
-    } catch (error) {
-      reply.code(403).send({
-        error: `Forbidden: Admin or Owneronly, info: ${id}`
-      });
+    
+    // Si es admin, permitir acceso
+    if (role_id === 3) {
+      return;
     }
+    
+    // Si no es ni el mismo usuario ni admin, denegar acceso
+    return reply.code(403).send({
+      error: `Forbidden: Admin or Owner only, user_id: ${id}, target: ${targetId}`
+    });
   };
 
   // Registrar los métodos de autenticación

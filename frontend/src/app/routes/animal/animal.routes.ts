@@ -14,7 +14,7 @@ export const routes: Routes = [
       // 2. Rutas estáticas
       {
         path: 'list',
-        canActivate: [userGuard],
+        canActivate: [userGuard], // All authenticated users can view list
         data: { menu: true, section: 'Animales', title: 'Lista de animales' },
         loadComponent: () =>
           import('./pages/animal-list/animal-list.page').then(
@@ -23,7 +23,7 @@ export const routes: Routes = [
       },
       {
         path: 'create',
-        canActivate: [adminOrOperatorGuard],
+        canActivate: [adminOrOperatorGuard], // Only admin and operators can create
         data: { menu: true, section: 'Animales', title: 'Crear un animal' },
         loadComponent: () =>
           import('./pages/animal-create/animal-create.page').then(
@@ -34,7 +34,7 @@ export const routes: Routes = [
       // 3. Rutas con sub-segmentos dinámicos
       {
         path: 'edit/:id',
-        canActivate: [adminOrOperatorGuard],
+        canActivate: [adminOrOperatorGuard], // Only admin and operators can edit
         data: { title: 'Editar Animal' },
         loadComponent: () =>
           import('./pages/animal-edit/animal-edit.page').then(
@@ -43,7 +43,7 @@ export const routes: Routes = [
       },
       {
         path: 'events/:id/sale',
-        canActivate: [adminOrSelfGuard],
+        canActivate: [adminOrOperatorGuard], // Only admin and operators can manage sales
         data: { title: 'Ventas del Animal' },
         loadComponent: () =>
           import(
@@ -52,7 +52,7 @@ export const routes: Routes = [
       },
       {
         path: 'events/:id/sale/create',
-        canActivate: [adminOrSelfGuard],
+        canActivate: [adminOrOperatorGuard], // Only admin and operators can create sales
         data: { title: 'Registrar Venta' },
         loadComponent: () =>
           import(
@@ -61,7 +61,7 @@ export const routes: Routes = [
       },
       {
         path: 'events/:id/vaccination',
-        canActivate: [adminOrSelfGuard],
+        canActivate: [userGuard], // All users can view vaccinations
         data: { title: 'Vacunaciones del Animal' },
         loadComponent: () =>
           import(
@@ -70,7 +70,7 @@ export const routes: Routes = [
       },
       {
         path: 'events/:id/vaccination/create',
-        canActivate: [adminOrSelfGuard],
+        canActivate: [adminOrOperatorGuard], // Only admin and operators can create vaccinations
         data: { title: 'Registrar Vacunación' },
         loadComponent: () =>
           import(
@@ -79,7 +79,7 @@ export const routes: Routes = [
       },
       {
         path: 'events/:id/weighing',
-        canActivate: [adminOrSelfGuard],
+        canActivate: [userGuard], // All users can view weighings
         data: { title: 'Pesajes del Animal' },
         loadComponent: () =>
           import(
@@ -88,7 +88,7 @@ export const routes: Routes = [
       },
       {
         path: 'events/:id/weighing/create',
-        canActivate: [adminOrOperatorGuard],
+        canActivate: [adminOrOperatorGuard], // Only admin and operators can create weighings
         data: { title: 'Registrar Pesaje' },
         loadComponent: () =>
           import(
@@ -97,7 +97,7 @@ export const routes: Routes = [
       },
       {
         path: 'history/:id',
-        canActivate: [userGuard],
+        canActivate: [userGuard], // All users can view history
         data: { title: 'Historial del Animal' },
         loadComponent: () =>
           import('./pages/animal-history/animal-history.page').then(
@@ -106,7 +106,7 @@ export const routes: Routes = [
       },
       {
         path: 'movements/:id',
-        canActivate: [userGuard],
+        canActivate: [userGuard], // All users can view movements
         data: { title: 'Movimientos del Animal' },
         loadComponent: () =>
           import('./pages/animal-movement/animal-movement.page').then(
@@ -118,7 +118,7 @@ export const routes: Routes = [
       {
         path: ':userId/list',
         pathMatch: 'full',
-        canActivate: [adminOrSelfGuard],
+        canActivate: [adminOrSelfGuard], // Admin or owner
         data: { title: 'Mis Animales' },
         loadComponent: () =>
           import('./pages/animal-user-list/animal-user-list.page').then(
@@ -129,7 +129,7 @@ export const routes: Routes = [
       // 5. Ruta genérica detalle
       {
         path: ':animal_id',
-        canActivate: [userGuard],
+        canActivate: [userGuard], // All authenticated users can view details
         data: { title: 'Detalle del Animal' },
         loadComponent: () =>
           import('./pages/animal-detail/animal-detail.page').then(

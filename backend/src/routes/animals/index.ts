@@ -39,7 +39,7 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
         },
       },
     },
-    onRequest: fastify.verifyAdmin,
+    onRequest: fastify.authenticate, // All authenticated users can view animals
     handler: async (request, reply) => {
       // Si la query viene vacía, se retornan todos los animales
       //const filters = request.query as AnimalFilter;
@@ -108,7 +108,7 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
         404: { description: "Animal no encontrado" },
       },
     },
-    onRequest: fastify.verifyOperator,
+    onRequest: fastify.verifyOperatorOrAdmin, // Only operators and admins can edit
     handler: async (request, reply) => {
       const { animal_id } = request.params as AnimalParams;
       const updateData = request.body as UpdateAnimalType;

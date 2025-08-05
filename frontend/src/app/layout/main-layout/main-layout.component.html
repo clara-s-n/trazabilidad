@@ -2,7 +2,10 @@
 <ion-app>
   <ion-header>
     <ion-toolbar>
-      <ion-title>Sistema de Trazabilidad Animal</ion-title>
+      <ion-title>
+        Sistema de Trazabilidad Animal
+        <ion-badge color="primary" style="margin-left: 10px;">{{ roleName() }}</ion-badge>
+      </ion-title>
       <ion-buttons slot="end">
         <app-logout-button></app-logout-button>
       </ion-buttons>

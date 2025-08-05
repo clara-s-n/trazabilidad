@@ -10,7 +10,7 @@
       <ion-button fill="clear" [routerLink]="['/animal/list']">
         <ion-icon slot="icon-only" name="list-outline"></ion-icon>
       </ion-button>
-      @if (animal) {
+      @if (animal && canEditAnimals()) {
       <ion-button fill="clear" (click)="goToEdit()">
         <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
       </ion-button>
@@ -104,9 +104,11 @@
             </ion-item>
             }
             <div class="tag-actions">
+              @if (canEditAnimals()) {
               <ion-button fill="outline" size="small" (click)="openTagModal()">
                 {{ currentTag ? 'Cambiar Caravana' : 'Asignar Caravana' }}
               </ion-button>
+              }
               @if (currentTag) {
               <ion-button
                 fill="clear"
@@ -187,12 +189,14 @@
                   </ion-button>
                 </ion-col>
 
+                @if (canEditAnimals()) {
                 <ion-col size="6" size-md="4">
                   <ion-button expand="block" fill="solid" (click)="goToEdit()">
                     <ion-icon slot="start" name="pencil-outline"></ion-icon>
                     Editar
                   </ion-button>
                 </ion-col>
+                }
               </ion-row>
             </ion-grid>
           </ion-card-content>

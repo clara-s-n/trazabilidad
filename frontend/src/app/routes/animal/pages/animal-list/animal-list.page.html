@@ -7,9 +7,13 @@
     </ion-buttons>
     <ion-title>Lista de Animales</ion-title>
     <ion-buttons slot="end">
+      @if (canCreateAnimals()) {
       <ion-button [routerLink]="['/animal/create']" fill="clear">
         <ion-icon slot="icon-only" name="add-outline"></ion-icon>
       </ion-button>
+      } @else {
+      <ion-badge color="medium">Solo lectura</ion-badge>
+      }
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -45,12 +49,15 @@
       <ion-col size="12" class="ion-text-center">
         <ion-card>
           <ion-card-content>
-            <h3>No hay animales registrados</h3>
             <p>Comienza creando tu primer animal.</p>
+            @if (canCreateAnimals()) {
             <ion-button expand="block" [routerLink]="['/animal/create']">
               <ion-icon slot="start" name="add-outline"></ion-icon>
               Crear Animal
             </ion-button>
+            } @else {
+            <ion-badge color="warning">Permisos insuficientes para crear animales</ion-badge>
+            }
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -82,10 +89,12 @@
                 <ion-icon slot="start" name="eye-outline"></ion-icon>
                 Ver
               </ion-button>
+              @if (canEditAnimals()) {
               <ion-button fill="clear" size="small" (click)="goToEdit(animal)">
                 <ion-icon slot="start" name="pencil-outline"></ion-icon>
                 Editar
               </ion-button>
+              }
             </div>
           </ion-card-content>
         </ion-card>
@@ -95,9 +104,11 @@
   </ion-grid>
 
   <!-- Floating Action Button -->
+  @if (canCreateAnimals()) {
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button [routerLink]="['/animal/create']">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+  }
 </ion-content>

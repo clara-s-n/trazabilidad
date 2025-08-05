@@ -9,6 +9,10 @@ export const routes: Routes = [
       import('./routes/auth/auth.routes').then((m) => m.routes),
   },
   {
+    path: 'unauthorized',
+    loadComponent: () => import('./pages/unauthorized/unauthorized.page').then(m => m.UnauthorizedPage)
+  },
+  {
     path: '',
     canActivate: [authGuard],
     data: { title: 'Sistema de Trazabilidad' },
