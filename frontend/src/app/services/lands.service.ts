@@ -4,15 +4,11 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
-import {
-  Land,
-  CreateLand,
-  UpdateLand,
-  LandParams
-} from '../model/land';
+import { Land, CreateLand, UpdateLand, LandParams } from '../model/land';
+import { Animal } from '../model/animal';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LandsService {
   private http = inject(HttpClient);
@@ -40,6 +36,33 @@ export class LandsService {
 
   /** DELETE /predios/:id → no devuelve contenido */
   async deleteLand(params: LandParams): Promise<void> {
-    return firstValueFrom(this.http.delete<void>(`${this.baseUrl}/${params.land_id}`));
+    return firstValueFrom(
+      this.http.delete<void>(`${this.baseUrl}/${params.land_id}`)
+    );
+  }
+
+  /** GET /predios/:id/animals → obtiene animales del predio */
+  async getLandAnimals(id: string): Promise<Animal[]> {
+    return firstValueFrom(
+      this.http.get<Animal[]>(`${this.baseUrl}/${id}/animals`)
+    );
+  }
+
+  /** Check if a land name already exists */
+  async checkLandNameExists(
+    name: string,
+    excludeId?: string
+  ): Promise<boolean> {
+    try {
+      const lands = await this.getAllLands();
+      return lands.some(
+        (land) =>
+          land.name.toLowerCase() === name.toLowerCase() &&
+          land.id !== excludeId
+      );
+    } catch (error) {
+      console.error('Error checking land name existence:', error);
+      return false;
+    }
   }
 }

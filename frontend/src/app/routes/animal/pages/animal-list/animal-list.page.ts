@@ -1,21 +1,34 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, resource } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {
   IonButton,
+  IonButtons,
   IonCol,
   IonContent,
+  IonFab,
+  IonFabButton,
   IonHeader,
   IonIcon,
-  IonList,
   IonRow,
   IonSpinner,
-  IonText,
   IonTitle,
   IonToolbar,
+  IonGrid,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonItem,
+  IonLabel,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { eyeOutline } from 'ionicons/icons';
+import {
+  addOutline,
+  eyeOutline,
+  pencilOutline,
+  homeOutline,
+} from 'ionicons/icons';
 import { Animal } from 'src/app/model/animal';
 import { AnimalService } from 'src/app/services/animal.service';
 
@@ -26,25 +39,38 @@ import { AnimalService } from 'src/app/services/animal.service';
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink,
     IonHeader,
     IonToolbar,
     IonTitle,
-    IonContent,
-    IonList,
-    IonSpinner,
-    IonText,
+    IonButtons,
     IonButton,
+    IonContent,
+    IonSpinner,
     IonRow,
     IonIcon,
     IonCol,
+    IonFab,
+    IonFabButton,
+    IonGrid,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardTitle,
+    IonItem,
+    IonLabel,
   ],
 })
 export class ListPage {
   constructor() {
     addIcons({
       eyeOutline,
+      pencilOutline,
+      addOutline,
+      homeOutline,
     });
   }
+
   private animalService = inject(AnimalService);
   private router = inject(Router);
 
@@ -53,17 +79,22 @@ export class ListPage {
   });
 
   goToSpecificAnimal(animal: Animal) {
-    console.log('Animal:', animal);
-    console.log(`Navigating to animal profile with ID: ${animal.id} `);
     this.router.navigate([`/animal/${animal.id}`]);
   }
 
-  reload() {
-    window.location.reload();
+  goToEdit(animal: Animal) {
+    this.router.navigate([`/animal/edit/${animal.id}`]);
   }
-  /*
-  goToAnimalModification(animal: Animal) {
-    console.log(`Navigating to animal edit with ID: ${animal.animal_id}`);
-    this.router.navigate([`/animal/edit/${animal.animal_id}`]);
-  }*/
+
+  goToCreate() {
+    this.router.navigate(['/animal/create']);
+  }
+
+  goToDashboard() {
+    this.router.navigate(['/dashboard']);
+  }
+
+  reload() {
+    this.animalsResource.reload();
+  }
 }

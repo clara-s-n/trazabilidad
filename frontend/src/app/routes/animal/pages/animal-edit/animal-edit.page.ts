@@ -1,9 +1,21 @@
-// animal-edit.ts
-
 import { Component, ChangeDetectionStrategy, computed, inject, input, resource } from '@angular/core';
 import { Router } from '@angular/router';
 import { AnimalFormComponent } from '../../components/animal-form/animal-form.component';
-import { IonSpinner, IonText } from '@ionic/angular/standalone';
+import {
+  IonSpinner,
+  IonText,
+  IonHeader,
+  IonToolbar,
+  IonButtons,
+  IonBackButton,
+  IonTitle,
+  IonContent,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonCard,
+  IonCardContent,
+} from '@ionic/angular/standalone';
 import { AnimalService } from 'src/app/services/animal.service';
 import { Animal } from 'src/app/model/animal';
 
@@ -16,11 +28,27 @@ import { Animal } from 'src/app/model/animal';
   templateUrl: './animal-edit.page.html',
   styleUrls: ['./edit.page.scss'],
   standalone: true,
+  imports: [
+    AnimalFormComponent,
+    IonSpinner,
+    IonText,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonBackButton,
+    IonTitle,
+    IonContent,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonCard,
+    IonCardContent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [AnimalFormComponent, IonSpinner, IonText],
   host: { class: 'animal-edit-page' }
+
 })
-export class AnimalEditPage {
+export class AnimalEditPage implements OnInit {
   private animalService = inject(AnimalService);
   private router = inject(Router);
 
@@ -47,6 +75,7 @@ export class AnimalEditPage {
   }) {
     try {
       await this.animalService.updateAnimal(this.animal_id(), data);
+      // Redirect to detail page after successful update
       this.router.navigate(['/animal', this.animal_id()]);
     } catch (error) {
       console.error('Error al actualizar el animal:', error);

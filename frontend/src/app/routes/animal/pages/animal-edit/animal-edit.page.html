@@ -1,13 +1,46 @@
-@if (animalResource()) {
-<ion-spinner></ion-spinner>
-} @else if (animal()) {
-<app-animal-form
-  [isEditMode]="true"
-  [animal]="animal()"
-  (submitted)="onSubmit($event)"
-  (canceled)="onCancel()"
->
-</app-animal-form>
-} @else {
-<ion-text color="danger">No se encontró el animal.</ion-text>
-}
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        [defaultHref]="'/animal/' + animal_id()"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      @if (animal()) { Editar: {{ animal().breed }} } @else { Editar Animal }
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-md="8" offset-md="2" size-lg="6" offset-lg="3">
+        @if (loading()) {
+        <ion-card>
+          <ion-card-content class="ion-text-center">
+            <ion-spinner></ion-spinner>
+            <p>Cargando información del animal...</p>
+          </ion-card-content>
+        </ion-card>
+        } @else if (animal()) {
+        <app-animal-form
+          [isEditMode]="true"
+          [animal]="animal()"
+          (submitted)="onSubmit($event)"
+          (canceled)="onCancel()"
+        >
+        </app-animal-form>
+        } @else {
+        <ion-card color="danger">
+          <ion-card-content class="ion-text-center">
+            <ion-text color="danger">
+              <h3>Animal no encontrado</h3>
+              <p>No se pudo cargar la información del animal.</p>
+            </ion-text>
+          </ion-card-content>
+        </ion-card>
+        }
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

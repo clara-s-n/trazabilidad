@@ -34,7 +34,7 @@ export class SaleCreatePage {
   async handleSave(data: SaleCreate) {
     try {
       await this.saleService.createSale(this.id(), data);
-      this.router.navigate([`/animal/events/${this.id()}/weighing`]);
+      this.router.navigate([`/animal/events/${this.id()}/sale`]);
     } catch (err) {
       console.error('Error creando venta', err);
     }

@@ -1,0 +1,114 @@
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <h1>Panel de Control</h1>
+        <p>Bienvenido al Sistema de Trazabilidad Animal</p>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <!-- Animals Section -->
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card button="true" [routerLink]="['/animal/list']">
+          <ion-card-header>
+            <ion-icon
+              name="paw-outline"
+              size="large"
+              color="primary"
+            ></ion-icon>
+            <ion-card-title>Animales</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            Gestionar registro de animales, historial y eventos
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Lands Section -->
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card button="true" [routerLink]="['/land/list']">
+          <ion-card-header>
+            <ion-icon
+              name="business-outline"
+              size="large"
+              color="success"
+            ></ion-icon>
+            <ion-card-title>Predios</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            Administrar predios y ubicaciones de animales
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Users Section -->
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card button="true" [routerLink]="['/user/list']">
+          <ion-card-header>
+            <ion-icon
+              name="people-outline"
+              size="large"
+              color="warning"
+            ></ion-icon>
+            <ion-card-title>Usuarios</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            Gestionar usuarios y permisos del sistema
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Tags Section -->
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card button="true" [routerLink]="['/tags/list']">
+          <ion-card-header>
+            <ion-icon
+              name="pricetag-outline"
+              size="large"
+              color="secondary"
+            ></ion-icon>
+            <ion-card-title>Caravanas</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            Administrar caravanas electrónicas y asignaciones
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Reports Section -->
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card button="true" (click)="navigateTo('/reports')">
+          <ion-card-header>
+            <ion-icon
+              name="stats-chart-outline"
+              size="large"
+              color="tertiary"
+            ></ion-icon>
+            <ion-card-title>Reportes</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            Generar reportes y estadísticas del sistema
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Documentation Section -->
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card button="true" (click)="navigateTo('/help')">
+          <ion-card-header>
+            <ion-icon
+              name="document-text-outline"
+              size="large"
+              color="medium"
+            ></ion-icon>
+            <ion-card-title>Ayuda</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            Documentación y guías del sistema
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

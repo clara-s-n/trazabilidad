@@ -1,55 +1,70 @@
 import { Component, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { IonButton, IonCol, IonRow, IonGrid, IonInput } from '@ionic/angular/standalone';
-//import { UpperCasePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import {
+  IonButton,
+  IonCol,
+  IonRow,
+  IonGrid,
+  IonInput,
+  IonItem,
+} from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
-import { MainStoreService } from 'src/app/services/main-store.service';
-import { firstValueFrom } from 'rxjs';
-import { Login } from 'src/app/model/login';
-import { Token } from 'src/app/model/token';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [FormsModule, IonRow, IonCol, IonButton, IonGrid, IonInput],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonRow,
+    IonCol,
+    IonButton,
+    IonGrid,
+    IonInput,
+    IonItem,
+  ],
 })
 export class LoginPage {
   email = signal<string>('');
   password = signal<string>('');
+  loading = signal<boolean>(false);
+  error = signal<string>('');
 
-  private http = inject(HttpClient);
   private router = inject(Router);
-  private store = inject(MainStoreService);
-  private api = environment.apiUrl;
+  private authService = inject(AuthService);
 
   async onSubmit() {
-    const login: Login = {
-      email: this.email(),
-      password: this.password(),
-    };
+    if (!this.email() || !this.password()) {
+      this.error.set('Por favor, ingresa email y contraseña');
+      return;
+    }
 
-    console.log('Login data:', login);
+    this.loading.set(true);
+    this.error.set('');
 
     try {
-      const { token } = await firstValueFrom(
-        this.http.post<Token>(this.api + 'auth/login', login)
+      const success = await this.authService.login(
+        this.email(),
+        this.password()
       );
-      this.store.setToken(token);
 
-      /*
-      const user = await firstValueFrom(
-        this.http.get<User>(this.api + 'users/user_id/3600e259-0cc1-491d-9860-aa4cff12155c')
-      );
-      this.store.setUser(user);
-      */
-      this.router.navigate(['/animal/list']);
-    } catch (err) {
-      console.error('Error al iniciar sesión', err);
-      // Aquí podrías mostrar un toast o alerta
+      if (success) {
+        // Redirect to dashboard after successful login
+        this.router.navigate(['/dashboard']);
+      }
+    } catch (error) {
+      console.error('Login failed:', error);
+      this.error.set('Credenciales inválidas. Por favor, inténtalo de nuevo.');
+    } finally {
+      this.loading.set(false);
     }
+  }
+
+  goToRegister() {
+    this.router.navigate(['/auth/register']);
   }
 }

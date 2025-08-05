@@ -1,1 +1,77 @@
-<app-user-form [isEditMode]="false" (submitted)="onSubmit($event)"></app-user-form>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/auth/login"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Registrar Usuario</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="ion-padding">
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" size-md="8" size-lg="6">
+        <form (ngSubmit)="onSubmit()">
+          <h1 class="ion-text-center">Registrar Nuevo Usuario</h1>
+
+          <!-- Error message -->
+          @if (error()) {
+          <div class="error-message ion-text-center">{{ error() }}</div>
+          }
+
+          <ion-item>
+            <ion-input
+              type="email"
+              [ngModel]="email()"
+              (ngModelChange)="email.set($event)"
+              placeholder="Email"
+              required
+            >
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input
+              type="password"
+              [ngModel]="password()"
+              (ngModelChange)="password.set($event)"
+              placeholder="Contraseña"
+              required
+            >
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input
+              type="password"
+              [ngModel]="confirmPassword()"
+              (ngModelChange)="confirmPassword.set($event)"
+              placeholder="Confirmar Contraseña"
+              required
+            >
+            </ion-input>
+          </ion-item>
+
+          <ion-button
+            expand="block"
+            type="submit"
+            [disabled]="loading()"
+            class="ion-margin-top"
+          >
+            @if (loading()) { Registrando... } @else { Registrar Usuario }
+          </ion-button>
+
+          <ion-button
+            expand="block"
+            fill="outline"
+            (click)="goToLogin()"
+            [disabled]="loading()"
+            class="ion-margin-top"
+          >
+            Volver al Login
+          </ion-button>
+        </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

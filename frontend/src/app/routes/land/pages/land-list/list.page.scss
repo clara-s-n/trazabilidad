@@ -1,0 +1,75 @@
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  p {
+    margin-bottom: 30px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+}
+
+.land-item {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  margin-bottom: 8px;
+
+  .land-info {
+    flex: 1;
+
+    h2 {
+      margin: 0 0 8px 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ion-color-primary);
+    }
+
+    .coordinates {
+      margin: 4px 0;
+      font-size: 14px;
+      color: var(--ion-color-medium);
+      display: flex;
+      align-items: center;
+
+      ion-icon {
+        margin-right: 6px;
+      }
+    }
+
+    .coordinates-decimal {
+      margin: 4px 0 0 0;
+      font-size: 12px;
+      color: var(--ion-color-light);
+      font-family: monospace;
+    }
+  }
+
+  .land-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    ion-button {
+      --padding-start: 8px;
+      --padding-end: 8px;
+      font-size: 12px;
+
+      ion-icon {
+        margin-right: 4px;
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .land-actions {
+    flex-direction: row !important;
+    align-items: center;
+  }
+}

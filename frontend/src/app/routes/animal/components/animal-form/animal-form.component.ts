@@ -1,148 +1,125 @@
+import { CommonModule } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
   Component,
-  computed,
-  effect,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
   inject,
-  input,
-  output,
   signal,
 } from '@angular/core';
 import {
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonInput,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import {
   IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonCol,
+  IonDatetime,
+  IonDatetimeButton,
+  IonGrid,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonModal,
+  IonRow,
   IonSelect,
   IonSelectOption,
+  IonTextarea,
 } from '@ionic/angular/standalone';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { MainStoreService } from 'src/app/services/main-store.service';
+import { Animal, AnimalPost } from 'src/app/model/animal';
 
 @Component({
   selector: 'app-animal-form',
-  templateUrl: './animal-form.component.html',
-  styleUrls: ['./animal-form.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
+    ReactiveFormsModule,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonItem,
+    IonLabel,
+    IonInput,
+    IonSelect,
+    IonSelectOption,
+    IonButton,
     IonGrid,
     IonRow,
     IonCol,
-    IonInput,
-    IonButton,
-    IonSelect,
-    IonSelectOption,
-    FormsModule,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'app-animal-form' },
+  templateUrl: './animal-form.component.html',
+  styleUrls: ['./animal-form.component.scss'],
 })
-export class AnimalFormComponent {
-  //inputs
-  animal = input<any | null>(null);
-  isEditMode = input<boolean>(false);
+export class AnimalFormComponent implements OnInit {
+  @Input() isEditMode = false;
+  @Input() animal: Animal | null = null;
+  @Output() submitted = new EventEmitter<AnimalPost>();
+  @Output() canceled = new EventEmitter<void>();
 
-  private store = inject(MainStoreService);
+  private fb = inject(FormBuilder);
 
-  //outputs
-  submitted = output<any>();
-  canceled = output<void>();
-
-  breed = signal('');
-  birth_date = signal('');
-  owner_id = signal('');
-  land_id = signal('');
-  status = signal('');
-
-  touched = signal({
-    breed: false,
-    birth_date: false,
-    owner_id: false,
-    land_id: false,
-    status: false,
-  });
-
+  animalForm!: FormGroup;
   loading = signal(false);
 
-  constructor() {
-    // Reactivar con un effect el cambio de animal
-    effect(() => {
-      const a = this.animal();
-      if (a) {
-        this.breed.set(a.breed);
-        this.birth_date.set(a.birth_date);
-        this.owner_id.set(a.owner_id);
-        this.land_id.set(a.land_id);
-        this.status.set(a.status);
-      }
+  // Mock data - replace with actual service calls
+  breeds = ['Holstein', 'Jersey', 'Angus', 'Hereford', 'Charolais'];
+  statuses = ['Activo', 'Vendido', 'Muerto', 'Transferido'];
+
+  ngOnInit() {
+    this.initializeForm();
+  }
+
+  private initializeForm() {
+    this.animalForm = this.fb.group({
+      breed: [this.animal?.breed || '', [Validators.required]],
+      birth_date: [this.animal?.birth_date || '', [Validators.required]],
+      owner_id: [this.animal?.owner_id || '', [Validators.required]],
+      land_id: [this.animal?.land_id || '', [Validators.required]],
+      status: [this.animal?.status || 'Activo', [Validators.required]],
     });
   }
 
-  allValues = computed(() => ({
-    breed: this.breed(),
-    birth_date: this.birth_date(),
-    owner_id: this.owner_id(),
-    land_id: this.land_id(),
-    status: this.status(),
-  }));
-
-  showStatusSelect = computed(
-    () =>
-      !this.isEditMode() ||
-      (this.isEditMode() && this.store.isOperatorOrAdmin())
-  );
-
-  formValid = computed(() => {
-    const v = this.allValues();
-    return (
-      !!v.breed && !!v.birth_date && !!v.land_id && !!v.owner_id && !!v.status
-    );
-  });
-
-  onBreedChange(value: string | number | null | undefined) {
-    this.breed.set(typeof value === 'string' ? value : String(value ?? ''));
-    this.touched.set({ ...this.touched(), breed: true });
-  }
-  onBirthDateChange(value: string | number | null | undefined) {
-    this.birth_date.set(
-      typeof value === 'string' ? value : String(value ?? '')
-    );
-    this.touched.set({ ...this.touched(), birth_date: true });
-  }
-  onLandIdChange(value: string | number | null | undefined) {
-    this.land_id.set(typeof value === 'string' ? value : String(value ?? ''));
-    this.touched.set({ ...this.touched(), land_id: true });
-  }
-  onOwnerIdChange(value: number | string | null | undefined) {
-    this.owner_id.set(typeof value === 'string' ? value : String(value ?? ''));
-    this.touched.set({ ...this.touched(), owner_id: true });
-  }
-  onStatusChange(value: number | string | null | undefined) {
-    const statusValue = typeof value === 'string' ? value : String(value ?? '');
-    this.status.set(statusValue);
-    this.touched.set({ ...this.touched(), status: true });
-  }
-
   async onSubmit() {
-    if (!this.formValid()) return;
-    this.loading.set(true);
-    try {
-      this.submitted.emit({
-        breed: this.breed(),
-        birth_date: this.birth_date(),
-        land_id: this.land_id(),
-        owner_id: this.owner_id(),
-        status: this.status()!,
-      });
-    } finally {
-      this.loading.set(false);
+    if (this.animalForm.valid) {
+      this.loading.set(true);
+      try {
+        const formData = this.animalForm.value;
+        this.submitted.emit(formData);
+      } catch (error) {
+        console.error('Error submitting form:', error);
+      } finally {
+        this.loading.set(false);
+      }
+    } else {
+      // Mark all fields as touched to show validation errors
+      this.animalForm.markAllAsTouched();
     }
   }
 
   onCancel() {
     this.canceled.emit();
+  }
+
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.animalForm.get(fieldName);
+    return !!(field && field.invalid && field.touched);
+  }
+
+  getFieldError(fieldName: string): string {
+    const field = this.animalForm.get(fieldName);
+    if (field && field.errors && field.touched) {
+      if (field.errors['required']) {
+        return `${fieldName} es requerido`;
+      }
+    }
+    return '';
   }
 }
