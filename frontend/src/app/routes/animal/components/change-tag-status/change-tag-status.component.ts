@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, ChangeDetectionStrategy, input, computed, resource } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, input, computed, resource, OnInit, OnDestroy } from '@angular/core';
 import {
   IonHeader, IonToolbar, IonTitle, IonButtons, IonButton,
   IonContent, IonList, IonItem, IonLabel, IonSpinner, IonText,
   ModalController
 } from '@ionic/angular/standalone';
 import { TagService } from 'src/app/services/tag.service';
+import { WebSocketService } from 'src/app/services/websocket.service';
 
 @Component({
   selector: 'app-change-tag-status',
@@ -19,12 +20,15 @@ import { TagService } from 'src/app/services/tag.service';
   ],
   templateUrl: './change-tag-status.component.html',
 })
-export class ChangeTagStatusComponent {
+export class ChangeTagStatusComponent implements OnInit, OnDestroy  {
   /** ID del animal al que se gestionan las caravanas */
   readonly id = input<string>('');
   isChange = input<boolean>(false);
   /** Caravana asignada */
   readonly oldTagId = input<string>('');
+  /** Servicio de WebSocket para notificaciones */
+  private wsService = inject(WebSocketService);
+  private unsubscribe: (() => void) | null = null;
 
   /** Asignaciones actuales del animal */
   readonly tags = input<{ tag_id: string; unassignment_date: string | null }[]>();
@@ -32,6 +36,21 @@ export class ChangeTagStatusComponent {
   private readonly tagService = inject(TagService);
   private readonly modalController = inject(ModalController);
 
+  ngOnInit(): void {
+    // Suscribirse a los cambios de asignaciones del animal
+    this.unsubscribe = this.wsService.onMessage('tags', () => {
+      console.log('Actualizando lista de caravanas por WebSocket');
+      this.tagsResource.reload();
+    });
+  }
+
+  ngOnDestroy() {
+    // Desregistrar el handler cuando se destruye el componente
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
+  
   get animalId(): string {
     return typeof this.id === 'function' ? this.id() : this.id;
   }
