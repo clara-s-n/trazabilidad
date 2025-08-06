@@ -1,4 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
+import { WebSocket } from "ws";
 import { UserPostSchema, UserPostType, UserResponseSchema } from "../../types/schemas/user.js";
 import { userRepository } from "../../services/user.repository.js";
 import bcrypt from "bcryptjs";
@@ -23,6 +24,14 @@ const usuariosRoute: FastifyPluginAsync = async (fastify) => {
         ...u,
         user_id: u.id, // agrega user_id
       }));
+
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("users");
+        }
+      });
+
       reply.send(safeUsers);
     }
   });

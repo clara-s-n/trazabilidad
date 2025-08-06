@@ -1,11 +1,12 @@
-import { FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox";
+import { FastifyPluginAsync } from "fastify";
+import { WebSocket } from "ws";
 import { Type } from "@sinclair/typebox";
 
 import {
   CreateVaccinationBody,
   //CreateVaccinationParams,
   //CreateVaccinationType,
-  VaccinationSchema
+  VaccinationSchema,
 } from "../../../types/schemas/vaccination.js";
 
 import { AnimalParams } from "../../../types/schemas/animal.js";
@@ -14,7 +15,7 @@ import { animalRepository } from "../../../services/animal.repository.js";
 import { UCUErrorNotFound, UCUErrorBadRequest } from "../../../utils/index.js";
 import { eventRepository } from "../../../services/event.repository.js";
 
-const vacunacionesRoute: FastifyPluginAsyncTypebox = async (fastify) => {
+const vacunacionesRoute: FastifyPluginAsync = async (fastify) => {
   // 1) GET /:animal_id → listar todas las vacunaciones
   fastify.get("/:animal_id", {
     schema: {
@@ -24,8 +25,8 @@ const vacunacionesRoute: FastifyPluginAsyncTypebox = async (fastify) => {
       params: AnimalParams,
       security: [{ bearerAuth: [] }],
       response: {
-        200: Type.Array(VaccinationSchema)
-      }
+        200: Type.Array(VaccinationSchema),
+      },
     },
     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
@@ -38,9 +39,17 @@ const vacunacionesRoute: FastifyPluginAsyncTypebox = async (fastify) => {
       }
 
       // Traer vacunaciones
-      const vacs = await vaccinationRepository.getByAnimal(animal_id);
-      return vacs;
-    }
+      const vaccinations = await vaccinationRepository.getByAnimal(animal_id);
+
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("animals");
+        }
+      });
+
+      return vaccinations;
+    },
   });
 
   // 2) POST /:animal_id → crear una vacunación
@@ -48,13 +57,14 @@ const vacunacionesRoute: FastifyPluginAsyncTypebox = async (fastify) => {
     schema: {
       tags: ["Vacunaciones"],
       summary: "Registrar una vacunación",
-      description: "Crea una vacunación vinculada a un evento de vacunación del animal",
+      description:
+        "Crea una vacunación vinculada a un evento de vacunación del animal",
       params: AnimalParams,
       body: CreateVaccinationBody,
       security: [{ bearerAuth: [] }],
       response: {
-        201: VaccinationSchema
-      }
+        201: VaccinationSchema,
+      },
     },
     onRequest: fastify.verifyOperator,
     handler: async (request, reply) => {
@@ -62,7 +72,7 @@ const vacunacionesRoute: FastifyPluginAsyncTypebox = async (fastify) => {
       const { id } = request.user as { id: string };
       const payload = request.body as CreateVaccinationBody;
       const event = await eventRepository.createEvent({
-        event_type: 'Vaccination',
+        event_type: "Vaccination",
         date: payload.date,
         comments: payload.comments,
         created_by: id,

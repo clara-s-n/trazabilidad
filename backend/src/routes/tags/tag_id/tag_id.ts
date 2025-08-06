@@ -1,4 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
+import { WebSocket } from "ws";
 import {
   TagParams,
   TagSchema,
@@ -310,6 +311,38 @@ const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
       }
     }
   );
+
+  fastify.post("/:tag_id/retire", async function (request, reply) {
+    const { tag_id } = request.params as TagParams;
+
+    // Primero verificamos que el tag exista
+    const existing = await tagRepository.getTagById(tag_id);
+    if (!existing) {
+      throw new UCUErrorNotFound(`Tag con id=${tag_id} no encontrado`);
+    }
+
+    // Chequeamos si está asignada a algún animal
+    const assignedAnimal = await tagRepository.getCurrentAnimalByTag(tag_id);
+    // Si está asignada, no se puede retirar
+    if (assignedAnimal) {
+      return reply
+        .status(400)
+        .send({
+          message: `No se puede retirar la tag porque está asignada al animal con ID ${assignedAnimal.id}.`,
+        });
+    }
+
+    await tagRepository.retireTag(tag_id);
+
+    // Broadcast WebSocket message to all connected clients
+    fastify.websocketServer.clients.forEach((cliente) => {
+      if (cliente.readyState === WebSocket.OPEN) {
+        cliente.send("tags");
+      }
+    });
+
+    return reply.status(204).send();
+  });
 }
 
 export default idTagsRoute;

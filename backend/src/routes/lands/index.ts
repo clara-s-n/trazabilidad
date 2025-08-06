@@ -1,4 +1,5 @@
-import { FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox";
+import { FastifyPluginAsync } from "fastify";
+import { WebSocket } from "ws";
 import { Type } from "@sinclair/typebox";
 import {
   CreateLandParams,
@@ -14,7 +15,7 @@ import { UCUErrorBadRequest, UCUErrorNotFound } from "../../utils/index.js";
 import { Animal } from "../../types/schemas/animal.js";
 import { saveFile } from "../../utils/file-upload.js";
 
-const prediosRoute: FastifyPluginAsyncTypebox = async (fastify, opts) => {
+const prediosRoute: FastifyPluginAsync = async (fastify, opts) => {
   // 1. Listar todos los predios
   fastify.get("/", {
     schema: {
@@ -30,6 +31,14 @@ const prediosRoute: FastifyPluginAsyncTypebox = async (fastify, opts) => {
     onRequest: fastify.authenticate,
     handler: async (request, reply) => {
       const lands = await landRepository.getAllLands();
+
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("lands");
+        }
+      });
+
       return lands;
     },
     // wshandler: (socket: WebSocket, req) => {
@@ -103,6 +112,14 @@ const prediosRoute: FastifyPluginAsyncTypebox = async (fastify, opts) => {
       if (!land) {
         throw new UCUErrorNotFound(`Predio ${land_id} no existe`);
       }
+
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("lands");
+        }
+      });
+
       return land;
     },
   });
@@ -142,14 +159,14 @@ const prediosRoute: FastifyPluginAsyncTypebox = async (fastify, opts) => {
           `No se pudo actualizar: predio ${land_id} no encontrado`
         );
       }
-      
+
       // Broadcast WebSocket message to all connected clients
       fastify.websocketServer.clients.forEach((cliente) => {
         if (cliente.readyState === WebSocket.OPEN) {
           cliente.send("lands");
         }
       });
-      
+
       return updated;
     },
   });
@@ -179,6 +196,14 @@ const prediosRoute: FastifyPluginAsyncTypebox = async (fastify, opts) => {
       // 2) Recuperar animales por land_id
       //    Reutilizamos el método filter() para filtrar por landId
       const animals = await landRepository.getAnimalsByLandId(land_id);
+
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("animals");
+        }
+      });
+
       return animals;
     },
   });
@@ -219,6 +244,13 @@ const prediosRoute: FastifyPluginAsyncTypebox = async (fastify, opts) => {
           `No se pudo actualizar: predio ${land_id} no encontrado`
         );
       }
+
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("lands");
+        }
+      });
 
       return {
         image_path,
@@ -267,7 +299,7 @@ const prediosRoute: FastifyPluginAsyncTypebox = async (fastify, opts) => {
 
       // 4) Responder sin contenido
       reply.code(204).send();
-      
+
       // Broadcast WebSocket message to all connected clients
       fastify.websocketServer.clients.forEach((cliente) => {
         if (cliente.readyState === WebSocket.OPEN) {

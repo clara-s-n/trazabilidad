@@ -4,9 +4,12 @@ import {
   input,
   inject,
   resource,
+  OnInit,
+  OnDestroy,
 } from '@angular/core';
 import { VaccinationService } from 'src/app/services/events/vaccination/vaccination.service';
 import { Router } from '@angular/router';
+import { WebSocketService } from 'src/app/services/websocket.service';
 
 import {
   IonHeader,
@@ -48,7 +51,7 @@ import { Vaccination } from 'src/app/model/events/vaccination';
     IonText,
   ],
 })
-export class VaccinationListPage {
+export class VaccinationListPage implements OnInit, OnDestroy {
   constructor() {
     addIcons({
       eyeOutline,
@@ -58,17 +61,34 @@ export class VaccinationListPage {
   readonly id = input.required<string>();
   private readonly vaccinationService = inject(VaccinationService);
   private readonly router = inject(Router);
+  private readonly wsService = inject(WebSocketService);
+  private unsubscribe: (() => void) | null = null;
 
   readonly vaccinationsResource = resource<Vaccination[], undefined>({
     loader: async () =>
       await this.vaccinationService.getAllVaccinations(this.id()),
   });
 
+  ngOnInit() {
+    // Registrar handler para mensajes de animals (las vacunaciones actualizan los animales)
+    this.unsubscribe = this.wsService.onMessage('animals', () => {
+      console.log('Actualizando lista de vacunaciones por WebSocket');
+      this.vaccinationsResource.reload();
+    });
+  }
+
+  ngOnDestroy() {
+    // Desregistrar el handler cuando se destruye el componente
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
+
   goToCreate() {
     this.router.navigate([`/animal/events/${this.id()}/vaccination/create`]);
   }
 
   reload() {
-    window.location.reload();
+    this.vaccinationsResource.reload();
   }
 }

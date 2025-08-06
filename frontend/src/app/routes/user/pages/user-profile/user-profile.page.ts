@@ -1,9 +1,10 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import {IonHeader, IonToolbar, IonTitle, IonContent, IonSpinner, IonItem, IonButton, ModalController} from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { DeleteUserModalComponent } from '../../components/delete-user-modal/delete-user-modal.component';
+import { WebSocketService } from 'src/app/services/websocket.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -12,10 +13,12 @@ import { DeleteUserModalComponent } from '../../components/delete-user-modal/del
   imports: [CommonModule, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonButton, RouterLink],
   standalone: true
 })
-export class UserProfilePage implements OnInit {
+export class UserProfilePage implements OnInit, OnDestroy {
   private userService = inject(UserService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private wsService = inject(WebSocketService);
+  private unsubscribe: (() => void) | null = null;
 
   role: string =''
 
@@ -42,6 +45,38 @@ export class UserProfilePage implements OnInit {
       }
     }
     this.loading.set(false);
+    
+    // Registrar handler para mensajes de users
+    this.unsubscribe = this.wsService.onMessage('users', () => {
+      console.log('Actualizando perfil de usuario por WebSocket');
+      this.reloadUserData();
+    });
+  }
+
+  ngOnDestroy() {
+    // Desregistrar el handler cuando se destruye el componente
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
+
+  private async reloadUserData() {
+    const userId = this.route.snapshot.paramMap.get('userId');
+    if (userId) {
+      try {
+        const userData = await this.userService.getUserById(userId);
+        this.user.set(userData);
+        if (this.user().role_id === 1){
+          this.role = 'Operador Autorizado'
+        } else if (this.user().role_id === 2){
+          this.role = 'Usuario Consulta'
+        } else{
+          this.role = 'Administrador'
+        }
+      } catch {
+        this.user.set(null);
+      }
+    }
   }
 
   async deleteUser() {
