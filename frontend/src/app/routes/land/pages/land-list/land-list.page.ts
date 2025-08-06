@@ -97,7 +97,9 @@ export class ListPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.title.setTitle('Lista de Predios | Sistema de Trazabilidad');
-    this.landsResource;
+
+    this.landsResource.reload();
+
 
     // Registrar handler para mensajes de lands
     this.unsubscribe = this.wsService.onMessage('lands', () => {
@@ -111,6 +113,7 @@ export class ListPage implements OnInit, OnDestroy {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
+
   }
   async loadLands() {
     const data = await this.landService.getAllLands();

@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, inject, input, OnInit, computed, signal } from '@angular/core';
+import { Component, inject, input, OnInit, OnDestroy, computed, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import {
@@ -44,6 +44,7 @@ import { TagHistoryComponent } from '../../components/tag-history/tag-history.co
 import { CompleteAnimal } from 'src/app/model/animal';
 import { Tag } from 'src/app/model/tag';
 import { ModalController } from '@ionic/angular';
+import { WebSocketService } from 'src/app/services/websocket.service';
 
 @Component({
   selector: 'app-animal-detail',
@@ -75,7 +76,7 @@ import { ModalController } from '@ionic/angular';
     IonGrid,
   ],
 })
-export class DetailPage implements OnInit {
+export class DetailPage implements OnInit, OnDestroy {
   constructor() {
     addIcons({
       pencilOutline,
@@ -103,6 +104,9 @@ export class DetailPage implements OnInit {
   private readonly title = inject(Title);
   private readonly mainStore = inject(MainStoreService);
   private readonly rolePermissionService = inject(RolePermissionService);
+  private readonly wsService = inject(WebSocketService);
+  private unsubscribeAnimals: (() => void) | null = null;
+  private unsubscribeTags: (() => void) | null = null;
 
   animal: CompleteAnimal | null = null;
   loading = false;
@@ -131,6 +135,27 @@ export class DetailPage implements OnInit {
       } finally {
         this.loading = false;
       }
+    }
+
+    // Registrar handlers para WebSocket
+    this.unsubscribeAnimals = this.wsService.onMessage('animals', () => {
+      console.log('Actualizando detalle de animal por WebSocket');
+      this.reloadAnimalData();
+    });
+
+    this.unsubscribeTags = this.wsService.onMessage('tags', () => {
+      console.log('Actualizando tags de animal por WebSocket');
+      this.reloadCurrentTag();
+    });
+  }
+
+  ngOnDestroy() {
+    // Desregistrar los handlers cuando se destruye el componente
+    if (this.unsubscribeAnimals) {
+      this.unsubscribeAnimals();
+    }
+    if (this.unsubscribeTags) {
+      this.unsubscribeTags();
     }
   }
 
@@ -250,5 +275,24 @@ export class DetailPage implements OnInit {
 
   goBack() {
     this.router.navigate(['/animal/list']);
+  }
+
+  // Métodos para recargar datos por WebSocket
+  private async reloadAnimalData() {
+    const id = this.animal_id();
+    if (id) {
+      try {
+        this.animal = await this.animalService.getCompleteAnimal(id);
+      } catch (error) {
+        console.error('Error recargando datos del animal:', error);
+      }
+    }
+  }
+
+  private async reloadCurrentTag() {
+    const id = this.animal_id();
+    if (id) {
+      await this.loadCurrentTag(id);
+    }
   }
 }

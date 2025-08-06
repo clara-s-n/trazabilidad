@@ -1,4 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
+import { WebSocket } from "ws";
 import { tagRepository } from "../../services/tag.repository.js";
 import { Type } from "@sinclair/typebox";
 import { TagResponse } from "../../types/schemas/tag.js";
@@ -20,6 +21,14 @@ const tagsRoute: FastifyPluginAsync = async (fastify, options) => {
       onRequest: fastify.verifyOperatorOrAdmin,
       handler: async (request, reply) => {
         const tags = await tagRepository.getAllTags();
+
+        // Broadcast WebSocket message to all connected clients
+        fastify.websocketServer.clients.forEach((cliente) => {
+          if (cliente.readyState === WebSocket.OPEN) {
+            cliente.send("tags");
+          }
+        });
+
         return reply.status(200).send(tags);
       },
     }
@@ -35,6 +44,14 @@ const tagsRoute: FastifyPluginAsync = async (fastify, options) => {
         const {animal_id} = request.params as AnimalParams;
         const tags = await tagRepository.getTagsByAnimal(animal_id);
         console.log('Historial de tags:', tags);
+
+        // Broadcast WebSocket message to all connected clients
+        fastify.websocketServer.clients.forEach((cliente) => {
+          if (cliente.readyState === WebSocket.OPEN) {
+            cliente.send("tags");
+          }
+        });
+
         return tags;
       }
     }

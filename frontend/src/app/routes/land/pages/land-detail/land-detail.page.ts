@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import {
   IonBackButton,
   IonButton,
@@ -32,6 +32,7 @@ import {
   imageOutline,
 } from 'ionicons/icons';
 import { environment } from '../../../../../environments/environment';
+import { WebSocketService } from '../../../../services/websocket.service';
 
 @Component({
   selector: 'app-land-detail',
@@ -58,7 +59,7 @@ import { environment } from '../../../../../environments/environment';
     IonText,
   ],
 })
-export class DetailPage implements OnInit {
+export class DetailPage implements OnInit, OnDestroy {
   public land = signal<Land | null>(null);
   public landAnimals = signal<Animal[]>([]);
   public isLoadingAnimals = signal<boolean>(false);
@@ -67,6 +68,9 @@ export class DetailPage implements OnInit {
   private route = inject(ActivatedRoute);
   private modalController = inject(ModalController);
   private router = inject(Router);
+  private wsService = inject(WebSocketService);
+  private unsubscribeLands: (() => void) | null = null;
+  private unsubscribeAnimals: (() => void) | null = null;
 
   constructor() {
     addIcons({
@@ -81,6 +85,29 @@ export class DetailPage implements OnInit {
     const id = this.route.snapshot.paramMap.get('id')!;
     this.loadLand(id);
     this.loadLandAnimals(id);
+    
+    // Registrar handlers para WebSocket
+    this.unsubscribeLands = this.wsService.onMessage('lands', () => {
+      console.log('Actualizando detalle de predio por WebSocket');
+      const id = this.route.snapshot.paramMap.get('id')!;
+      this.loadLand(id);
+    });
+
+    this.unsubscribeAnimals = this.wsService.onMessage('animals', () => {
+      console.log('Actualizando animales del predio por WebSocket');
+      const id = this.route.snapshot.paramMap.get('id')!;
+      this.loadLandAnimals(id);
+    });
+  }
+
+  ngOnDestroy() {
+    // Desregistrar los handlers cuando se destruye el componente
+    if (this.unsubscribeLands) {
+      this.unsubscribeLands();
+    }
+    if (this.unsubscribeAnimals) {
+      this.unsubscribeAnimals();
+    }
   }
 
   private async loadLand(id: string) {

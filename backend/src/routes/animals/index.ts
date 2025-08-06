@@ -1,4 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
+import { WebSocket } from "ws";
 import {
   Animal,
   AnimalEventSchema,
@@ -95,6 +96,13 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
     if (!animal) {
       return reply.status(404).send({ message: "Animal no encontrado" });
     }
+    // Broadcast WebSocket message to all connected clients
+    fastify.websocketServer.clients.forEach((cliente) => {
+      if (cliente.readyState === WebSocket.OPEN) {
+        cliente.send("animals");
+      }
+    });
+
     reply.send(animal);
   },
   });
@@ -185,6 +193,13 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       const modificationList = await animalRepository.getHistoryByAnimalId(
         animal_id
       );
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("animals");
+        }
+      });
+
       reply.send(modificationList);
     },
   });
@@ -208,6 +223,13 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
     async (request, reply) => {
       const { animal_id } = request.params as AnimalParams;
       const events = await animalRepository.getAnimalEvents(animal_id);
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("animals");
+        }
+      });
+
       return reply.code(200).send(events);
     }
   );
@@ -230,6 +252,13 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
     async (request, reply) => {
       const { animal_id } = request.params as AnimalParams;
       const movements = await animalRepository.getTransportHistoryByAnimalId(animal_id);
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("animals");
+        }
+      });
+
       return reply.code(200).send(movements);
     }
   );
@@ -262,6 +291,13 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
       if (!currentTag) {
         return reply.status(404).send({ message: "Caravana no encontrada" });
       }
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("animals");
+        }
+      });
+
       return reply.code(200).send({ currentTag });
     },
   });
