@@ -96,7 +96,7 @@ export class ListPage implements OnInit {
 
   ngOnInit() {
     this.title.setTitle('Lista de Predios | Sistema de Trazabilidad');
-    this.loadLands();
+    this.landsResource.reload();
 
     this.socket.addEventListener('open', (event) => {
       // Si quiero hacer algo al establecer la conexión.
@@ -105,7 +105,7 @@ export class ListPage implements OnInit {
     this.socket.addEventListener('message', (event) => {
       console.log('Mensaje del servidor: ', event.data);
       if (event.data === 'newLand') {
-        this.loadLands();
+        this.landsResource.reload();
       }
       // window.location.reload();
     });
