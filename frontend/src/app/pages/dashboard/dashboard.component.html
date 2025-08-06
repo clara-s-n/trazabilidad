@@ -11,7 +11,12 @@
     <ion-row>
       <!-- Animals Section - All users can view, but editing depends on role -->
       <ion-col size="12" size-md="6" size-lg="4">
-        <ion-card button="true" [routerLink]="isAdmin() ? ['/animal/list/'] : ['/animal', userIdValue, 'list']">
+        <ion-card
+          button="true"
+          [routerLink]="
+            isAdmin() ? ['/animal/list/'] : ['/animal', userIdValue, 'list']
+          "
+        >
           <ion-card-header>
             <ion-icon
               name="paw-outline"
@@ -19,18 +24,17 @@
               color="primary"
             ></ion-icon>
             <ion-card-title>
-              Animales
-              @if (!permissions().canEditAnimals) {
-                <ion-badge color="medium" style="margin-left: 8px;">Solo lectura</ion-badge>
+              Animales @if (!permissions().canEditAnimals) {
+              <ion-badge color="medium" style="margin-left: 8px"
+                >Solo lectura</ion-badge
+              >
               }
             </ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            @if (permissions().canEditAnimals) {
-              Gestionar registro de animales, historial y eventos
-            } @else {
-              Ver información de animales e historial
-            }
+            @if (permissions().canEditAnimals) { Gestionar registro de animales,
+            historial y eventos } @else { Ver información de animales e
+            historial }
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -45,18 +49,16 @@
               color="success"
             ></ion-icon>
             <ion-card-title>
-              Predios
-              @if (!permissions().canEditLands) {
-                <ion-badge color="medium" style="margin-left: 8px;">Solo lectura</ion-badge>
+              Predios @if (!permissions().canEditLands) {
+              <ion-badge color="medium" style="margin-left: 8px"
+                >Solo lectura</ion-badge
+              >
               }
             </ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            @if (permissions().canEditLands) {
-              Administrar predios y ubicaciones de animales
-            } @else {
-              Ver información de predios y ubicaciones
-            }
+            @if (permissions().canEditLands) { Administrar predios y ubicaciones
+            de animales } @else { Ver información de predios y ubicaciones }
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -71,25 +73,23 @@
               [color]="permissions().canViewUsers ? 'warning' : 'medium'"
             ></ion-icon>
             <ion-card-title>
-              Usuarios
-              @if (!permissions().canViewUsers) {
-                <ion-badge color="danger" style="margin-left: 8px;">Restringido</ion-badge>
+              Usuarios @if (!permissions().canViewUsers) {
+              <ion-badge color="danger" style="margin-left: 8px"
+                >Restringido</ion-badge
+              >
               }
             </ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            @if (permissions().canViewUsers) {
-              Gestionar usuarios y permisos del sistema
-            } @else {
-              Gestión de usuarios (solo administradores)
-            }
+            @if (permissions().canViewUsers) { Gestionar usuarios y permisos del
+            sistema } @else { Gestión de usuarios (solo administradores) }
           </ion-card-content>
         </ion-card>
       </ion-col>
 
       <!-- Tags Section - Show for all but restrict access through guards -->
       <ion-col size="12" size-md="6" size-lg="4">
-        <ion-card button="true" [routerLink]="['/tags/list']">
+        <ion-card button="true" [routerLink]="['/tag/list']">
           <ion-card-header>
             <ion-icon
               name="pricetag-outline"
@@ -97,18 +97,17 @@
               [color]="permissions().canViewTags ? 'secondary' : 'medium'"
             ></ion-icon>
             <ion-card-title>
-              Caravanas
-              @if (!permissions().canViewTags) {
-                <ion-badge color="danger" style="margin-left: 8px;">Restringido</ion-badge>
+              Caravanas @if (!permissions().canViewTags) {
+              <ion-badge color="danger" style="margin-left: 8px"
+                >Restringido</ion-badge
+              >
               }
             </ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            @if (permissions().canViewTags) {
-              Administrar caravanas electrónicas y asignaciones
-            } @else {
-              Gestión de caravanas (administradores y operadores)
-            }
+            @if (permissions().canViewTags) { Administrar caravanas electrónicas
+            y asignaciones } @else { Gestión de caravanas (administradores y
+            operadores) }
           </ion-card-content>
         </ion-card>
       </ion-col>

@@ -61,6 +61,10 @@ export class TagRepository {
         await query(`UPDATE tags SET status='active' WHERE id=$1`, [id]);
     }
 
+    async retireTag(id: string): Promise<void> {
+        await query(`UPDATE tags SET status='retired' WHERE id=$1`, [id]);
+    }
+
     async assignTagToAnimal(animalId: string, tagId: string): Promise<boolean> {
         if (!animalId || !tagId) throw new Error('Faltan parámetros');
 

@@ -44,7 +44,7 @@ const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
         tags: ["Caravanas"],
         params: TagParams,
         body: UpdateTagSchema,
-        description: "Desactivar (inactivate) un tag específico",
+        description: "Actualizar el estado de un tag (active, inactive, retired)",
         summary: "Actualizar el status de un tag",
         security: [{ bearerAuth: [] }],
         response: {
@@ -66,8 +66,12 @@ const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
           throw new UCUErrorNotFound(`Tag con id=${tag_id} no encontrado`);
         }
 
-        // Solo permitimos desactivar (status='inactive')
-        if (payload.status === "inactive") {
+        // Validar transiciones de estado permitidas
+        const currentStatus = existing.status;
+        const newStatus = payload.status;
+
+        // Reglas de negocio para cambios de estado
+        if (newStatus === "inactive") {
           // Chequeamos si está asignada a algún animal
           const assignedAnimal = await tagRepository.getCurrentAnimalByTag(tag_id);
           // Si está asignada, no se puede desactivar
@@ -79,23 +83,47 @@ const idTagsRoute: FastifyPluginAsync = async (fastify, options) => {
               });
           }
           await tagRepository.deactivateTag(tag_id);
-          
-          // Broadcast WebSocket message to all connected clients
-          fastify.websocketServer.clients.forEach((cliente) => {
-            if (cliente.readyState === WebSocket.OPEN) {
-              cliente.send("tags");
-            }
-          });
-          
-          return reply.status(204).send();
+        } 
+        else if (newStatus === "active") {
+          // Solo se puede activar si está inactive
+          if (currentStatus !== "inactive") {
+            return reply
+              .status(400)
+              .send({
+                message: `No se puede activar una tag que está en estado '${currentStatus}'. Solo se pueden activar tags inactivas.`,
+              });
+          }
+          await tagRepository.activateTag(tag_id);
         }
-
-        return reply
-          .status(400)
-          .send({
-            message:
-              "Operación inválida. Solo se puede cambiar el status a 'inactive'.",
-          });
+        else if (newStatus === "retired") {
+          // Chequeamos si está asignada a algún animal
+          const assignedAnimal = await tagRepository.getCurrentAnimalByTag(tag_id);
+          // Si está asignada, no se puede retirar
+          if (assignedAnimal) {
+            return reply
+              .status(400)
+              .send({
+                message: `No se puede retirar la tag porque está asignada al animal con ID ${assignedAnimal.id}.`,
+              });
+          }
+          await tagRepository.retireTag(tag_id);
+        }
+        else {
+          return reply
+            .status(400)
+            .send({
+              message: `Estado '${newStatus}' no válido. Estados permitidos: active, inactive, retired.`,
+            });
+        }
+        
+        // Broadcast WebSocket message to all connected clients
+        fastify.websocketServer.clients.forEach((cliente) => {
+          if (cliente.readyState === WebSocket.OPEN) {
+            cliente.send("tags");
+          }
+        });
+        
+        return reply.status(204).send();
       },
     }
   );

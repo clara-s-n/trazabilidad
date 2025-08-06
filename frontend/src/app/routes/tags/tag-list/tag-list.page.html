@@ -1,24 +1,182 @@
-<!-- tag-list.page.html -->
-<ion-content>
-  <ion-grid>
-    <ion-list>
-      @for (tag of tagsResource.value(); track tag.id) {
-        <ion-item>
-          <ion-label>
-            <div><strong>{{ tag.tag_number }}</strong></div>
-            <div>ID: {{ tag.id }}</div>
-            @if (tag.animal.id) {
-              <span>Asignada a animal: {{ tag.animal.id }}</span>
-            } @else {
-              <span>No asignada</span>
-            }
-          </ion-label>
-          <ion-select [value]="tag.status" (ionChange)="onStatusChange(tag, $event.detail.value)">
-            <ion-select-option value="active">Activo</ion-select-option>
-            <ion-select-option value="inactive">Inactivo</ion-select-option>
-          </ion-select>
-        </ion-item>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" [routerLink]="['/dashboard']">
+        <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Lista de Caravanas</ion-title>
+    <ion-buttons slot="end">
+      @if (canCreateTags()) {
+      <ion-button fill="clear" (click)="goToCreate()">
+        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+      </ion-button>
+      } @else {
+      <ion-badge color="medium">Solo lectura</ion-badge>
       }
-    </ion-list>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (tagsResource.status() === 'loading') {
+  <div class="loading-state ion-text-center">
+    <ion-spinner></ion-spinner>
+    <p>Cargando caravanas...</p>
+  </div>
+  } @else if (tagsResource.status() === 'error') {
+  <div class="error-state ion-text-center">
+    <ion-icon
+      name="alert-circle-outline"
+      size="large"
+      color="danger"
+    ></ion-icon>
+    <h3>Error al cargar caravanas</h3>
+    <p>Hubo un problema al cargar la lista de caravanas.</p>
+    <ion-button expand="block" (click)="reload()">Reintentar</ion-button>
+  </div>
+  } @else if (tagsResource.status() === 'resolved') { @if ((tagsResource.value()
+  ?? []).length === 0) {
+  <div class="empty-state ion-padding ion-text-center">
+    <ion-icon name="pricetag-outline" size="large"></ion-icon>
+    <h3>No hay caravanas registradas</h3>
+    <p>Comienza creando tu primera caravana.</p>
+    @if (canCreateTags()) {
+    <ion-button expand="block" (click)="goToCreate()">
+      <ion-icon slot="start" name="add-outline"></ion-icon>
+      Crear Caravana
+    </ion-button>
+    } @else {
+    <ion-badge color="warning"
+      >Permisos insuficientes para crear caravanas</ion-badge
+    >
+    }
+  </div>
+  } @else {
+  <ion-grid>
+    @for (tag of tagsResource.value() ?? []; track tag.id) {
+    <ion-row>
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              <ion-icon name="pricetag-outline" slot="start"></ion-icon>
+              {{ tag.tag_number }}
+            </ion-card-title>
+            <ion-card-subtitle> ID: {{ tag.id }} </ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item lines="none" class="status-item">
+              <ion-label>
+                <h3>Estado</h3>
+                <ion-badge 
+                  [color]="tag.status === 'active' ? 'success' : tag.status === 'inactive' ? 'warning' : 'danger'"
+                  class="status-badge">
+                  <ion-icon 
+                    [name]="tag.status === 'active' ? 'checkmark-circle-outline' : tag.status === 'inactive' ? 'close-circle-outline' : 'ban-outline'"
+                    slot="start">
+                  </ion-icon>
+                  {{ tag.status === 'active' ? 'Activo' : tag.status === 'inactive' ? 'Inactivo' : 'Retirado' }}
+                </ion-badge>
+              </ion-label>
+              @if (canEditTags()) {
+              <ion-select
+                [value]="tag.status"
+                interface="popover"
+                (ionChange)="onStatusChange(tag, $event.detail.value)"
+                placeholder="Cambiar estado"
+              >
+                <ion-select-option value="active">
+                  <ion-icon
+                    name="checkmark-circle-outline"
+                    slot="start"
+                  ></ion-icon>
+                  Activo
+                </ion-select-option>
+                <ion-select-option value="inactive">
+                  <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+                  Inactivo
+                </ion-select-option>
+                <ion-select-option value="retired">
+                  <ion-icon name="ban-outline" slot="start"></ion-icon>
+                  Retirado
+                </ion-select-option>
+              </ion-select>
+              }
+            </ion-item>
+
+            <ion-item lines="none" class="assignment-item">
+              <ion-label>
+                <h3>Asignación</h3>
+                @if (tag.animal?.id) {
+                <p>
+                  <ion-icon name="paw-outline" color="primary"></ion-icon>
+                  Animal: {{ tag.animal.id }}
+                </p>
+                <ion-button
+                  fill="clear"
+                  size="small"
+                  (click)="goToAnimal(tag.animal.id)"
+                  color="primary"
+                >
+                  <ion-icon slot="start" name="eye-outline"></ion-icon>
+                  Ver Animal
+                </ion-button>
+                } @else {
+                <p>
+                  <ion-icon
+                    name="radio-button-off-outline"
+                    color="medium"
+                  ></ion-icon>
+                  No asignada
+                </p>
+                @if (canEditTags()) {
+                <ion-button
+                  fill="outline"
+                  size="small"
+                  (click)="assignTag(tag)"
+                  color="secondary"
+                >
+                  <ion-icon slot="start" name="link-outline"></ion-icon>
+                  Asignar
+                </ion-button>
+                } }
+              </ion-label>
+            </ion-item>
+
+            @if (canEditTags()) {
+            <div class="action-buttons ion-margin-top">
+              <ion-button fill="outline" size="small" (click)="editTag(tag)">
+                <ion-icon slot="start" name="pencil-outline"></ion-icon>
+                Editar
+              </ion-button>
+              @if (tag.status === 'inactive' && !tag.animal?.id) {
+              <ion-button
+                fill="clear"
+                size="small"
+                color="danger"
+                (click)="deleteTag(tag)"
+              >
+                <ion-icon slot="start" name="trash-outline"></ion-icon>
+                Eliminar
+              </ion-button>
+              }
+            </div>
+            }
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    }
   </ion-grid>
+  } }
+
+  <!-- Floating Action Button -->
+  @if (canCreateTags()) {
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="goToCreate()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  }
 </ion-content>
