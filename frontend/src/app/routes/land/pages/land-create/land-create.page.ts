@@ -18,7 +18,7 @@ import {
   standalone: true,
   imports: [
     LandFormComponent,
-    //IonContent,
+    IonContent,
     IonTitle,
     IonBackButton,
     IonButtons,

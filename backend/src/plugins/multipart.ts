@@ -13,7 +13,7 @@ export default fp(async (fastify) => {
       fieldNameSize: 100, // Tamaño máximo del nombre del campo (en bytes).
       fieldSize: 100, // Tamaño máximo del valor del campo (en bytes).
       fields: 10, // Número máximo de campos no relacionados con archivos.
-      fileSize: 1024 * 1024 * 10, // Tamaño máximo de archivos (10 MB).
+      fileSize: 1024 * 1024 * 1024 * 10, // Tamaño máximo de archivos (10 GB).
       files: 1, // Número máximo de campos de archivo.
       headerPairs: 100, // Número máximo de pares clave-valor en el encabezado.
       parts: 1000, // Número máximo de partes en el formulario (campos + archivos).

@@ -19,9 +19,26 @@ import {
   IonText,
   IonImg,
   IonIcon,
+  IonSpinner,
 } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
 import { LandsService } from '../../../../services/lands.service';
+import { addIcons } from 'ionicons';
+import {
+  locationOutline,
+  businessOutline,
+  navigateOutline,
+  compassOutline,
+  cameraOutline,
+  cloudUploadOutline,
+  imageOutline,
+  saveOutline,
+  alertCircleOutline,
+  informationCircleOutline,
+  documentOutline,
+  pencilOutline,
+  trashOutline,
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-land-form',
@@ -39,6 +56,7 @@ import { LandsService } from '../../../../services/lands.service';
     IonText,
     IonImg,
     IonIcon,
+    IonSpinner,
   ],
 })
 export class LandFormComponent {
@@ -67,6 +85,23 @@ export class LandFormComponent {
   public submitted = output<CreateLand | UpdateLand>();
 
   constructor() {
+    // Add required icons
+    addIcons({
+      locationOutline,
+      businessOutline,
+      navigateOutline,
+      compassOutline,
+      cameraOutline,
+      cloudUploadOutline,
+      imageOutline,
+      saveOutline,
+      alertCircleOutline,
+      informationCircleOutline,
+      documentOutline,
+      pencilOutline,
+      trashOutline,
+    });
+
     // Effect to populate form when land input changes
     effect(() => {
       const currentLand = this.land();

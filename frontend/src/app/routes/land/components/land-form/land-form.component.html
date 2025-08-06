@@ -1,179 +1,282 @@
-<form (ngSubmit)="onSubmit()" #landForm="ngForm">
-  <ion-grid>
-    <!-- Nombre del predio -->
-    <ion-row class="ion-justify-content-center">
-      <ion-col size="12" size-sm="8" size-md="6">
-        <ion-item>
-          <ion-label position="floating">Nombre del Predio *</ion-label>
-          <ion-input
-            fill="solid"
-            [value]="name()"
-            (ionInput)="name.set($event.detail.value!)"
-            (ionBlur)="validateName()"
-            name="name"
-            required
-            minlength="3"
-            [class.ion-invalid]="!!nameError()"
-            [class.ion-touched]="true"
-          >
-          </ion-input>
-        </ion-item>
-        @if(nameError()) {
-        <ion-text color="danger">
-          <small>{{ nameError() }}</small>
-        </ion-text>
-        }
-      </ion-col>
-    </ion-row>
+<div class="land-form-container">
+  <div class="form-header">
+    <ion-icon name="location-outline" class="header-icon"></ion-icon>
+    <h3 class="header-title">
+      {{ land() ? "Editar Predio" : "Nuevo Predio" }}
+    </h3>
+    <div class="header-line"></div>
+  </div>
 
-    <!-- Latitud -->
-    <ion-row class="ion-justify-content-center">
-      <ion-col size="12" size-sm="8" size-md="6">
-        <ion-item>
-          <ion-label position="floating">Latitud (-90 a 90) *</ion-label>
-          <ion-input
-            fill="solid"
-            type="number"
-            step="0.000001"
-            [value]="latitude()"
-            (ionInput)="
-              latitude.set(
-                $event.detail.value ? parseFloat($event.detail.value) : null
-              )
-            "
-            (ionBlur)="validateLatitude()"
-            name="latitude"
-            required
-            min="-90"
-            max="90"
-            [class.ion-invalid]="!!latitudeError()"
-            [class.ion-touched]="true"
-          >
-          </ion-input>
-        </ion-item>
-        @if(latitudeError()) {
-        <ion-text color="danger">
-          <small>{{ latitudeError() }}</small>
-        </ion-text>
-        } @if(!latitudeError() && latitude() !== null) {
-        <ion-text color="medium">
-          <small>Ejemplo: Uruguay está entre -30° y -35° de latitud</small>
-        </ion-text>
-        }
-      </ion-col>
-    </ion-row>
-
-    <!-- Longitud -->
-    <ion-row class="ion-justify-content-center">
-      <ion-col size="12" size-sm="8" size-md="6">
-        <ion-item>
-          <ion-label position="floating">Longitud (-180 a 180) *</ion-label>
-          <ion-input
-            fill="solid"
-            type="number"
-            step="0.000001"
-            [value]="longitude()"
-            (ionInput)="
-              longitude.set(
-                $event.detail.value ? parseFloat($event.detail.value) : null
-              )
-            "
-            (ionBlur)="validateLongitude()"
-            name="longitude"
-            required
-            min="-180"
-            max="180"
-            [class.ion-invalid]="!!longitudeError()"
-            [class.ion-touched]="true"
-          >
-          </ion-input>
-        </ion-item>
-        @if(longitudeError()) {
-        <ion-text color="danger">
-          <small>{{ longitudeError() }}</small>
-        </ion-text>
-        } @if(!longitudeError() && longitude() !== null) {
-        <ion-text color="medium">
-          <small>Ejemplo: Uruguay está entre -53° y -58° de longitud</small>
-        </ion-text>
-        }
-      </ion-col>
-    </ion-row>
-
-    <!-- Imagen del predio -->
-    <ion-row class="ion-justify-content-center">
-      <ion-col size="12" size-sm="8" size-md="6">
-        <ion-item lines="none">
-          <ion-label position="stacked">Imagen del predio</ion-label>
-        </ion-item>
-
-        <div class="file-upload-container">
-          @if(!previewUrl()) {
-          <ion-button
-            expand="block"
-            color="medium"
-            class="upload-button"
-            (click)="fileInput.click()"
-          >
-            <ion-icon name="image-outline" slot="start"></ion-icon>
-            Seleccionar imagen
-          </ion-button>
-          } @else {
-          <div class="image-preview-container">
-            <ion-img
-              [src]="previewUrl()"
-              alt="Vista previa del predio"
-              class="image-preview"
-            />
-            <div class="image-actions">
-              <ion-button
-                fill="clear"
-                color="medium"
-                (click)="fileInput.click()"
+  <form (ngSubmit)="onSubmit()" #landForm="ngForm" class="land-form">
+    <ion-grid>
+      <!-- Nombre del predio -->
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="12" size-sm="10" size-md="8">
+          <div class="form-field">
+            <div class="field-label">
+              <ion-icon name="business-outline" class="label-icon"></ion-icon>
+              <span>Nombre del Predio *</span>
+            </div>
+            <ion-item
+              lines="none"
+              class="custom-input"
+              [class.error]="!!nameError()"
+            >
+              <ion-input
+                fill="solid"
+                [value]="name()"
+                (ionInput)="name.set($event.detail.value!)"
+                (ionBlur)="validateName()"
+                name="name"
+                required
+                minlength="3"
+                placeholder="Ej: Estancia San José"
+                [class.ion-invalid]="!!nameError()"
+                [class.ion-touched]="true"
               >
-                <ion-icon name="reload-outline" slot="icon-only"></ion-icon>
-              </ion-button>
-              <ion-button fill="clear" color="danger" (click)="removeImage()">
-                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-              </ion-button>
+              </ion-input>
+            </ion-item>
+            @if(nameError()) {
+            <div class="error-message">
+              <ion-icon name="alert-circle-outline"></ion-icon>
+              <span>{{ nameError() }}</span>
+            </div>
+            }
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <!-- Coordenadas -->
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="12" size-sm="10" size-md="8">
+          <div class="coordinates-section">
+            <div class="section-title">
+              <ion-icon name="navigate-outline" class="title-icon"></ion-icon>
+              <span>Coordenadas Geográficas *</span>
+            </div>
+
+            <ion-row class="coordinates-row">
+              <!-- Latitud -->
+              <ion-col size="12" size-md="6">
+                <div class="form-field">
+                  <div class="field-label">
+                    <ion-icon
+                      name="compass-outline"
+                      class="label-icon"
+                    ></ion-icon>
+                    <span>Latitud</span>
+                  </div>
+                  <ion-item
+                    lines="none"
+                    class="custom-input"
+                    [class.error]="!!latitudeError()"
+                  >
+                    <ion-input
+                      fill="solid"
+                      type="number"
+                      step="0.000001"
+                      [value]="latitude()"
+                      (ionInput)="
+                        latitude.set(
+                          $event.detail.value
+                            ? parseFloat($event.detail.value)
+                            : null
+                        )
+                      "
+                      (ionBlur)="validateLatitude()"
+                      name="latitude"
+                      required
+                      min="-90"
+                      max="90"
+                      placeholder="-34.478611"
+                      [class.ion-invalid]="!!latitudeError()"
+                      [class.ion-touched]="true"
+                    >
+                    </ion-input>
+                  </ion-item>
+                  @if(latitudeError()) {
+                  <div class="error-message">
+                    <ion-icon name="alert-circle-outline"></ion-icon>
+                    <span>{{ latitudeError() }}</span>
+                  </div>
+                  } @else if(latitude() !== null) {
+                  <div class="help-text">
+                    <ion-icon name="information-circle-outline"></ion-icon>
+                    <span>Uruguay: -30° a -35°</span>
+                  </div>
+                  }
+                </div>
+              </ion-col>
+
+              <!-- Longitud -->
+              <ion-col size="12" size-md="6">
+                <div class="form-field">
+                  <div class="field-label">
+                    <ion-icon
+                      name="location-outline"
+                      class="label-icon"
+                    ></ion-icon>
+                    <span>Longitud</span>
+                  </div>
+                  <ion-item
+                    lines="none"
+                    class="custom-input"
+                    [class.error]="!!longitudeError()"
+                  >
+                    <ion-input
+                      fill="solid"
+                      type="number"
+                      step="0.000001"
+                      [value]="longitude()"
+                      (ionInput)="
+                        longitude.set(
+                          $event.detail.value
+                            ? parseFloat($event.detail.value)
+                            : null
+                        )
+                      "
+                      (ionBlur)="validateLongitude()"
+                      name="longitude"
+                      required
+                      min="-180"
+                      max="180"
+                      placeholder="-56.892778"
+                      [class.ion-invalid]="!!longitudeError()"
+                      [class.ion-touched]="true"
+                    >
+                    </ion-input>
+                  </ion-item>
+                  @if(longitudeError()) {
+                  <div class="error-message">
+                    <ion-icon name="alert-circle-outline"></ion-icon>
+                    <span>{{ longitudeError() }}</span>
+                  </div>
+                  } @else if(longitude() !== null) {
+                  <div class="help-text">
+                    <ion-icon name="information-circle-outline"></ion-icon>
+                    <span>Uruguay: -53° a -58°</span>
+                  </div>
+                  }
+                </div>
+              </ion-col>
+            </ion-row>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <!-- Imagen del predio -->
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="12" size-sm="10" size-md="8">
+          <div class="form-field">
+            <div class="field-label">
+              <ion-icon name="camera-outline" class="label-icon"></ion-icon>
+              <span>Imagen del Predio</span>
+              <span class="optional-label">(Opcional)</span>
+            </div>
+
+            <div class="image-upload-section">
+              @if(!previewUrl()) {
+              <div class="upload-area" (click)="fileInput.click()">
+                <ion-icon
+                  name="cloud-upload-outline"
+                  class="upload-icon"
+                ></ion-icon>
+                <h4>Seleccionar Imagen</h4>
+                <p>Haz clic aquí para subir una imagen del predio</p>
+                <ion-button
+                  fill="outline"
+                  color="primary"
+                  class="upload-button"
+                >
+                  <ion-icon name="image-outline" slot="start"></ion-icon>
+                  Seleccionar Archivo
+                </ion-button>
+              </div>
+              } @else {
+              <div class="image-preview-section">
+                <div class="preview-container">
+                  <ion-img
+                    [src]="previewUrl()"
+                    alt="Vista previa del predio"
+                    class="preview-image"
+                  />
+                  <div class="image-overlay">
+                    <ion-button
+                      fill="clear"
+                      color="light"
+                      size="small"
+                      (click)="fileInput.click()"
+                      class="overlay-button"
+                    >
+                      <ion-icon
+                        name="pencil-outline"
+                        slot="icon-only"
+                      ></ion-icon>
+                    </ion-button>
+                    <ion-button
+                      fill="clear"
+                      color="light"
+                      size="small"
+                      (click)="removeImage()"
+                      class="overlay-button"
+                    >
+                      <ion-icon
+                        name="trash-outline"
+                        slot="icon-only"
+                      ></ion-icon>
+                    </ion-button>
+                  </div>
+                </div>
+                @if(selectedFile) {
+                <div class="file-info-card">
+                  <ion-icon
+                    name="document-outline"
+                    class="file-icon"
+                  ></ion-icon>
+                  <div class="file-details">
+                    <span class="file-name">{{ selectedFile.name }}</span>
+                    <span class="file-size"
+                      >{{ (selectedFile.size / 1024).toFixed(1) }} KB</span
+                    >
+                  </div>
+                </div>
+                }
+              </div>
+              }
+
+              <input
+                #fileInput
+                type="file"
+                class="file-input-hidden"
+                (change)="onFileSelected($event)"
+                accept="image/*"
+              />
             </div>
           </div>
-          }
-          <input
-            #fileInput
-            type="file"
-            class="file-input-hidden"
-            (change)="onFileSelected($event)"
-            accept="image/*"
-          />
-        </div>
+        </ion-col>
+      </ion-row>
 
-        @if(selectedFile) {
-        <ion-text color="medium" class="file-info">
-          <small
-            >{{ selectedFile.name }} ({{
-              (selectedFile.size / 1024).toFixed(1)
-            }}
-            KB)</small
-          >
-        </ion-text>
-        }
-      </ion-col>
-    </ion-row>
-
-    <!-- Botón Guardar -->
-    <ion-row class="ion-justify-content-center">
-      <ion-col size="12" size-sm="8" size-md="6">
-        <ion-button
-          expand="block"
-          shape="round"
-          type="submit"
-          [disabled]="!isFormValid() || isSubmitting()"
-        >
-          @if(isSubmitting()) { Guardando... } @else {
-          {{ land() ? "Actualizar" : "Crear" }} Predio }
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</form>
+      <!-- Botón Guardar -->
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="12" size-sm="10" size-md="8">
+          <div class="form-actions">
+            <ion-button
+              expand="block"
+              size="large"
+              type="submit"
+              class="submit-button"
+              [disabled]="!isFormValid() || isSubmitting()"
+            >
+              @if(isSubmitting()) {
+              <ion-spinner name="crescent" slot="start"></ion-spinner>
+              Guardando... } @else {
+              <ion-icon name="save-outline" slot="start"></ion-icon>
+              {{ land() ? "Actualizar Predio" : "Crear Predio" }}
+              }
+            </ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</div>
