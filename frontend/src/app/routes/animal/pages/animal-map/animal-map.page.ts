@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal, OnInit } from '@angular/core';
+import { Component, computed, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -32,6 +32,7 @@ import {
   FilterValues,
 } from '../../components/animal-filters/animal-filters.component';
 import { RolePermissionService } from '../../../../services/role-permission.service';
+import { WebSocketService } from '../../../../services/websocket.service';
 
 @Component({
   selector: 'app-animal-map',
@@ -56,11 +57,13 @@ import { RolePermissionService } from '../../../../services/role-permission.serv
     AnimalFiltersComponent,
   ],
 })
-export class AnimalMapPage implements OnInit {
+export class AnimalMapPage implements OnInit, OnDestroy {
   private animalService = inject(AnimalService);
   private rolePermissionService = inject(RolePermissionService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private wsService = inject(WebSocketService);
+  private unsubscribe: (() => void) | null = null;
 
   // Signals for state management
   loading = signal(true);
@@ -133,6 +136,19 @@ export class AnimalMapPage implements OnInit {
   async ngOnInit() {
     await this.loadData();
     this.loadFiltersFromQueryParams();
+    
+    // Registrar handler para mensajes de animals
+    this.unsubscribe = this.wsService.onMessage('animals', () => {
+      console.log('Actualizando mapa de animales por WebSocket');
+      this.loadData();
+    });
+  }
+
+  ngOnDestroy() {
+    // Desregistrar el handler cuando se destruye el componente
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
   }
 
   private async loadData() {

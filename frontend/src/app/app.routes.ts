@@ -11,17 +11,23 @@ export const routes: Routes = [
   },
   {
     path: 'unauthorized',
-    loadComponent: () => import('./pages/unauthorized/unauthorized.page').then(m => m.UnauthorizedPage)
+    loadComponent: () =>
+      import('./pages/unauthorized/unauthorized.page').then(
+        (m) => m.UnauthorizedPage
+      ),
   },
   {
     path: '',
-    loadComponent: () => import('./layout/main-layout/main-layout.component').then(m => m.MainLayoutComponent),
+    loadComponent: () =>
+      import('./layout/main-layout/main-layout.component').then(
+        (m) => m.MainLayoutComponent
+      ),
     canActivate: [userGuard],
     children: [
       {
         path: '',
         redirectTo: '/dashboard',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'dashboard',
@@ -34,26 +40,34 @@ export const routes: Routes = [
       {
         path: 'animal',
         loadChildren: () =>
-          import('./routes/animal/animal.routes').then((m) => m.routes)
+          import('./routes/animal/animal.routes').then((m) => m.routes),
       },
       {
         path: 'land',
         loadChildren: () =>
-          import('./routes/land/land.routes').then((m) => m.routes)
+          import('./routes/land/land.routes').then((m) => m.routes),
       },
       {
         path: 'user',
         loadChildren: () =>
-          import('./routes/user/user.routes').then((m) => m.routes)
+          import('./routes/user/user.routes').then((m) => m.routes),
+      },
+      {
+        path: 'tag',
+        loadChildren: () =>
+          import('./routes/tags/tag.routes').then((m) => m.routes),
       },
       {
         path: 'unauthorized',
-        loadComponent: () => import('./pages/unauthorized/unauthorized.page').then(m => m.UnauthorizedPage)
-      }
-    ]
+        loadComponent: () =>
+          import('./pages/unauthorized/unauthorized.page').then(
+            (m) => m.UnauthorizedPage
+          ),
+      },
+    ],
   },
   {
     path: '**',
-    redirectTo: '/auth/login'
-  }
+    redirectTo: '/auth/login',
+  },
 ];

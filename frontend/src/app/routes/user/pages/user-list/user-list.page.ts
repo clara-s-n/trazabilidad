@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, resource, OnInit } from '@angular/core';
+import { Component, inject, resource, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import {
@@ -25,6 +25,7 @@ import {
 } from 'ionicons/icons';
 import { User } from 'src/app/model/user';
 import { UserService } from 'src/app/services/user.service';
+import { WebSocketService } from 'src/app/services/websocket.service';
 
 @Component({
   selector: 'app-user-list',
@@ -48,7 +49,7 @@ import { UserService } from 'src/app/services/user.service';
     IonCol,
   ],
 })
-export class UserListPage implements OnInit {
+export class UserListPage implements OnInit, OnDestroy {
   constructor() {
     addIcons({
       eyeOutline,
@@ -61,9 +62,24 @@ export class UserListPage implements OnInit {
   private userService = inject(UserService);
   private router = inject(Router);
   private title = inject(Title);
+  private wsService = inject(WebSocketService);
+  private unsubscribe: (() => void) | null = null;
 
   ngOnInit() {
     this.title.setTitle('Lista de Usuarios | Sistema de Trazabilidad');
+    
+    // Registrar handler para mensajes de users
+    this.unsubscribe = this.wsService.onMessage('users', () => {
+      console.log('Actualizando lista de usuarios por WebSocket');
+      this.usersResource.reload();
+    });
+  }
+
+  ngOnDestroy() {
+    // Desregistrar el handler cuando se destruye el componente
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
   }
 
   usersResource = resource<User[], undefined>({

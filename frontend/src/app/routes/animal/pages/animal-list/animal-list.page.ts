@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, resource, OnInit, computed, signal } from '@angular/core';
+import { Component, inject, resource, OnInit, computed, signal, OnDestroy } from '@angular/core';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import {
@@ -38,6 +38,7 @@ import { Animal } from 'src/app/model/animal';
 import { AnimalService } from 'src/app/services/animal.service';
 import { RolePermissionService } from 'src/app/services/role-permission.service';
 import { AnimalFiltersComponent, FilterValues } from '../../components/animal-filters/animal-filters.component';
+import { WebSocketService } from 'src/app/services/websocket.service';
 
 @Component({
   selector: 'app-animal-list',
@@ -70,7 +71,8 @@ import { AnimalFiltersComponent, FilterValues } from '../../components/animal-fi
     AnimalFiltersComponent,
   ],
 })
-export class ListPage implements OnInit {
+export class ListPage implements OnInit, OnDestroy {
+  
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private animalService = inject(AnimalService);
@@ -81,6 +83,10 @@ export class ListPage implements OnInit {
   animals = signal<Animal[]>([]);
   speciesList = signal<string[]>([]);
   regionsList = signal<string[]>([]);
+
+  // Websocket connection
+  private wsService = inject(WebSocketService);
+  private unsubscribe: (() => void) | null = null;
   
   // Filter signals
   speciesFilter = signal<string | null>(null);
@@ -141,6 +147,19 @@ export class ListPage implements OnInit {
     this.title.setTitle('Lista de Animales | Sistema de Trazabilidad');
     this.loadInitialData();
     this.readQueryParams();
+
+    // Registrar handler para mensajes de animals
+    this.unsubscribe = this.wsService.onMessage('animals', () => {
+      console.log('Actualizando lista de animales por WebSocket');
+      this.animalsResource.reload();
+    });
+  }
+
+  ngOnDestroy() {
+    // Desregistrar el handler cuando se destruye el componente
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
   }
 
   loadInitialData() {

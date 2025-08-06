@@ -1,14 +1,16 @@
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   IonButton,
   IonButtons,
   IonContent,
   IonHeader,
+  IonModal,
   IonTitle,
   IonToolbar,
   ModalController
 } from "@ionic/angular/standalone";
-import { IonModal } from '@ionic/angular';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-delete-user-modal',
@@ -17,7 +19,7 @@ import { IonModal } from '@ionic/angular';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    IonModal,
+    //IonModal,
     IonButton,
     IonButtons,
     IonContent,
@@ -27,13 +29,21 @@ import { IonModal } from '@ionic/angular';
   ]
 })
 export class DeleteUserModalComponent {
-
-  userId = input<string>();
+  private userService = inject(UserService);
+  private router = inject(Router);
+  userId = input<string>('');
   deleted = output<void>();
   private modalController = inject(ModalController);
 
-  confirmDelete() {
+  // String del userId para mostrar en la plantilla
+  get userIdStr(): string {
+    return typeof this.userId === 'function' ? this.userId() : this.userId;
+  }
+
+  async confirmDelete() {
+    await this.userService.deleteUser(this.userIdStr);
     this.deleted.emit();
+    this.router.navigate(['/user/list']);
     this.modalController.dismiss({ confirm: true });
   }
 

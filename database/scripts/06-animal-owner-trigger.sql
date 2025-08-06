@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION fn_check_animal_owner() RETURNS TRIGGER AS $$
 BEGIN
-    IF TG_OP IN ('INSERT','UPDATE') AND NEW.owner_id IS NULL THEN
+    IF TG_OP IN ('INSERT') AND NEW.owner_id IS NULL THEN
         RAISE EXCEPTION 'No se permite animal sin owner_id';
     END IF;
     RETURN NEW;

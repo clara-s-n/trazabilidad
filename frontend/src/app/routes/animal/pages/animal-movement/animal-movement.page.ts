@@ -4,9 +4,12 @@ import {
   input,
   inject,
   resource,
+  OnInit,
+  OnDestroy,
 } from '@angular/core';
 import { AnimalService } from 'src/app/services/animal.service';
 import { Router } from '@angular/router';
+import { WebSocketService } from 'src/app/services/websocket.service';
 
 import {
   IonHeader,
@@ -49,7 +52,7 @@ import { AnimalMovementSchema, AnimalMovementWithLands } from 'src/app/model/ani
     IonText,
   ],
 })
-export class MovementPage {
+export class MovementPage implements OnInit, OnDestroy {
   constructor() {
     addIcons({
       eyeOutline,
@@ -59,6 +62,8 @@ export class MovementPage {
 
   private readonly animalService = inject(AnimalService);
   private readonly router = inject(Router);
+  private readonly wsService = inject(WebSocketService);
+  private unsubscribe: (() => void) | null = null;
 
   readonly animalMovementsResource = resource<
     AnimalMovementWithLands[],
@@ -68,11 +73,26 @@ export class MovementPage {
       await this.animalService.getAllAnimalMovments(this.id()),
   });
 
+  ngOnInit() {
+    // Registrar handler para mensajes de transports (movimientos están relacionados con transportes)
+    this.unsubscribe = this.wsService.onMessage('transports', () => {
+      console.log('Actualizando movimientos de animal por WebSocket');
+      this.animalMovementsResource.reload();
+    });
+  }
+
+  ngOnDestroy() {
+    // Desregistrar el handler cuando se destruye el componente
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
+
   goToMovement() {
     this.router.navigate([`/animal/movements/${this.id()}`]);
   }
 
   reload() {
-    window.location.reload();
+    this.animalMovementsResource.reload();
   }
 }

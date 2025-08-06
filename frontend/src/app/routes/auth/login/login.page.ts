@@ -31,10 +31,10 @@ import {
   imports: [
     CommonModule,
     FormsModule,
-    IonRow,
-    IonCol,
+    //IonRow,
+    //IonCol,
     IonButton,
-    IonGrid,
+    //IonGrid,
     IonInput,
     IonItem,
     IonIcon,

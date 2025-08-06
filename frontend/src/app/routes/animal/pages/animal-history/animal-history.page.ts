@@ -4,9 +4,12 @@ import {
   input,
   inject,
   resource,
+  OnInit,
+  OnDestroy,
 } from '@angular/core';
 import { AnimalService } from 'src/app/services/animal.service';
 import { Router } from '@angular/router';
+import { WebSocketService } from 'src/app/services/websocket.service';
 
 import {
   IonHeader,
@@ -48,7 +51,7 @@ import { AnimalHistorySchema, AnimalHistoryWithUser } from 'src/app/model/animal
     IonText,
   ],
 })
-export class HistoryPage {
+export class HistoryPage implements OnInit, OnDestroy {
   constructor() {
     addIcons({
       eyeOutline,
@@ -58,6 +61,8 @@ export class HistoryPage {
 
   private readonly animalService = inject(AnimalService);
   private readonly router = inject(Router);
+  private readonly wsService = inject(WebSocketService);
+  private unsubscribe: (() => void) | null = null;
 
   readonly animalModificationsResource = resource<
     AnimalHistoryWithUser[],
@@ -67,11 +72,26 @@ export class HistoryPage {
       await this.animalService.getAllAnimalModification(this.id()),
   });
 
+  ngOnInit() {
+    // Registrar handler para mensajes de animals (cambios en animales generan historial)
+    this.unsubscribe = this.wsService.onMessage('animals', () => {
+      console.log('Actualizando historial de animal por WebSocket');
+      this.animalModificationsResource.reload();
+    });
+  }
+
+  ngOnDestroy() {
+    // Desregistrar el handler cuando se destruye el componente
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
+
   goToModify() {
     this.router.navigate([`/animal/edit/${this.id()}`]);
   }
 
   reload() {
-    window.location.reload();
+    this.animalModificationsResource.reload();
   }
 }

@@ -36,7 +36,7 @@ export class TagRepository {
         animal_id: row.animal_id ?? null,
         animal: row.animal_id
             ? {
-                id: row.animal_id, // <-- AGREGA ESTA LÍNEA
+                id: row.animal_id, 
                 animal_id: row.animal_id,
                 breed: row.breed,
                 birth_date: row.birth_date,
@@ -61,6 +61,10 @@ export class TagRepository {
         await query(`UPDATE tags SET status='active' WHERE id=$1`, [id]);
     }
 
+    async retireTag(id: string): Promise<void> {
+        await query(`UPDATE tags SET status='retired' WHERE id=$1`, [id]);
+    }
+
     async assignTagToAnimal(animalId: string, tagId: string): Promise<boolean> {
         if (!animalId || !tagId) throw new Error('Faltan parámetros');
 
@@ -78,6 +82,14 @@ export class TagRepository {
         await query(
             'INSERT INTO animal_tag (id, animal_id, tag_id, assignment_date) VALUES (gen_random_uuid(), $1, $2, now())',
             [animalId, tagId]
+        );
+
+        // 3. Cambiar el estado de la tag
+        await query(
+            `UPDATE tags
+             SET status = 'active'
+             WHERE id = $1`,
+            [tagId]
         );
         return true;
     }
@@ -156,19 +168,15 @@ export class TagRepository {
         try {
             await query('BEGIN');
 
-            // 1. Desasignar la tag antigua
-            const res = await query(
-                `UPDATE animal_tag
-                SET unassignment_date = NOW()
-                WHERE animal_id = $1 AND tag_id = $2 AND unassignment_date IS NULL`,
-                [animalId, oldTagId]
-            );
+            // 1. Desasignar la tag antigua (setea la tag como retirada)
+            await this.unassignTagFromAnimal(animalId, oldTagId);
 
-            // 2. Asignar la nueva tag
+            // 2. Asignar la nueva tag (realiza la asignación y cambia el estado a activa)
             await this.assignTagToAnimal(animalId, newTagId);
 
+            // 3. Confirmar transacción
             await query('COMMIT');
-            return (res.rowCount ?? 0) > 0;
+            return true;
         } catch (e) {
             await query('ROLLBACK');
             throw e;
