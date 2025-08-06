@@ -27,7 +27,7 @@ export class UserService {
 
   async deleteUser(userId: string) {
     return await firstValueFrom(
-      this.httpClient.delete(`${this.apiUrl}users/${userId}`)
+      this.httpClient.delete(`${this.apiUrl}users/user_id/${userId}`)
     );
   }
 
