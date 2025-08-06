@@ -1,0 +1,296 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/animal/list"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Crear Animales en Lote</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="clearForm()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Loading state -->
+  @if (loading()) {
+    <div class="loading-container">
+      <ion-spinner></ion-spinner>
+      <p>Procesando animales...</p>
+    </div>
+  }
+
+  <!-- Results section -->
+  @if (showResults() && lastResult(); as result) {
+    <ion-card class="results-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon 
+            [name]="result.success ? 'checkmark-circle' : 'alert-circle'"
+            [color]="result.success ? 'success' : 'warning'">
+          </ion-icon>
+          Resultados del Proceso
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6" size-md="3">
+              <div class="stat-card">
+                <div class="stat-number">{{ result.total_processed }}</div>
+                <div class="stat-label">Total Procesados</div>
+              </div>
+            </ion-col>
+            <ion-col size="6" size-md="3">
+              <div class="stat-card success">
+                <div class="stat-number">{{ result.successful }}</div>
+                <div class="stat-label">Exitosos</div>
+              </div>
+            </ion-col>
+            <ion-col size="6" size-md="3">
+              <div class="stat-card error">
+                <div class="stat-number">{{ result.failed }}</div>
+                <div class="stat-label">Con Errores</div>
+              </div>
+            </ion-col>
+            <ion-col size="6" size-md="3">
+              <ion-button expand="block" fill="outline" (click)="goToAnimalList()">
+                Ver Lista
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <!-- Created Animals -->
+        @if (result.created_animals && result.created_animals.length > 0) {
+          <h4>Animales Creados</h4>
+          <ion-list>
+            @for (animal of result.created_animals; track animal.id) {
+              <ion-item button (click)="viewAnimalDetail(animal.id)">
+                <ion-label>
+                  <h3>{{ animal.breed }}</h3>
+                  <p>Fecha de nacimiento: {{ animal.birth_date }}</p>
+                  <p>Estado: {{ animal.status }}</p>
+                </ion-label>
+              </ion-item>
+            }
+          </ion-list>
+        }
+
+        <!-- Errors -->
+        @if (result.errors && result.errors.length > 0) {
+          <h4>Errores Encontrados</h4>
+          <ion-list>
+            @for (error of result.errors; track $index) {
+              <ion-item>
+                <ion-label>
+                  <h3 class="error-text">Fila {{ error.row_id || 'N/A' }}</h3>
+                  <p>{{ error.message }}</p>
+                  @if (error.field) {
+                    <p><small>Campo: {{ error.field }}</small></p>
+                  }
+                </ion-label>
+              </ion-item>
+            }
+          </ion-list>
+        }
+
+        <div class="action-buttons">
+          <ion-button fill="outline" (click)="showResults.set(false)">
+            Crear Más Animales
+          </ion-button>
+          <ion-button fill="solid" (click)="goToAnimalList()">
+            Ir a Lista de Animales
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  }
+
+  <!-- Form section -->
+  @if (!showResults()) {
+    <form [formGroup]="bulkForm" (ngSubmit)="onSubmit()">
+      <!-- Instructions -->
+      <ion-card class="instructions-card">
+        <ion-card-content>
+          <h3>Instrucciones</h3>
+          <ul>
+            <li>Complete la información para cada animal que desea crear</li>
+            <li>Puede agregar hasta 50 animales por lote</li>
+            <li>Use los botones + para agregar filas y - para eliminar</li>
+            <li>Puede duplicar una fila para copiar la información</li>
+            <li><strong>Tip:</strong> Complete la primera fila completamente y luego duplíquela para acelerar el proceso</li>
+          </ul>
+          
+          <!-- Quick actions -->
+          <div class="quick-actions">
+            <ion-button fill="outline" size="small" (click)="fillSampleData()">
+              <ion-icon name="flask" slot="start"></ion-icon>
+              Llenar Datos de Ejemplo
+            </ion-button>
+            <ion-button fill="outline" size="small" (click)="importFromCSV()">
+              <ion-icon name="cloud-upload" slot="start"></ion-icon>
+              Importar CSV
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Animal rows -->
+      <div formArrayName="animals">
+        @for (animalControl of animalRows.controls; track $index; let i = $index) {
+          <ion-card class="animal-card" [formGroupName]="i">
+            <ion-card-header>
+              <ion-card-title>
+                Animal {{ i + 1 }}
+                <div class="row-actions">
+                  <ion-button 
+                    fill="clear" 
+                    size="small" 
+                    (click)="duplicateRow(i)"
+                    title="Duplicar fila">
+                    <ion-icon name="copy" slot="icon-only"></ion-icon>
+                  </ion-button>
+                  <ion-button 
+                    fill="clear" 
+                    size="small" 
+                    color="danger"
+                    (click)="removeRow(i)"
+                    title="Eliminar fila">
+                    <ion-icon name="trash" slot="icon-only"></ion-icon>
+                  </ion-button>
+                </div>
+              </ion-card-title>
+            </ion-card-header>
+            
+            <ion-card-content>
+              <ion-grid>
+                <ion-row>
+                  <!-- Breed -->
+                  <ion-col size="12" size-md="6">
+                    <ion-item [class.ion-invalid]="isFieldInvalid(i, 'breed')">
+                      <ion-label position="stacked">Raza *</ion-label>
+                      <ion-select formControlName="breed" placeholder="Seleccionar raza">
+                        @if (validationInfo()?.breeds) {
+                          @for (breed of validationInfo()!.breeds; track breed) {
+                            <ion-select-option [value]="breed">{{ breed }}</ion-select-option>
+                          }
+                        }
+                      </ion-select>
+                    </ion-item>
+                    @if (isFieldInvalid(i, 'breed')) {
+                      <div class="error-message">{{ getFieldError(i, 'breed') }}</div>
+                    }
+                  </ion-col>
+
+                  <!-- Birth Date -->
+                  <ion-col size="12" size-md="6">
+                    <ion-item [class.ion-invalid]="isFieldInvalid(i, 'birth_date')">
+                      <ion-label position="stacked">Fecha de Nacimiento *</ion-label>
+                      <ion-input
+                        type="date"
+                        formControlName="birth_date"
+                        placeholder="YYYY-MM-DD">
+                      </ion-input>
+                    </ion-item>
+                    @if (isFieldInvalid(i, 'birth_date')) {
+                      <div class="error-message">{{ getFieldError(i, 'birth_date') }}</div>
+                    }
+                  </ion-col>
+                </ion-row>
+
+                <ion-row>
+                  <!-- Owner -->
+                  <ion-col size="12" size-md="6">
+                    <ion-item [class.ion-invalid]="isFieldInvalid(i, 'owner_id')">
+                      <ion-label position="stacked">Propietario *</ion-label>
+                      <ion-select formControlName="owner_id" placeholder="Seleccionar propietario">
+                        @if (validationInfo()?.owners) {
+                          @for (owner of validationInfo()!.owners; track owner.id) {
+                            <ion-select-option [value]="owner.id">{{ owner.email }}</ion-select-option>
+                          }
+                        }
+                      </ion-select>
+                    </ion-item>
+                    @if (isFieldInvalid(i, 'owner_id')) {
+                      <div class="error-message">{{ getFieldError(i, 'owner_id') }}</div>
+                    }
+                  </ion-col>
+
+                  <!-- Land -->
+                  <ion-col size="12" size-md="6">
+                    <ion-item [class.ion-invalid]="isFieldInvalid(i, 'land_id')">
+                      <ion-label position="stacked">Predio *</ion-label>
+                      <ion-select formControlName="land_id" placeholder="Seleccionar predio">
+                        @if (validationInfo()?.lands) {
+                          @for (land of validationInfo()!.lands; track land.id) {
+                            <ion-select-option [value]="land.id">{{ land.name }}</ion-select-option>
+                          }
+                        }
+                      </ion-select>
+                    </ion-item>
+                    @if (isFieldInvalid(i, 'land_id')) {
+                      <div class="error-message">{{ getFieldError(i, 'land_id') }}</div>
+                    }
+                  </ion-col>
+                </ion-row>
+
+                <ion-row>
+                  <!-- Status -->
+                  <ion-col size="12" size-md="6">
+                    <ion-item [class.ion-invalid]="isFieldInvalid(i, 'status')">
+                      <ion-label position="stacked">Estado *</ion-label>
+                      <ion-select formControlName="status">
+                        @if (validationInfo()?.statuses) {
+                          @for (status of validationInfo()!.statuses; track status.key) {
+                            <ion-select-option [value]="status.key">{{ status.label_es }}</ion-select-option>
+                          }
+                        }
+                      </ion-select>
+                    </ion-item>
+                    @if (isFieldInvalid(i, 'status')) {
+                      <div class="error-message">{{ getFieldError(i, 'status') }}</div>
+                    }
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        }
+      </div>
+
+      <!-- Add row button -->
+      <div class="add-row-container">
+        <ion-button 
+          expand="block" 
+          fill="outline" 
+          (click)="addRow()"
+          [disabled]="animalRows.length >= 50">
+          <ion-icon name="add" slot="start"></ion-icon>
+          Agregar Animal ({{ animalRows.length }}/50)
+        </ion-button>
+      </div>
+
+      <!-- Submit buttons -->
+      <div class="submit-buttons">
+        <ion-button 
+          expand="block" 
+          type="submit" 
+          [disabled]="bulkForm.invalid || loading()"
+          class="submit-btn">
+          <ion-icon name="save" slot="start"></ion-icon>
+          Crear {{ animalRows.length }} Animales
+        </ion-button>
+        
+        <ion-button 
+          expand="block" 
+          fill="outline" 
+          (click)="onCancel()"
+          [disabled]="loading()">
+          Cancelar
+        </ion-button>
+      </div>
+    </form>
+  }
+</ion-content>

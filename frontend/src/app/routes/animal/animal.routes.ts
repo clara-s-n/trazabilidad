@@ -31,6 +31,24 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'bulk-create',
+        canActivate: [adminOrOperatorGuard], // Only admin and operators can bulk create
+        data: { menu: true, section: 'Animales', title: 'Crear animales en lote' },
+        loadComponent: () =>
+          import('./pages/animal-bulk-create/animal-bulk-create.page').then(
+            (m) => m.AnimalBulkCreatePage
+          ),
+      },
+      {
+        path: 'bulk-edit',
+        canActivate: [adminOrOperatorGuard], // Only admin and operators can bulk edit
+        data: { menu: true, section: 'Animales', title: 'Edición masiva' },
+        loadComponent: () =>
+          import('./pages/animal-bulk-edit/animal-bulk-edit.page').then(
+            (m) => m.AnimalBulkEditPage
+          ),
+      },
+      {
         path: 'map',
         canActivate: [userGuard], // All authenticated users can view map
         data: { menu: true, section: 'Animales', title: 'Mapa de animales' },

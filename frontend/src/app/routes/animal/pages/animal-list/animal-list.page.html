@@ -11,6 +11,30 @@
         <ion-icon slot="icon-only" name="map-outline"></ion-icon>
       </ion-button>
       @if (canCreateAnimals()) {
+      <!-- Bulk operations menu -->
+      <ion-button id="bulk-operations-trigger" fill="clear">
+        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+      </ion-button>
+      <ion-popover trigger="bulk-operations-trigger" trigger-action="click">
+        <ng-template>
+          <ion-content>
+            <ion-list>
+              <ion-item button [routerLink]="['/animal/create']">
+                <ion-icon slot="start" name="add-outline"></ion-icon>
+                <ion-label>Crear Animal</ion-label>
+              </ion-item>
+              <ion-item button [routerLink]="['/animal/bulk-create']">
+                <ion-icon slot="start" name="duplicate-outline"></ion-icon>
+                <ion-label>Crear en Lote</ion-label>
+              </ion-item>
+              <ion-item button [routerLink]="['/animal/bulk-edit']">
+                <ion-icon slot="start" name="create-outline"></ion-icon>
+                <ion-label>Edición Masiva</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-content>
+        </ng-template>
+      </ion-popover>
       <ion-button [routerLink]="['/animal/create']" fill="clear">
         <ion-icon slot="icon-only" name="add-outline"></ion-icon>
       </ion-button>

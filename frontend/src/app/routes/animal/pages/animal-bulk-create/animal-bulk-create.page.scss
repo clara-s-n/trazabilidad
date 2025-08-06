@@ -1,0 +1,221 @@
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.instructions-card {
+  margin-bottom: 1rem;
+  
+  h3 {
+    margin-top: 0;
+    color: var(--ion-color-primary);
+  }
+  
+  ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    
+    li {
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+  }
+  
+  .quick-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    
+    ion-button {
+      --color: var(--ion-color-primary);
+      --border-color: var(--ion-color-primary);
+    }
+  }
+}
+
+.results-card {
+  margin-bottom: 1rem;
+  
+  ion-card-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    ion-icon {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.stat-card {
+  text-align: center;
+  padding: 1rem;
+  border-radius: 8px;
+  background: var(--ion-color-light);
+  
+  &.success {
+    background: var(--ion-color-success-tint);
+    color: var(--ion-color-success-contrast);
+  }
+  
+  &.error {
+    background: var(--ion-color-danger-tint);
+    color: var(--ion-color-danger-contrast);
+  }
+  
+  .stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 1;
+  }
+  
+  .stat-label {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    opacity: 0.8;
+  }
+}
+
+.animal-card {
+  margin-bottom: 1rem;
+  border-left: 4px solid var(--ion-color-primary);
+  
+  ion-card-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+  }
+  
+  .row-actions {
+    display: flex;
+    gap: 0.25rem;
+  }
+}
+
+.add-row-container {
+  margin: 1rem 0;
+}
+
+.submit-buttons {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  
+  .submit-btn {
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
+  }
+}
+
+.action-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  
+  ion-button {
+    flex: 1;
+    min-width: 120px;
+  }
+}
+
+.error-message {
+  color: var(--ion-color-danger);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  padding-left: 1rem;
+}
+
+.error-text {
+  color: var(--ion-color-danger);
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .animal-card {
+    ion-card-title {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    
+    .row-actions {
+      align-self: flex-end;
+    }
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    
+    ion-button {
+      width: 100%;
+    }
+  }
+  
+  .stat-card {
+    .stat-number {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .quick-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+    
+    ion-button {
+      width: 100%;
+    }
+  }
+  
+  .submit-buttons {
+    .submit-btn {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .animal-card {
+    margin-bottom: 0.5rem;
+    
+    ion-card-content {
+      padding: 0.75rem;
+    }
+  }
+  
+  .instructions-card {
+    ion-card-content {
+      padding: 1rem;
+    }
+    
+    h3 {
+      font-size: 1.1rem;
+    }
+    
+    ul {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .stat-card {
+    background: var(--ion-color-dark-tint);
+    
+    &.success {
+      background: var(--ion-color-success-shade);
+    }
+    
+    &.error {
+      background: var(--ion-color-danger-shade);
+    }
+  }
+}

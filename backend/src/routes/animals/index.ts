@@ -66,45 +66,47 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
     handler: async (request, reply) => {
       const animalData = request.body as AnimalPost;
       const newAnimal = await animalRepository.createAnimal(animalData);
-      
+
       // Broadcast WebSocket message to all connected clients
       fastify.websocketServer.clients.forEach((cliente) => {
         if (cliente.readyState === WebSocket.OPEN) {
           cliente.send("animals");
         }
       });
-      
+
       reply.status(201).send(newAnimal);
     },
   });
 
   fastify.get("/:animal_id", {
-  schema: {
-    tags: ["Animales"],
-    params: AnimalParams,
-    description: "Obtener un animal con relaciones",
-    summary: "Detalle de animal con propietario y predio",
-    security: [{ bearerAuth: [] }],
-    response: {
-      200: AnimalWithRelationsSchema,
+    schema: {
+      tags: ["Animales"],
+      params: AnimalParams,
+      description: "Obtener un animal con relaciones",
+      summary: "Detalle de animal con propietario y predio",
+      security: [{ bearerAuth: [] }],
+      response: {
+        200: AnimalWithRelationsSchema,
+      },
     },
-  },
-  onRequest: fastify.authenticate,
-  handler: async (request, reply) => {
-    const params = request.params as AnimalParams;
-    const animal = await animalRepository.getByIdWithRelations(params.animal_id);
-    if (!animal) {
-      return reply.status(404).send({ message: "Animal no encontrado" });
-    }
-    // Broadcast WebSocket message to all connected clients
-    fastify.websocketServer.clients.forEach((cliente) => {
-      if (cliente.readyState === WebSocket.OPEN) {
-        cliente.send("animals");
+    onRequest: fastify.authenticate,
+    handler: async (request, reply) => {
+      const params = request.params as AnimalParams;
+      const animal = await animalRepository.getByIdWithRelations(
+        params.animal_id
+      );
+      if (!animal) {
+        return reply.status(404).send({ message: "Animal no encontrado" });
       }
-    });
+      // Broadcast WebSocket message to all connected clients
+      fastify.websocketServer.clients.forEach((cliente) => {
+        if (cliente.readyState === WebSocket.OPEN) {
+          cliente.send("animals");
+        }
+      });
 
-    reply.send(animal);
-  },
+      reply.send(animal);
+    },
   });
 
   fastify.put("/:animal_id", {
@@ -137,14 +139,14 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
           `No se pudo actualizar el animal ${animal_id}`
         );
       }
-      
+
       // Broadcast WebSocket message to all connected clients
       fastify.websocketServer.clients.forEach((cliente) => {
         if (cliente.readyState === WebSocket.OPEN) {
           cliente.send("animals");
         }
       });
-      
+
       reply.send(updatedAnimal);
     },
   });
@@ -251,7 +253,9 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
     },
     async (request, reply) => {
       const { animal_id } = request.params as AnimalParams;
-      const movements = await animalRepository.getTransportHistoryByAnimalId(animal_id);
+      const movements = await animalRepository.getTransportHistoryByAnimalId(
+        animal_id
+      );
       // Broadcast WebSocket message to all connected clients
       fastify.websocketServer.clients.forEach((cliente) => {
         if (cliente.readyState === WebSocket.OPEN) {
@@ -302,31 +306,28 @@ const animalesRoute: FastifyPluginAsync = async (fastify, options) => {
     },
   });
 
-  fastify.get(
-    "/statuses",
-    {
-      schema: {
-        tags: ["Animales"],
-        summary: "Obtener todos los estados posibles para animales",
-        description: "Devuelve la lista de posibles estados para un animal",
-        security: [{ bearerAuth: [] }],
-        response: {
-          200: Type.Array(
-            Type.Object({
-              key: Type.String(),
-              label_es: Type.String(),
-              label_en: Type.String(),
-            })
-          ),
-        },
+  fastify.get("/statuses", {
+    schema: {
+      tags: ["Animales"],
+      summary: "Obtener todos los estados posibles para animales",
+      description: "Devuelve la lista de posibles estados para un animal",
+      security: [{ bearerAuth: [] }],
+      response: {
+        200: Type.Array(
+          Type.Object({
+            key: Type.String(),
+            label_es: Type.String(),
+            label_en: Type.String(),
+          })
+        ),
       },
-      onRequest: fastify.authenticate,
-      handler: async (request, reply) => {
-        const statuses = await animalRepository.getAnimalStatuses();
-        return reply.code(200).send(statuses);
-      },
-    }
-  );
+    },
+    onRequest: fastify.authenticate,
+    handler: async (request, reply) => {
+      const statuses = await animalRepository.getAnimalStatuses();
+      return reply.code(200).send(statuses);
+    },
+  });
 };
 
 export default animalesRoute;

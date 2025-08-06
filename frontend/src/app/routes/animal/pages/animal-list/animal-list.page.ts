@@ -23,6 +23,8 @@ import {
   IonItem,
   IonLabel,
   IonBadge,
+  IonPopover,
+  IonList,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -33,6 +35,9 @@ import {
   mapOutline,
   filterOutline,
   pawOutline,
+  ellipsisVertical,
+  duplicateOutline,
+  createOutline,
 } from 'ionicons/icons';
 import { Animal } from 'src/app/model/animal';
 import { AnimalService } from 'src/app/services/animal.service';
@@ -68,6 +73,8 @@ import { WebSocketService } from 'src/app/services/websocket.service';
     IonItem,
     IonLabel,
     IonBadge,
+    IonList,
+    IonPopover,
     AnimalFiltersComponent,
   ],
 })
@@ -140,6 +147,9 @@ export class ListPage implements OnInit, OnDestroy {
       mapOutline,
       filterOutline,
       pawOutline,
+      ellipsisVertical,
+      duplicateOutline,
+      createOutline,
     });
   }
 

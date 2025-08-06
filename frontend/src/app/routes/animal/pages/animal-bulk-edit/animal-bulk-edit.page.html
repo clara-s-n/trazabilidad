@@ -1,0 +1,314 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/animal/list"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Edición Masiva de Animales</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Loading state -->
+  @if (loading()) {
+    <div class="loading-container">
+      <ion-spinner></ion-spinner>
+      <p>Cargando animales...</p>
+    </div>
+  }
+
+  <!-- Results section -->
+  @if (showResults() && lastResult(); as result) {
+    <ion-card class="results-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon 
+            [name]="result.success ? 'checkmark-circle' : 'alert-circle'"
+            [color]="result.success ? 'success' : 'warning'">
+          </ion-icon>
+          Resultados de la Actualización
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6" size-md="3">
+              <div class="stat-card">
+                <div class="stat-number">{{ result.total_processed }}</div>
+                <div class="stat-label">Total Procesados</div>
+              </div>
+            </ion-col>
+            <ion-col size="6" size-md="3">
+              <div class="stat-card success">
+                <div class="stat-number">{{ result.successful }}</div>
+                <div class="stat-label">Exitosos</div>
+              </div>
+            </ion-col>
+            <ion-col size="6" size-md="3">
+              <div class="stat-card error">
+                <div class="stat-number">{{ result.failed }}</div>
+                <div class="stat-label">Con Errores</div>
+              </div>
+            </ion-col>
+            <ion-col size="6" size-md="3">
+              <ion-button expand="block" fill="outline" (click)="goToAnimalList()">
+                Ver Lista
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <!-- Errors -->
+        @if (result.errors && result.errors.length > 0) {
+          <h4>Errores Encontrados</h4>
+          <ion-list>
+            @for (error of result.errors; track $index) {
+              <ion-item>
+                <ion-label>
+                  <h3 class="error-text">Animal {{ error.animal_id || 'N/A' }}</h3>
+                  <p>{{ error.message }}</p>
+                  @if (error.field) {
+                    <p><small>Campo: {{ error.field }}</small></p>
+                  }
+                </ion-label>
+              </ion-item>
+            }
+          </ion-list>
+        }
+
+        <div class="action-buttons">
+          <ion-button fill="outline" (click)="showResults.set(false)">
+            Editar Más Animales
+          </ion-button>
+          <ion-button fill="solid" (click)="goToAnimalList()">
+            Ir a Lista de Animales
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  }
+
+  <!-- Main content -->
+  @if (!showResults()) {
+    <!-- Instructions -->
+    <ion-card class="instructions-card">
+      <ion-card-content>
+        <h3>Instrucciones</h3>
+        <ol>
+          <li>Seleccione los animales que desea modificar</li>
+          <li>Complete los campos que desea actualizar (deje en blanco los que no desea cambiar)</li>
+          <li>Confirme la actualización masiva</li>
+        </ol>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Selection summary -->
+    <ion-card class="selection-summary">
+      <ion-card-content>
+        <div class="summary-header">
+          <h3>Animales Seleccionados: {{ selectedCount() }}</h3>
+          <div class="selection-actions">
+            <ion-button fill="clear" size="small" (click)="selectAll()">
+              Seleccionar Todos
+            </ion-button>
+            <ion-button fill="clear" size="small" (click)="selectNone()">
+              Deseleccionar Todos
+            </ion-button>
+          </div>
+        </div>
+        
+        @if (selectedCount() > 0) {
+          <div class="selected-chips">
+            @for (animalId of getSelectedAnimalIdsArray(); track animalId) {
+              @if (getAnimalById(animalId); as animal) {
+                <ion-chip (click)="toggleAnimalSelection(animalId)">
+                  <ion-label>{{ animal.breed }} - {{ animal.birth_date }}</ion-label>
+                  <ion-icon name="close"></ion-icon>
+                </ion-chip>
+              }
+            }
+          </div>
+        }
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Update form -->
+    @if (selectedCount() > 0) {
+      <ion-card class="update-form-card">
+        <ion-card-header>
+          <ion-card-title>Campos a Actualizar</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <form [formGroup]="updateForm" (ngSubmit)="onSubmit()">
+            <ion-grid>
+              <ion-row>
+                <!-- Breed -->
+                <ion-col size="12" size-md="6">
+                  <ion-item>
+                    <ion-label position="stacked">Raza</ion-label>
+                    <ion-select formControlName="breed" placeholder="Seleccionar nueva raza (opcional)">
+                      <ion-select-option value="">-- No cambiar --</ion-select-option>
+                      @if (validationInfo()?.breeds) {
+                        @for (breed of validationInfo()!.breeds; track breed) {
+                          <ion-select-option [value]="breed">{{ breed }}</ion-select-option>
+                        }
+                      }
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+
+                <!-- Owner -->
+                <ion-col size="12" size-md="6">
+                  <ion-item>
+                    <ion-label position="stacked">Propietario</ion-label>
+                    <ion-select formControlName="owner_id" placeholder="Seleccionar nuevo propietario (opcional)">
+                      <ion-select-option value="">-- No cambiar --</ion-select-option>
+                      @if (validationInfo()?.owners) {
+                        @for (owner of validationInfo()!.owners; track owner.id) {
+                          <ion-select-option [value]="owner.id">{{ owner.email }}</ion-select-option>
+                        }
+                      }
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <!-- Land -->
+                <ion-col size="12" size-md="6">
+                  <ion-item>
+                    <ion-label position="stacked">Predio</ion-label>
+                    <ion-select formControlName="land_id" placeholder="Seleccionar nuevo predio (opcional)">
+                      <ion-select-option value="">-- No cambiar --</ion-select-option>
+                      @if (validationInfo()?.lands) {
+                        @for (land of validationInfo()!.lands; track land.id) {
+                          <ion-select-option [value]="land.id">{{ land.name }}</ion-select-option>
+                        }
+                      }
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+
+                <!-- Status -->
+                <ion-col size="12" size-md="6">
+                  <ion-item>
+                    <ion-label position="stacked">Estado</ion-label>
+                    <ion-select formControlName="status" placeholder="Seleccionar nuevo estado (opcional)">
+                      <ion-select-option value="">-- No cambiar --</ion-select-option>
+                      @if (validationInfo()?.statuses) {
+                        @for (status of validationInfo()!.statuses; track status.key) {
+                          <ion-select-option [value]="status.key">{{ status.label_es }}</ion-select-option>
+                        }
+                      }
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <!-- Submit buttons -->
+            <div class="submit-buttons">
+              <ion-button 
+                expand="block" 
+                type="submit" 
+                [disabled]="!canUpdate() || loading()"
+                class="submit-btn">
+                <ion-icon name="save" slot="start"></ion-icon>
+                Actualizar {{ selectedCount() }} Animales
+              </ion-button>
+            </div>
+          </form>
+        </ion-card-content>
+      </ion-card>
+    }
+
+    <!-- Animal list -->
+    <ion-card class="animal-list-card">
+      <ion-card-header>
+        <ion-card-title>Lista de Animales</ion-card-title>
+        
+        <!-- Search and filters -->
+        <div class="search-filters">
+          <ion-searchbar
+            [value]="searchTerm()"
+            (ionInput)="onSearchChange($event)"
+            placeholder="Buscar por raza, estado o fecha"
+            show-clear-button="focus">
+          </ion-searchbar>
+          
+          <!-- Quick filters -->
+          <div class="quick-filters">
+            <ion-button fill="outline" size="small" (click)="filterByStatus('alive')">
+              Vivos
+            </ion-button>
+            <ion-button fill="outline" size="small" (click)="filterByStatus('deceased')">
+              Fallecidos
+            </ion-button>
+            <ion-button fill="outline" size="small" (click)="clearFilters()">
+              Ver Todos
+            </ion-button>
+          </div>
+          
+          <!-- Selection info -->
+          <div class="selection-info">
+            <span>{{ filteredAnimals().length }} animales mostrados</span>
+            @if (selectedCount() > 0) {
+              <span> • {{ selectedCount() }} seleccionados</span>
+            }
+          </div>
+        </div>
+      </ion-card-header>
+      
+      <ion-card-content>
+        @if (filteredAnimals().length === 0) {
+          <div class="no-animals">
+            <p>No se encontraron animales.</p>
+          </div>
+        } @else {
+          <ion-list>
+            @for (animal of filteredAnimals(); track animal.id) {
+              <ion-item>
+                <ion-checkbox 
+                  slot="start"
+                  [checked]="isAnimalSelected(animal.id)"
+                  (ionChange)="toggleAnimalSelection(animal.id)">
+                </ion-checkbox>
+                
+                <ion-label>
+                  <h3>{{ animal.breed }}</h3>
+                  <p>Fecha de nacimiento: {{ animal.birth_date }}</p>
+                  <p>Estado: {{ getFieldDisplayValue('status', animal.status) }}</p>
+                  @if (validationInfo()) {
+                    <p>
+                      Propietario: {{ getFieldDisplayValue('owner_id', animal.owner_id) }}
+                    </p>
+                    <p>
+                      Predio: {{ getFieldDisplayValue('land_id', animal.land_id) }}
+                    </p>
+                  }
+                </ion-label>
+                
+                <ion-button 
+                  fill="clear" 
+                  slot="end"
+                  (click)="viewAnimalDetail(animal.id)">
+                  Ver Detalle
+                </ion-button>
+              </ion-item>
+            }
+          </ion-list>
+        }
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Cancel button -->
+    <div class="cancel-button">
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        (click)="onCancel()"
+        [disabled]="loading()">
+        Cancelar
+      </ion-button>
+    </div>
+  }
+</ion-content>
