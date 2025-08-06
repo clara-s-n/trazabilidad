@@ -9,6 +9,7 @@ import {
   IonBadge,
   IonMenuButton,
   IonSplitPane,
+  IonRouterOutlet,
 } from '@ionic/angular/standalone';
 import { LogoutButtonComponent } from '../../components/logout-button/logout-button.component';
 import { SideMenuComponent } from '../../components/side-menu/side-menu.component';
@@ -30,6 +31,7 @@ import { RolePermissionService } from '../../services/role-permission.service';
     IonMenuButton,
     LogoutButtonComponent,
     SideMenuComponent,
+    IonRouterOutlet
   ],
 })
 export class MainLayoutComponent {
